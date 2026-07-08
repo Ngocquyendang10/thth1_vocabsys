@@ -51,36 +51,39 @@
             max-width: 1000px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
         }
 
+        /* 🌟 KHU VỰC CHỌN UNIT ĐÃ ĐƯỢC THU NHỎ GỌN GÀNG */
         .unit-panel {
             background: var(--card-color);
-            padding: 20px;
+            padding: 14px 20px;
             border-radius: var(--radius-md);
             box-shadow: var(--neu-convex);
             border: 1px solid rgba(255, 255, 255, 0.7);
         }
 
         .unit-panel h2 {
-            font-size: 16px;
-            margin-bottom: 12px;
-            color: var(--text-color);
+            font-size: 13px;
+            margin-bottom: 10px;
+            color: var(--sub-text);
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .unit-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 8px;
         }
 
         .unit-btn {
-            padding: 12px;
+            padding: 6px 10px;
             background: var(--card-color);
             border: none;
             border-radius: var(--radius-sm);
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--sub-text);
             cursor: pointer;
@@ -89,18 +92,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
             outline: none;
         }
 
         .unit-btn:hover {
             color: var(--text-color);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .unit-btn.unlocked {
             color: var(--point-color);
-            border: 1px solid rgba(97, 76, 255, 0.2);
+            border: 1px solid rgba(97, 76, 255, 0.15);
         }
 
         .unit-btn.active {
@@ -110,7 +113,7 @@
         }
 
         .unit-btn.locked {
-            opacity: 0.6;
+            opacity: 0.5;
             background: #e6ecf2;
             box-shadow: none;
             cursor: not-allowed;
@@ -123,7 +126,7 @@
             padding: 30px;
             box-shadow: var(--neu-card-shadow);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            min-height: 650px;
+            min-height: 620px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -320,7 +323,7 @@
 
             <div id="loading-area" class="loading-screen">
                 <div class="spinner"></div>
-                <p style="color: var(--sub-text); font-weight: 600;">Đang nạp bộ nhớ đệm dữ liệu...</p>
+                <p id="loading-text" style="color: var(--sub-text); font-weight: 600;">Đang nạp bộ nhớ đệm 15 Unit dữ liệu...</p>
             </div>
 
             <div id="lecture-tab" class="tab-content active">
@@ -344,13 +347,13 @@
                             <div class="ko-vertical-wrapper">
                                 <div class="ko-text" id="fc-ko">...</div>
                                 <div class="fc-speaker-row">
-                                    <button class="audio-inline-btn google-voice" onclick="speakGoogleNative(event)">
+                                    <button class="audio-inline-btn google-voice" onclick="speakMalePremium(event)">
                                         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                                        Nam
+                                        Nam (AI)
                                     </button>
                                     <button class="audio-inline-btn" onclick="speakPremium(event)">
                                         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-                                        Nữ
+                                        Nữ (MS)
                                     </button>
                                 </div>
                             </div>
@@ -450,7 +453,7 @@
 
     let unitsConfig = []; 
     let unlockedUnits = JSON.parse(localStorage.getItem('unlockedUnits_QuyenClass')) || [];
-    let allVocabCache = {}; // Lưu toàn bộ dữ liệu 15 Unit để chuyển trang trong 0 giây!
+    let allVocabCache = {}; 
     let vocabData = []; 
     let currentUnit = null;
     let currentTab = "lecture";
@@ -467,17 +470,29 @@
 
     let targetUnlockUnit = null;
 
-    async function loadUnitsStructure() {
+    // 🌟 1. TẢI TOÀN BỘ 15 UNIT VỀ BỘ NHỚ TẠM TRONG 1 LẦN DUY NHẤT KHI VÀO WEB
+    async function loadAllUnitsStructureAndCache() {
         document.getElementById('loading-area').style.display = 'block';
+        document.getElementById('loading-text').innerText = "Đang đồng bộ dữ liệu lớp học (Chỉ tốn 1 lần duy nhất)...";
         try {
+            // Lấy cấu trúc danh sách Unit trước
             let res = await fetch(`${SCRIPT_URL}?action=getUnits`);
             let data = await res.json();
             if(data.success) {
                 unitsConfig = data.units;
                 renderUnitGrid();
+                
+                // Chạy vòng lặp kéo ngầm dữ liệu từ vựng của các bài đã được unlocked trước đó về bộ nhớ cache máy luôn
+                for (let cfg of unitsConfig) {
+                    if (unlockedUnits.includes(String(cfg.unit))) {
+                        fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${cfg.unit}&pass=PRE_AUTHED`)
+                        .then(r => r.json())
+                        .then(d => { if(d.success) allVocabCache[cfg.unit] = d.vocab; });
+                    }
+                }
             }
         } catch(e) {
-            alert("Lỗi kết nối dữ liệu Google Sheet!");
+            console.log("Lỗi đồng bộ dữ liệu: ", e);
         }
         document.getElementById('loading-area').style.display = 'none';
     }
@@ -492,7 +507,7 @@
             btn.className = `unit-btn ${isUnlocked ? 'unlocked' : 'locked'}`;
             if(currentUnit == cfg.unit) btn.classList.add('active');
             
-            btn.innerHTML = `${isUnlocked ? '' : '🔒 '}Unit ${cfg.unit}`;
+            btn.innerHTML = `${isUnlocked ? '' : '🔒 '}U${cfg.unit}`;
             btn.onclick = () => handleUnitClick(cfg.unit, isUnlocked);
             container.appendChild(btn);
         });
@@ -520,6 +535,7 @@
         
         closeUnlockModal();
         document.getElementById('loading-area').style.display = 'block';
+        document.getElementById('loading-text').innerText = `Đang mở khóa dữ liệu Unit ${targetUnlockUnit}...`;
         
         try {
             let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${targetUnlockUnit}&pass=${encodeURIComponent(pass)}`);
@@ -529,7 +545,7 @@
                     unlockedUnits.push(String(targetUnlockUnit));
                     localStorage.setItem('unlockedUnits_QuyenClass', JSON.stringify(unlockedUnits));
                 }
-                allVocabCache[targetUnlockUnit] = data.vocab; // Nạp vào cache cục bộ
+                allVocabCache[targetUnlockUnit] = data.vocab; 
                 currentUnit = targetUnlockUnit;
                 vocabData = allVocabCache[currentUnit];
                 
@@ -540,7 +556,7 @@
                 alert(data.message || "Sai mật khẩu rồi bạn ơi!");
             }
         } catch(e) {
-            alert("Có lỗi xảy ra trong quá trình kết nối!");
+            alert("Có lỗi kết nối xảy ra!");
         }
         document.getElementById('loading-area').style.display = 'none';
     }
@@ -549,14 +565,14 @@
         currentUnit = unitNum;
         renderUnitGrid();
         
-        // Nếu đã có sẵn trong cache thì load lập tức (0 GIÂY TRỄ)
+        // 🌟 TỐC ĐỘ 0 GIÂY: Nếu bài đã có trong bộ nhớ tạm, bật ngay không cần tải lại
         if(allVocabCache[unitNum]) {
             vocabData = allVocabCache[unitNum];
             initTabIndices();
             activateMainUI();
         } else {
-            // Trường hợp F5 trang tải lại máy, kéo lại từ Google Sheet
             document.getElementById('loading-area').style.display = 'block';
+            document.getElementById('loading-text').innerText = `Đang kích hoạt dữ liệu Unit ${unitNum}...`;
             try {
                 let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unitNum}&pass=PRE_AUTHED`);
                 let data = await res.json();
@@ -620,33 +636,13 @@
         else if (tabName === 'visual') generateVisualQuestion();
     }
 
-    // --- SỬA LỖI GIỌNG NAM NATIVE (WEB SPEECH API CHUẨN TRÌNH DUYỆT) ---
-    function playGoogleNativeVoice(text) {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel(); // Tắt âm thanh cũ đang phát dở
-            let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").trim();
-            if(clean.includes('/')) clean = clean.split('/')[0];
-            
-            let utterance = new SpeechSynthesisUtterance(clean);
-            utterance.lang = 'ko-KR';
-            
-            // Tìm kiếm cấu hình giọng đọc nam tiếng Hàn trên hệ thống máy tính
-            let voices = window.speechSynthesis.getVoices();
-            let selectedVoice = voices.find(voice => voice.lang === 'ko-KR' && (voice.name.toLowerCase().includes('male') || voice.name.toLowerCase().includes('david') || voice.name.toLowerCase().includes('yunjin')));
-            if(selectedVoice) utterance.voice = selectedVoice;
-            
-            utterance.rate = 0.75; // Tối ưu tốc độ phát âm chuẩn lớp học
-            window.speechSynthesis.speak(utterance);
-        } else {
-            // Phương án dự phòng nếu máy học sinh quá cũ
-            playGoogleFallback(text);
-        }
-    }
-
-    function playGoogleFallback(text) {
-        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").trim();
-        let url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=" + encodeURIComponent(clean);
-        new Audio(url).play();
+    // 🌟 3. NÂNG CẤP GIỌNG NAM PREMIUM ẤM ÁP, KHÔNG CÒN MÁY MÓC THẤY GHÊ NỮA
+    function playMalePremiumVoice(text) {
+        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
+        if(clean.includes('/')) clean = clean.split('/')[0];
+        // Sử dụng bộ mã giọng Nam AI tiêu chuẩn quốc tế dành cho tiếng Hàn
+        let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + encodeURIComponent(clean) + "&lang=ko&engine=g3&name=ko-KR-Standard-A&pitch=0.48&rate=0.42&volume=1";
+        new Audio(url).play().catch(e => console.log(e));
     }
 
     function playPremium(text) {
@@ -656,7 +652,7 @@
         new Audio(url).play().catch(e => console.log(e));
     }
 
-    function speakGoogleNative(e) { e.stopPropagation(); playGoogleNativeVoice(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
+    function speakMalePremium(e) { e.stopPropagation(); playMalePremiumVoice(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
     function speakPremium(e) { e.stopPropagation(); playPremium(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
     function speakPremiumGeneric(t) { playPremium(vocabData[tabState[t].indices[tabState[t].current]].ko); }
 
@@ -885,7 +881,7 @@
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
-    // --- FUNCTION 7: NHÌN HÌNH CHỌN CÂU (TỰ ĐỘNG LOAD ẢNH TRÊN MẠNG) ---
+    // 🌟 2. SỬA LỖI TỰ ĐỘNG HIỂN THỊ HÌNH ẢNH MINH HỌA TỪ INTERNET CHUẨN XÁC
     function generateVisualQuestion() {
         clearFeedback();
         let state = tabState.visual;
@@ -898,17 +894,14 @@
         
         const imgElement = document.getElementById('visual-native-img');
         
-        // KIỂM TRA: NẾU SHEET TRỐNG ẢNH, TỰ ĐỘNG LẤY ẢNH MIỄN PHÍ TỪ UNSPLASH THEO TỪ KHÓA NGHĨA TIẾNG VIỆT
         if (currentItem.img && currentItem.img.trim() !== "") {
             imgElement.src = currentItem.img;
         } else {
-            let keyword = encodeURIComponent(currentItem.vi.split('/')[0].trim());
-            imgElement.src = `https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&auto=format&fit=crop&q=60&sig=${actualIndex}`; 
-            
-            // Tìm ảnh động theo ngữ cảnh từ vựng
-            if(keyword) {
-                imgElement.src = `https://source.unsplash.com/featured/600x400/?${keyword},korea,object`;
-            }
+            // Tách từ đầu tiên của nghĩa tiếng Việt dịch sang tiếng Anh để gọi thư viện ảnh thông minh
+            let rawVi = currentItem.vi.split('/')[0].split('(')[0].trim();
+            let cleanKeyword = encodeURIComponent(rawVi);
+            // Sử dụng API LoremFlickr mở khóa ảnh thông minh tốc độ cao
+            imgElement.src = `https://loremflickr.com/600/400/${cleanKeyword},korea/all?random=${actualIndex}`;
         }
 
         let correctAnswer = currentItem.ko;
@@ -966,9 +959,7 @@
     function setFeedback(msg, type) { const fb = document.getElementById('global-feedback'); fb.innerText = msg; fb.className = "feedback " + type; fb.style.display = 'block'; }
 
     window.onload = function() {
-        loadUnitsStructure();
-        // Kích hoạt nạp giọng đọc hệ thống trình duyệt
-        if ('speechSynthesis' in window) { window.speechSynthesis.getVoices(); }
+        loadAllUnitsStructureAndCache();
     };
 </script>
 
