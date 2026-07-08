@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngoc Quyen's Classroom - Ôn tập từ vựng</title>
+    <title>Ngoc Quyen's Classroom - Hệ thống ôn tập</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -54,7 +54,37 @@
             gap: 16px;
         }
 
-        /* 🌟 KHU VỰC CHỌN UNIT ĐÃ ĐƯỢC THU NHỎ GỌN GÀNG */
+        /* SCREEN LOGIN NEUMORPHISM */
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-color);
+            padding: 40px 30px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--neu-convex);
+            border: 1px solid rgba(255,255,255,0.8);
+            text-align: center;
+            margin: auto;
+            display: block;
+        }
+        .login-container h2 { font-size: 22px; margin-bottom: 8px; color: #1a202c; font-weight: 800; }
+        .login-container p { font-size: 13px; color: var(--sub-text); margin-bottom: 24px; }
+        .login-group { text-align: left; margin-bottom: 16px; }
+        .login-group label { font-size: 12px; font-weight: 700; color: var(--sub-text); display: block; margin-bottom: 6px; }
+        
+        .remember-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--text-color);
+            cursor: pointer;
+            justify-content: flex-start;
+        }
+        .remember-wrapper input { cursor: pointer; accent-color: var(--point-color); width: 16px; height: 16px; }
+
+        /* UNIT SELECT PANEL */
         .unit-panel {
             background: var(--card-color);
             padding: 14px 20px;
@@ -63,23 +93,25 @@
             border: 1px solid rgba(255, 255, 255, 0.7);
         }
 
-        .unit-panel h2 {
-            font-size: 13px;
+        .unit-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
-            color: var(--sub-text);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
+
+        .unit-panel h2 { font-size: 13px; color: var(--sub-text); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .logout-link { font-size: 12px; color: var(--error-color); font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 
         .unit-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
             gap: 8px;
         }
 
         .unit-btn {
-            padding: 6px 10px;
+            padding: 6px 8px;
             background: var(--card-color);
             border: none;
             border-radius: var(--radius-sm);
@@ -90,35 +122,37 @@
             box-shadow: var(--neu-convex);
             transition: all 0.2s ease;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 2px;
             outline: none;
+            position: relative;
         }
 
-        .unit-btn:hover {
-            color: var(--text-color);
-            transform: translateY(-1px);
-        }
+        .unit-btn:hover { color: var(--text-color); transform: translateY(-1px); }
+        .unit-btn.unlocked { color: var(--point-color); border: 1px solid rgba(97, 76, 255, 0.15); }
+        .unit-btn.active { color: white; background: var(--point-color); box-shadow: var(--neu-concave); }
+        .unit-btn.locked { opacity: 0.5; background: #e6ecf2; box-shadow: none; cursor: not-allowed; }
 
-        .unit-btn.unlocked {
-            color: var(--point-color);
-            border: 1px solid rgba(97, 76, 255, 0.15);
-        }
-
-        .unit-btn.active {
+        /* TAG NEW BOUNCE POPUP STYLE */
+        .new-tag {
+            font-size: 8px;
+            background: var(--success-color);
             color: white;
-            background: var(--point-color);
-            box-shadow: var(--neu-concave);
+            padding: 1px 4px;
+            border-radius: 8px;
+            position: absolute;
+            top: -6px;
+            animation: bounceTag 0.8s infinite alternate;
+            font-weight: 800;
+        }
+        @keyframes bounceTag {
+            from { transform: translateY(0); }
+            to { transform: translateY(-3px); }
         }
 
-        .unit-btn.locked {
-            opacity: 0.5;
-            background: #e6ecf2;
-            box-shadow: none;
-            cursor: not-allowed;
-        }
-
+        /* MAIN APP BOX */
         .container {
             width: 100%;
             background: var(--card-color);
@@ -132,81 +166,21 @@
             justify-content: space-between;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
+        header { text-align: center; margin-bottom: 24px; }
+        h1 { font-size: 24px; font-weight: 800; color: #1a202c; margin-bottom: 6px; }
+        p.subtitle { font-size: 13px; color: var(--sub-text); font-weight: 500; }
 
-        h1 {
-            font-size: 24px;
-            font-weight: 800;
-            color: #1a202c;
-            margin-bottom: 6px;
-        }
-
-        p.subtitle {
-            font-size: 13px;
-            color: var(--sub-text);
-            font-weight: 500;
-        }
-
-        .tabs {
-            display: flex;
-            background: var(--bg-color);
-            padding: 6px;
-            border-radius: var(--radius-md);
-            box-shadow: var(--neu-concave);
-            margin-bottom: 24px;
-            gap: 4px;
-            overflow-x: auto;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 12px 6px;
-            background: none;
-            border: none;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--sub-text);
-            cursor: pointer;
-            transition: all 0.25s ease;
-            border-radius: var(--radius-sm);
-            white-space: nowrap;
-            outline: none;
-        }
-
+        .tabs { display: flex; background: var(--bg-color); padding: 6px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); margin-bottom: 24px; gap: 4px; overflow-x: auto; }
+        .tab-btn { flex: 1; padding: 12px 6px; background: none; border: none; font-size: 12px; font-weight: 700; color: var(--sub-text); cursor: pointer; transition: all 0.25s ease; border-radius: var(--radius-sm); white-space: nowrap; outline: none; }
         .tab-btn:hover { color: var(--text-color); }
-        .tab-btn.active {
-            color: var(--point-color);
-            background: var(--card-color);
-            box-shadow: var(--neu-convex);
-        }
+        .tab-btn.active { color: var(--point-color); background: var(--card-color); box-shadow: var(--neu-convex); }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .embed-wrapper {
-            width: 100%;
-            height: 480px;
-            border-radius: var(--radius-md);
-            box-shadow: var(--neu-concave);
-            overflow: hidden;
-            background: #e2e8f0;
-            position: relative;
-        }
-        .embed-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .no-embed-msg {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: var(--sub-text);
-        }
+        .embed-wrapper { width: 100%; height: 480px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden; background: #e2e8f0; position: relative; }
+        .embed-wrapper iframe { width: 100%; height: 100%; border: none; }
+        .no-embed-msg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: var(--sub-text); }
 
         .fc-mode-container { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 16px; gap: 10px; }
         .fc-mode-label { font-size: 13px; font-weight: 700; color: var(--sub-text); }
@@ -229,7 +203,6 @@
         
         .fc-speaker-row { display: flex; gap: 12px; margin-top: 4px; }
         .audio-inline-btn { background: var(--bg-color); border: none; padding: 6px 12px; height: 34px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; box-shadow: var(--neu-convex); color: var(--point-color); outline: none; }
-        .audio-inline-btn.google-voice { color: var(--google-voice-color); }
         .audio-inline-btn:hover { transform: scale(1.05); }
 
         .quiz-question { font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 20px; text-align: center; }
@@ -275,32 +248,43 @@
         .btn-primary:hover { background: var(--point-hover); }
         .counter { font-size: 13px; color: var(--sub-text); font-weight: 600; background: var(--bg-color); padding: 6px 14px; border-radius: 20px; box-shadow: var(--neu-concave); }
 
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(240,244,248,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-box { background: var(--card-color); padding: 30px; border-radius: var(--radius-lg); box-shadow: var(--neu-convex); width: 90%; max-width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.8); }
-        .modal-box h3 { font-size: 18px; margin-bottom: 12px; color: #1a202c; }
-        .modal-box p { font-size: 13px; color: var(--sub-text); margin-bottom: 20px; }
-        .modal-box .input-field { margin-bottom: 20px; }
-        .modal-buttons { display: flex; gap: 12px; justify-content: center; }
-
         .loading-screen { display: none; text-align: center; padding: 40px; }
         .spinner { width: 40px; height: 40px; border: 4px solid rgba(97, 76, 255, 0.1); border-left-color: var(--point-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        @media(max-width: 768px) {
-            body { padding: 10px; }
-            .container { padding: 20px; min-height: 550px; }
-            .ko-text { font-size: 26px; }
-            .vi-text { font-size: 20px; }
-            .embed-wrapper { height: 320px; }
-        }
     </style>
 </head>
 <body>
 
-<div class="app-wrapper">
+<!-- SCREEN LOGIN -->
+<div class="login-container" id="login-screen-wrapper">
+    <h2>Hệ Thống Đăng Nhập</h2>
+    <p>Vui lòng đăng nhập tài khoản lớp học Ngoc Quyen's Classroom để tiếp tục bài học.</p>
+    <div class="login-group">
+        <label>Tên đăng nhập / Mã học sinh</label>
+        <input type="text" class="input-field" id="login-username" placeholder="Nhập tên đăng nhập...">
+    </div>
+    <div class="login-group">
+        <label>Mật khẩu truy cập</label>
+        <input type="password" class="input-field" id="login-password" placeholder="Nhập mật khẩu..." onkeydown="if(event.key==='Enter') executeStudentLogin()">
+    </div>
+    <!-- 🌟 NÚT LƯU THÔNG TIN ĐĂNG NHẬP THEO YÊU CẦU -->
+    <div class="remember-wrapper">
+        <input type="checkbox" id="login-remember-me" checked>
+        <label for="login-remember-me">Ghi nhớ thông tin đăng nhập tự động</label>
+    </div>
+    <button class="btn btn-primary" style="width: 100%; padding: 14px;" onclick="executeStudentLogin()">Đăng nhập hệ thống 🚀</button>
+</div>
+
+<!-- KHU VỰC CHỨC NĂNG CHÍNH -->
+<div class="app-wrapper" id="main-app-wrapper" style="display: none;">
     <div class="unit-panel">
-        <h2 id="unit-panel-title">Chọn bài học (Unit)</h2>
+        <div class="unit-header-row">
+            <h2 id="unit-panel-title">Chọn bài học (Unit)</h2>
+            <div class="logout-link" onclick="executeStudentLogout()">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+                Đăng xuất
+            </div>
+        </div>
         <div class="unit-grid" id="unit-buttons-container"></div>
     </div>
 
@@ -308,7 +292,7 @@
         <div class="content-body">
             <header>
                 <h1 id="main-title">Ngoc Quyen's Classroom</h1>
-                <p class="subtitle" id="main-subtitle">Vui lòng chọn hoặc mở khóa bài học để bắt đầu</p>
+                <p class="subtitle" id="main-subtitle">Vui lòng chọn bài học để bắt đầu</p>
             </header>
 
             <div class="tabs" id="main-tabs-nav" style="display: none;">
@@ -323,9 +307,10 @@
 
             <div id="loading-area" class="loading-screen">
                 <div class="spinner"></div>
-                <p id="loading-text" style="color: var(--sub-text); font-weight: 600;">Đang nạp bộ nhớ đệm 15 Unit dữ liệu...</p>
+                <p id="loading-text" style="color: var(--sub-text); font-weight: 600;">Đang kết nối đám mây...</p>
             </div>
 
+            <!-- TAB CONTENT PANELS -->
             <div id="lecture-tab" class="tab-content active">
                 <div class="embed-wrapper">
                     <div class="no-embed-msg" id="lecture-empty-msg">Không có slide bài giảng cho Unit này.</div>
@@ -347,7 +332,7 @@
                             <div class="ko-vertical-wrapper">
                                 <div class="ko-text" id="fc-ko">...</div>
                                 <div class="fc-speaker-row">
-                                    <button class="audio-inline-btn google-voice" onclick="speakMalePremium(event)">
+                                    <button class="audio-inline-btn" onclick="speakMalePremium(event)">
                                         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
                                         Nam (AI)
                                     </button>
@@ -402,7 +387,7 @@
                         <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
                         듣기 (Nghe)
                     </button>
-                    <button class="hint-btn-bottom-right" onclick="toggleGuessHint()">💡</button>
+                    <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡</button>
                     <div class="text-hint-display" id="guess-hint-text"></div>
                 </div>
                 <div class="quiz-question">Cụm từ bạn nghe được mang nghĩa là gì?</div>
@@ -435,24 +420,12 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="lock-modal">
-    <div class="modal-box">
-        <h3 id="modal-unit-name">Unlock Unit</h3>
-        <p>Vui lòng cung cấp mật khẩu lớp học để mở khóa toàn bộ 7 tính năng ôn tập của bài học này.</p>
-        <input type="password" class="input-field" id="modal-password-input" placeholder="Nhập mật khẩu tại đây..." onkeydown="if(event.key==='Enter') submitUnlockPassword()">
-        <div class="modal-buttons">
-            <button class="btn" onclick="closeUnlockModal()">Hủy bỏ</button>
-            <button class="btn btn-primary" onclick="submitUnlockPassword()">Mở khóa 🔓</button>
-        </div>
-    </div>
-</div>
-
 <script>
     // 🌟 ĐIỀN ĐƯỜNG LINK WEB APP URL CỦA PEN VÀO ĐÂY NHA:
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoiuvhY5MANz416-ST3q4CdVl9_oajWD-yUrmi-gGxdaFW2s_Rx_U7abytzY5VuL5v/exec";
 
     let unitsConfig = []; 
-    let unlockedUnits = JSON.parse(localStorage.getItem('unlockedUnits_QuyenClass')) || [];
+    let allowedUnitsList = []; // Danh sách Unit học sinh này được cấp quyền học
     let allVocabCache = {}; 
     let vocabData = []; 
     let currentUnit = null;
@@ -468,111 +441,145 @@
         visual: { indices: [], current: 0, answered: false }
     };
 
-    let targetUnlockUnit = null;
-
-    // 🌟 1. TẢI TOÀN BỘ 15 UNIT VỀ BỘ NHỚ TẠM TRONG 1 LẦN DUY NHẤT KHI VÀO WEB
-    async function loadAllUnitsStructureAndCache() {
+    // --- XỬ LÝ ĐĂNG NHẬP / ĐĂNG XUẤT TỰ ĐỘNG ---
+    async function executeStudentLogin() {
+        const user = document.getElementById('login-username').value.trim();
+        const pass = document.getElementById('login-password').value.trim();
+        const rememberMe = document.getElementById('login-remember-me').checked;
+        
+        if(!user || !pass) { alert("Vui lòng điền đầy đủ tài khoản và mật khẩu!"); return; }
+        
+        document.getElementById('login-screen-wrapper').style.display = 'none';
         document.getElementById('loading-area').style.display = 'block';
-        document.getElementById('loading-text').innerText = "Đang đồng bộ dữ liệu lớp học (Chỉ tốn 1 lần duy nhất)...";
+        document.getElementById('loading-text').innerText = "Đang xác thực thông tin tài khoản...";
+        
         try {
-            // Lấy cấu trúc danh sách Unit trước
+            let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(user + "||" + pass)}`);
+            let data = await res.json();
+            
+            if(data.success) {
+                // Nếu chọn ghi nhớ, lưu cookie cục bộ dài hạn
+                if(rememberMe) {
+                    localStorage.setItem('saved_user_QuyenClass', user);
+                    localStorage.setItem('saved_pass_QuyenClass', pass);
+                }
+                localStorage.setItem('studentSession_QuyenClass', user);
+                parseAndInitApp(data.allowedUnits);
+            } else {
+                alert("Tài khoản hoặc mật khẩu không chính xác!");
+                window.location.reload();
+            }
+        } catch(e) {
+            alert("Lỗi kết nối máy chủ xác thực!");
+            window.location.reload();
+        }
+    }
+
+    function executeStudentLogout() {
+        localStorage.removeItem('studentSession_QuyenClass');
+        localStorage.removeItem('saved_user_QuyenClass');
+        localStorage.removeItem('saved_pass_QuyenClass');
+        localStorage.removeItem('historyUnits_QuyenClass'); // Xóa lịch sử bài học cũ
+        window.location.reload();
+    }
+
+    async function parseAndInitApp(allowedUnitsString) {
+        // Chuyển chuỗi "1,2,3" từ Sheet thành mảng dữ liệu [1, 2, 3]
+        allowedUnitsList = allowedUnitsString.split(',').map(s => String(s).trim());
+        
+        document.getElementById('login-screen-wrapper').style.display = 'none';
+        document.getElementById('main-app-wrapper').style.display = 'flex';
+        document.getElementById('loading-area').style.display = 'block';
+        document.getElementById('loading-text').innerText = "Đang đồng bộ giáo trình từ dữ liệu Sheet...";
+        
+        try {
             let res = await fetch(`${SCRIPT_URL}?action=getUnits`);
             let data = await res.json();
             if(data.success) {
                 unitsConfig = data.units;
-                renderUnitGrid();
                 
-                // Chạy vòng lặp kéo ngầm dữ liệu từ vựng của các bài đã được unlocked trước đó về bộ nhớ cache máy luôn
-                for (let cfg of unitsConfig) {
-                    if (unlockedUnits.includes(String(cfg.unit))) {
-                        fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${cfg.unit}&pass=PRE_AUTHED`)
-                        .then(r => r.json())
-                        .then(d => { if(d.success) allVocabCache[cfg.unit] = d.vocab; });
+                // 🌟 HIỆU ỨNG POPUP BOUNCE CHO CÁC BÀI MỚI ĐƯỢC MỞ KHÓA
+                let oldHistory = JSON.parse(localStorage.getItem('historyUnits_QuyenClass')) || [];
+                let newUnitsFound = [];
+                
+                allowedUnitsList.forEach(u => {
+                    if(!oldHistory.includes(String(u))) {
+                        newUnitsFound.push(String(u));
                     }
-                }
+                });
+                
+                renderUnitGrid(newUnitsFound);
+                
+                // Cập nhật lưu lại lịch sử bài học cho lần vào sau
+                localStorage.setItem('historyUnits_QuyenClass', JSON.stringify(allowedUnitsList));
+                
+                // Kéo ngầm từ vựng để chuyển trang trong 0 giây trễ
+                allowedUnitsList.forEach(unit => {
+                    fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unit}&pass=PRE_AUTHED`)
+                    .then(r => r.json())
+                    .then(d => { if(d.success) allVocabCache[unit] = d.vocab; });
+                });
             }
         } catch(e) {
-            console.log("Lỗi đồng bộ dữ liệu: ", e);
+            console.log("Lỗi đồng bộ cấu trúc: ", e);
         }
         document.getElementById('loading-area').style.display = 'none';
     }
 
-    function renderUnitGrid() {
+    function renderUnitGrid(newUnitsArray) {
         const container = document.getElementById('unit-buttons-container');
         container.innerHTML = "";
         unitsConfig.forEach(cfg => {
             const btn = document.createElement('button');
-            const isUnlocked = unlockedUnits.includes(String(cfg.unit));
+            const isUnlocked = allowedUnitsList.includes(String(cfg.unit));
+            const isBrandNew = newUnitsArray.includes(String(cfg.unit));
             
             btn.className = `unit-btn ${isUnlocked ? 'unlocked' : 'locked'}`;
             if(currentUnit == cfg.unit) btn.classList.add('active');
             
-            btn.innerHTML = `${isUnlocked ? '' : '🔒 '}U${cfg.unit}`;
-            btn.onclick = () => handleUnitClick(cfg.unit, isUnlocked);
+            btn.innerHTML = `${isUnlocked ? '' : '🔒 '}Unit ${cfg.unit}`;
+            
+            // Nếu phát hiện bài học mới, đính kèm tag Bounce lung linh
+            if(isUnlocked && isBrandNew) {
+                const tag = document.createElement('span');
+                tag.className = "new-tag";
+                tag.innerText = "MỚI! 🔓";
+                btn.appendChild(tag);
+            }
+            
+            btn.onclick = () => handleUnitClick(cfg.unit, isUnlocked, isBrandNew);
             container.appendChild(btn);
         });
     }
 
-    function handleUnitClick(unitNum, isUnlocked) {
+    function handleUnitClick(unitNum, isUnlocked, isBrandNew) {
         if(!isUnlocked) {
-            targetUnlockUnit = unitNum;
-            document.getElementById('modal-unit-name').innerText = `Mở khóa Unit ${unitNum}`;
-            document.getElementById('modal-password-input').value = "";
-            document.getElementById('lock-modal').classList.add('active');
-            document.getElementById('modal-password-input').focus();
-        } else {
-            selectUnitLocal(unitNum);
+            alert("Bài học này hiện tại chưa được kích hoạt cho tài khoản của bạn.");
+            return;
         }
-    }
-
-    function closeUnlockModal() {
-        document.getElementById('lock-modal').classList.remove('active');
-    }
-
-    async function submitUnlockPassword() {
-        const pass = document.getElementById('modal-password-input').value.trim();
-        if(!pass) return;
         
-        closeUnlockModal();
-        document.getElementById('loading-area').style.display = 'block';
-        document.getElementById('loading-text').innerText = `Đang mở khóa dữ liệu Unit ${targetUnlockUnit}...`;
-        
-        try {
-            let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${targetUnlockUnit}&pass=${encodeURIComponent(pass)}`);
-            let data = await res.json();
-            if(data.success) {
-                if(!unlockedUnits.includes(String(targetUnlockUnit))) {
-                    unlockedUnits.push(String(targetUnlockUnit));
-                    localStorage.setItem('unlockedUnits_QuyenClass', JSON.stringify(unlockedUnits));
-                }
-                allVocabCache[targetUnlockUnit] = data.vocab; 
-                currentUnit = targetUnlockUnit;
-                vocabData = allVocabCache[currentUnit];
-                
-                renderUnitGrid();
-                initTabIndices();
-                activateMainUI();
-            } else {
-                alert(data.message || "Sai mật khẩu rồi bạn ơi!");
-            }
-        } catch(e) {
-            alert("Có lỗi kết nối xảy ra!");
+        // Hiện popup chúc mừng nhân văn nếu là bài mới tinh sáng đèn
+        if(isBrandNew) {
+            alert(`🎉 Chúc mừng bạn học! Sự siêng năng của bạn đã kích hoạt thành công Unit ${unitNum} mới tinh rồi nè. Cùng học thôi nào!`);
+            // Xóa trạng thái mới sau khi học sinh đã bấm vào xem lần đầu
+            let oldHistory = JSON.parse(localStorage.getItem('historyUnits_QuyenClass')) || [];
+            renderUnitGrid([]); 
         }
-        document.getElementById('loading-area').style.display = 'none';
+        
+        selectUnitLocal(unitNum);
     }
 
     async function selectUnitLocal(unitNum) {
         currentUnit = unitNum;
-        renderUnitGrid();
+        renderUnitGrid([]); 
         
-        // 🌟 TỐC ĐỘ 0 GIÂY: Nếu bài đã có trong bộ nhớ tạm, bật ngay không cần tải lại
         if(allVocabCache[unitNum]) {
             vocabData = allVocabCache[unitNum];
             initTabIndices();
             activateMainUI();
         } else {
             document.getElementById('loading-area').style.display = 'block';
-            document.getElementById('loading-text').innerText = `Đang kích hoạt dữ liệu Unit ${unitNum}...`;
+            document.getElementById('loading-text').innerText = `Đang tải bộ nhớ đệm Unit ${unitNum}...`;
             try {
                 let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unitNum}&pass=PRE_AUTHED`);
                 let data = await res.json();
@@ -583,7 +590,7 @@
                     activateMainUI();
                 }
             } catch(e) {
-                alert("Không thể kết nối tải từ vựng!");
+                alert("Không thể kết nối tải từ vựng bài học!");
             }
             document.getElementById('loading-area').style.display = 'none';
         }
@@ -636,20 +643,16 @@
         else if (tabName === 'visual') generateVisualQuestion();
     }
 
-    // 🌟 3. NÂNG CẤP GIỌNG NAM PREMIUM ẤM ÁP, KHÔNG CÒN MÁY MÓC THẤY GHÊ NỮA
+    // AUDIO PREMIUM SYSTEM
     function playMalePremiumVoice(text) {
         let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
         if(clean.includes('/')) clean = clean.split('/')[0];
-        // Sử dụng bộ mã giọng Nam AI tiêu chuẩn quốc tế dành cho tiếng Hàn
-        let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + encodeURIComponent(clean) + "&lang=ko&engine=g3&name=ko-KR-Standard-A&pitch=0.48&rate=0.42&volume=1";
-        new Audio(url).play().catch(e => console.log(e));
+        responsiveVoice.speak(clean, "Korean Male", {pitch: 1, rate: 0.85, volume: 1});
     }
-
     function playPremium(text) {
         let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
         if(clean.includes('/')) clean = clean.split('/')[0];
-        let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + encodeURIComponent(clean) + "&lang=ko&engine=g3&name=ko-KR-Neural2-A&pitch=0.5&rate=0.4&volume=1";
-        new Audio(url).play().catch(e => console.log(e));
+        responsiveVoice.speak(clean, "Korean Female", {pitch: 1, rate: 0.85, volume: 1});
     }
 
     function speakMalePremium(e) { e.stopPropagation(); playMalePremiumVoice(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
@@ -732,8 +735,7 @@
 
         document.getElementById('quiz-q').innerText = questionText;
         let allOptions = shuffleArray([correctAnswer, ...wrongAnswers]);
-        const optsContainer = document.getElementById('quiz-opts');
-        optsContainer.innerHTML = "";
+        const optsContainer = document.getElementById('quiz-opts'); optsContainer.innerHTML = "";
         
         allOptions.forEach(opt => {
             const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
@@ -749,7 +751,7 @@
             else if (btn === selectedBtn) btn.classList.add('wrong');
         });
         if(selectedOpt === correctOpt) setFeedback("🎉 Chính xác! Bạn nhớ bài tốt lắm.", "success");
-        else setFeedback("😢 Chưa chính xác rồi nè, cố lên câu tiếp theo nha.", "error");
+        else setFeedback("😢 Chưa chính xác rồi nè, cùng cố gắng ở câu tiếp theo nha.", "error");
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
@@ -881,7 +883,6 @@
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
-    // 🌟 2. SỬA LỖI TỰ ĐỘNG HIỂN THỊ HÌNH ẢNH MINH HỌA TỪ INTERNET CHUẨN XÁC
     function generateVisualQuestion() {
         clearFeedback();
         let state = tabState.visual;
@@ -897,18 +898,15 @@
         if (currentItem.img && currentItem.img.trim() !== "") {
             imgElement.src = currentItem.img;
         } else {
-            // Tách từ đầu tiên của nghĩa tiếng Việt dịch sang tiếng Anh để gọi thư viện ảnh thông minh
             let rawVi = currentItem.vi.split('/')[0].split('(')[0].trim();
             let cleanKeyword = encodeURIComponent(rawVi);
-            // Sử dụng API LoremFlickr mở khóa ảnh thông minh tốc độ cao
             imgElement.src = `https://loremflickr.com/600/400/${cleanKeyword},korea/all?random=${actualIndex}`;
         }
 
         let correctAnswer = currentItem.ko;
         let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
         let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
-        const optsContainer = document.getElementById('visual-opts');
-        optsContainer.innerHTML = "";
+        const optsContainer = document.getElementById('visual-opts'); optsContainer.innerHTML = "";
 
         allChoices.forEach(opt => {
             const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
@@ -958,10 +956,36 @@
     function clearFeedback() { const fb = document.getElementById('global-feedback'); fb.style.display = 'none'; fb.className = 'feedback'; }
     function setFeedback(msg, type) { const fb = document.getElementById('global-feedback'); fb.innerText = msg; fb.className = "feedback " + type; fb.style.display = 'block'; }
 
-    window.onload = function() {
-        loadAllUnitsStructureAndCache();
+    // 🌟 KÍCH HOẠT TỰ ĐỘNG ĐĂNG NHẬP NẾU CÓ DỮ LIỆU ĐÃ LƯU
+    window.onload = async function() {
+        const sessionUser = localStorage.getItem('studentSession_QuyenClass');
+        const savedUser = localStorage.getItem('saved_user_QuyenClass');
+        const savedPass = localStorage.getItem('saved_pass_QuyenClass');
+        
+        if(sessionUser) {
+            // Đang có phiên hoạt động, nạp ngầm data
+            document.getElementById('login-screen-wrapper').style.display = 'none';
+            document.getElementById('main-app-wrapper').style.display = 'flex';
+            document.getElementById('loading-area').style.display = 'block';
+            try {
+                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
+                let data = await res.json();
+                if(data.success) { parseAndInitApp(data.allowedUnits); }
+                else { executeStudentLogout(); }
+            } catch(e) { executeStudentLogout(); }
+        } else if (savedUser && savedPass) {
+            // Có dữ liệu ghi nhớ đăng nhập, tự động bypass màn hình login nhanh chóng
+            document.getElementById('login-username').value = savedUser;
+            document.getElementById('login-password').value = savedPass;
+            executeStudentLogin();
+        } else {
+            document.getElementById('login-screen-wrapper').style.display = 'block';
+            document.getElementById('main-app-wrapper').style.display = 'none';
+        }
     };
 </script>
+
+<script src="https://code.responsivevoice.org/voice.js?key=7w64YI2V"></script>
 
 </body>
 </html>
