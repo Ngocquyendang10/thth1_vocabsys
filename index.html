@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngoc Quyen's Classroom - Hệ thống ôn tập</title>
+    <title>Ngoc Quyen's Classroom - Hệ thống ôn tập nâng cấp</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f4f7fc;
+            --bg-color: #f0f4f8;
             --sidebar-color: #ffffff;
             --card-color: #ffffff;
             --text-color: #2d3748;
             --sub-text: #718096;
-            --point-color: #614CFF; 
+            --point-color: #614CFF; /* Màu xanh tím của Pen */
             --point-hover: #4b36e3;
             --point-light: rgba(97, 76, 255, 0.08);
             --success-color: #48bb78;
             --error-color: #f56565;
             
+            /* Cấu hình bóng Neumorphism dập nổi mềm mại chuẩn gu của Pen */
             --neu-convex: 6px 6px 12px #d1d9e6, -6px -6px 12px #ffffff;
             --neu-concave: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
             --neu-card-shadow: 0 10px 30px rgba(97, 76, 255, 0.04), 0 2px 8px rgba(0,0,0,0.01);
@@ -33,7 +34,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: "Chiron GoRound TC", -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: "Chiron GoRound TC", -apple-system, sans-serif;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -44,16 +45,17 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow-x: hidden;
         }
 
         /* ==========================================================================
-           1. GIAO DIỆN ĐĂNG NHẬP CHUYÊN NGHIỆP CHIA ĐÔI (HÌNH 2)
+           1. GIAO DIỆN ĐĂNG NHẬP CHIA ĐÔI CHUẨN XỊN SÒ (GIỐNG HÌNH 2)
            ========================================================================== */
         .login-page-container {
             display: flex;
             width: 100%;
-            max-width: 1050px;
-            height: 650px;
+            max-width: 1000px;
+            height: 600px;
             background: var(--card-color);
             border-radius: var(--radius-lg);
             box-shadow: var(--neu-card-shadow);
@@ -73,10 +75,10 @@
         }
 
         .art-3d-mockup {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             background: #ffffff;
-            border-radius: 40px;
+            border-radius: 36px;
             box-shadow: var(--neu-convex);
             display: flex;
             align-items: center;
@@ -88,21 +90,21 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
-        .art-3d-mockup svg { width: 90px; height: 90px; color: var(--point-color); }
+        .art-3d-mockup svg { width: 80px; height: 80px; color: var(--point-color); }
 
-        .login-left-art h3 { font-size: 22px; font-weight: 800; color: #1a202c; text-align: center; margin-bottom: 8px; }
-        .login-left-art p { font-size: 13px; color: var(--sub-text); text-align: center; max-width: 320px; }
+        .login-left-art h3 { font-size: 20px; font-weight: 800; color: #1a202c; margin-bottom: 6px; text-align: center; }
+        .login-left-art p { font-size: 13px; color: var(--sub-text); text-align: center; max-width: 280px; }
 
-        .login-right-form { flex: 0.9; padding: 50px 45px; display: flex; flex-direction: column; justify-content: center; }
-        .login-right-form h2 { font-size: 26px; font-weight: 800; color: #1a202c; margin-bottom: 6px; }
-        .login-right-form p.info-p { font-size: 13px; color: var(--sub-text); margin-bottom: 32px; }
+        .login-right-form { flex: 0.9; padding: 40px 45px; display: flex; flex-direction: column; justify-content: center; }
+        .login-right-form h2 { font-size: 24px; font-weight: 800; color: #1a202c; margin-bottom: 6px; }
+        .login-right-form p.info-p { font-size: 13px; color: var(--sub-text); margin-bottom: 28px; }
 
-        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-size: 12px; font-weight: 700; color: var(--sub-text); text-transform: uppercase; }
+        .form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 11px; font-weight: 700; color: var(--sub-text); text-transform: uppercase; }
 
         .input-field {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 16px;
             font-size: 14px;
             border: 1px solid rgba(226, 232, 240, 0.8);
             border-radius: var(--radius-sm);
@@ -113,25 +115,28 @@
         }
         .input-field:focus { border-color: var(--point-color); }
 
-        .remember-row { display: flex; align-items: center; gap: 8px; margin: 8px 0 24px 0; font-size: 13px; color: var(--text-color); cursor: pointer; }
+        .remember-row { display: flex; align-items: center; gap: 8px; margin: 6px 0 20px 0; font-size: 13px; color: var(--text-color); cursor: pointer; }
         .remember-row input { width: 16px; height: 16px; accent-color: var(--point-color); cursor: pointer; }
+        .btn-submit-login { width: 100%; padding: 14px; font-size: 14px; background: var(--point-color); color: white; border: none; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(97, 76, 255, 0.2); }
+        .btn-submit-login:hover { background: var(--point-hover); }
 
         /* ==========================================================================
-           2. 🌟 GIẢI PHÓNG DIỆN TÍCH TRUNG TÂM RỘNG RÃI CĂN 2 LỀ (HÌNH 3)
+           2. 🌟 BỐ CỤC 3 CỘT ĐẲNG CẤP - GIẢI PHÓNG KHÔNG GIAN BIÊN (HÌNH 3)
            ========================================================================== */
         .dashboard-layout {
             display: none; 
-            width: 100%;
-            max-width: 100%; /* Mở rộng tối đa toàn màn hình */
+            width: 100vw;
             height: 100vh;
             background: var(--bg-color);
-            padding: 14px;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 240px 1fr 270px; /* Cố định 2 bên lề, ở giữa tự do giãn rộng */
+            gap: 12px;
             box-sizing: border-box;
         }
 
-        /* Cột trái căn biên trái */
+        /* CỘT BIÊN TRÁI: SIDEBAR NAV */
         .sidebar-left {
-            width: 250px;
             background: var(--sidebar-color);
             border-radius: var(--radius-lg);
             box-shadow: var(--neu-card-shadow);
@@ -140,54 +145,51 @@
             flex-direction: column;
             justify-content: space-between;
             border: 1px solid rgba(255,255,255,0.7);
-            height: calc(100vh - 28px);
-            position: sticky;
-            top: 14px;
+            height: 100%;
         }
 
-        .brand-logo-area { display: flex; align-items: center; gap: 10px; padding-left: 12px; margin-bottom: 35px; }
-        .brand-logo-area svg { width: 28px; height: 24px; color: var(--point-color); }
-        .brand-logo-area span { font-size: 15px; font-weight: 800; color: #1a202c; }
+        .brand-logo-area { display: flex; align-items: center; gap: 10px; padding-left: 10px; margin-bottom: 30px; }
+        .brand-logo-area svg { width: 26px; height: 22px; color: var(--point-color); }
+        .brand-logo-area span { font-size: 14px; font-weight: 800; color: #1a202c; letter-spacing: 0.5px; }
 
-        .menu-list { display: flex; flex-direction: column; gap: 6px; list-style: none; }
+        .menu-list { display: flex; flex-direction: column; gap: 4px; list-style: none; }
         .menu-item a {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
+            padding: 12px 14px;
             color: var(--sub-text);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             text-decoration: none;
             border-radius: var(--radius-sm);
             transition: all 0.2s;
         }
         .menu-item.active a, .menu-item a:hover { color: var(--point-color); background: var(--point-light); }
-        .menu-item a svg { width: 18px; height: 18px; fill: currentColor; }
+        .menu-item a svg { width: 16px; height: 18px; fill: currentColor; }
+        .logout-link { font-size: 12px; color: var(--error-color) !important; font-weight: 700; cursor: pointer; }
 
-        /* 🌟 KHU VỰC GIỮA ĐƯỢC GIẢI PHÓNG DIỆN TÍCH RỘNG RÃI */
+        /* CỘT GIỮA TRUNG TÂM: WORKSPACE RỘNG RÃI TOÀN DIỆN */
         .main-center-content {
-            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            height: calc(100vh - 28px);
+            gap: 12px;
+            height: 100%;
             overflow-y: auto;
-            padding: 0 10px;
         }
 
         .unit-panel-box {
             background: #ffffff;
-            padding: 14px 20px;
+            padding: 12px 18px;
             border-radius: var(--radius-md);
             box-shadow: var(--neu-card-shadow);
             border: 1px solid rgba(255,255,255,0.7);
         }
-        .unit-panel-box h4 { font-size: 11px; color: var(--sub-text); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px; }
+        .unit-panel-box h4 { font-size: 11px; color: var(--sub-text); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
         
-        .unit-grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); gap: 8px; }
+        .unit-grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 6px; }
         .unit-btn {
-            padding: 8px; background: #ffffff; border: none; border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; color: var(--sub-text); cursor: pointer; box-shadow: var(--neu-convex); transition: all 0.2s; display: flex; flex-direction: column; align-items: center; position: relative;
+            padding: 8px 4px; background: #ffffff; border: none; border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; color: var(--sub-text); cursor: pointer; box-shadow: var(--neu-convex); display: flex; flex-direction: column; align-items: center; position: relative; outline: none;
         }
         .unit-btn:hover { color: var(--text-color); transform: translateY(-1px); }
         .unit-btn.unlocked { color: var(--point-color); border: 1px solid rgba(97, 76, 255, 0.15); }
@@ -195,10 +197,11 @@
         .unit-btn.locked { opacity: 0.45; background: #e6ecf2; box-shadow: none; cursor: not-allowed; }
 
         .bounce-new-tag {
-            font-size: 7px; background: var(--success-color); color: white; padding: 1px 4px; border-radius: 6px; position: absolute; top: -6px; font-weight: 800; animation: miniBounce 0.6s infinite alternate;
+            font-size: 7px; background: var(--success-color); color: white; padding: 1px 3px; border-radius: 5px; position: absolute; top: -6px; font-weight: 800; animation: miniBounce 0.6s infinite alternate;
         }
-        @keyframes miniBounce { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+        @keyframes miniBounce { from { transform: translateY(0); } to { transform: translateY(-2px); } }
 
+        /* KHUNG CHỨA GAME VÀ LÀM BÀI TẬP ÔN TẬP */
         .work-workspace-container {
             background: #ffffff;
             border-radius: var(--radius-lg);
@@ -209,19 +212,18 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-height: 520px;
         }
 
-        .workspace-header { margin-bottom: 16px; }
-        .workspace-header h1 { font-size: 20px; font-weight: 800; color: #1a202c; }
-        .workspace-header p { font-size: 12px; color: var(--sub-text); margin-top: 2px; }
+        .workspace-header h1 { font-size: 18px; font-weight: 800; color: #1a202c; }
+        .workspace-header p { font-size: 11px; color: var(--sub-text); margin-top: 2px; margin-bottom: 14px; }
 
         .workspace-tabs { display: flex; background: var(--bg-color); padding: 4px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); margin-bottom: 20px; gap: 2px; overflow-x: auto; }
-        .tab-click-btn { flex: 1; padding: 11px 4px; background: none; border: none; font-size: 11px; font-weight: 700; color: var(--sub-text); cursor: pointer; border-radius: var(--radius-sm); white-space: nowrap; outline: none; }
+        .tab-click-btn { flex: 1; padding: 10px 2px; background: none; border: none; font-size: 11px; font-weight: 700; color: var(--sub-text); cursor: pointer; border-radius: var(--radius-sm); white-space: nowrap; outline: none; }
         .tab-click-btn.active { color: var(--point-color); background: #ffffff; box-shadow: var(--neu-convex); }
 
-        /* Cột phải căn biên phải */
+        /* CỘT BIÊN PHẢI: WIDGET HỌC VIÊN SÁT LỀ */
         .widget-right-profile {
-            width: 270px;
             background: #ffffff;
             border-radius: var(--radius-lg);
             box-shadow: var(--neu-card-shadow);
@@ -230,38 +232,36 @@
             flex-direction: column;
             gap: 20px;
             border: 1px solid rgba(255,255,255,0.7);
-            height: calc(100vh - 28px);
-            position: sticky;
-            top: 14px;
+            height: 100%;
         }
 
         .profile-card-box { display: flex; flex-direction: column; align-items: center; text-align: center; padding-bottom: 16px; border-bottom: 1px solid #edf2f7; }
-        .avatar-circle-wrapper { width: 70px; height: 70px; border-radius: 50%; background: var(--bg-color); box-shadow: var(--neu-convex); padding: 4px; margin-bottom: 10px; }
-        .avatar-circle-wrapper .avatar-core { width: 100%; height: 100%; border-radius: 50%; background: var(--point-color); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 22px; }
-        .profile-card-box h3 { font-size: 14px; font-weight: 800; color: #1a202c; }
+        .avatar-circle-wrapper { width: 64px; height: 64px; border-radius: 50%; background: var(--bg-color); box-shadow: var(--neu-convex); padding: 4px; margin-bottom: 10px; }
+        .avatar-circle-wrapper .avatar-core { width: 100%; height: 100%; border-radius: 50%; background: var(--point-color); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 20px; }
+        .profile-card-box h3 { font-size: 13px; font-weight: 800; color: #1a202c; }
         .profile-card-box span { font-size: 11px; color: var(--sub-text); }
 
         .todo-list-widget h4 { font-size: 11px; color: var(--text-color); font-weight: 800; margin-bottom: 10px; text-transform: uppercase; }
-        .todo-item { display: flex; gap: 10px; padding: 10px; background: var(--bg-color); border-radius: var(--radius-sm); margin-bottom: 8px; font-size: 11px; border-left: 3px solid var(--point-color); }
+        .todo-item { display: flex; gap: 8px; padding: 10px; background: var(--bg-color); border-radius: var(--radius-sm); margin-bottom: 6px; font-size: 11px; border-left: 3px solid var(--point-color); }
         .todo-item p { font-weight: 600; color: #2d3748; }
         .todo-item span { color: var(--sub-text); font-size: 10px; display: block; margin-top: 2px; }
 
         /* ==========================================================================
-           3. ĐỊNH DẠNG NỘI DUNG GAME ÔN TẬP
+           3. CẤU TRÚC ĐỊNH DẠNG 7 CHỨC NĂNG HỌC TẬP
            ========================================================================== */
         .tab-render-view { display: none; }
         .tab-render-view.active { display: block; }
 
-        .lecture-iframe-box { width: 100%; height: 460px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden; border: none; background: #e2e8f0; }
+        .lecture-iframe-box { width: 100%; height: 440px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden; border: none; background: #e2e8f0; }
 
-        .card-container { perspective: 1000px; width: 100%; height: 220px; margin-bottom: 20px; cursor: pointer; }
+        .card-container { perspective: 1000px; width: 100%; height: 210px; margin-bottom: 16px; cursor: pointer; }
         .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.5s ease; border-radius: var(--radius-md); box-shadow: var(--neu-convex); }
         .flashcard.flipped { transform: rotateY(180deg); }
         .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; border-radius: var(--radius-md); background: #ffffff; text-align: center; }
         .card-back { transform: rotateY(180deg); background-color: #fafdff; }
-        .ko-text { font-size: 30px; font-weight: 800; color: #1a202c; }
-        .vi-text { font-size: 22px; font-weight: 600; color: #4a5568; }
-        .card-hint { font-size: 10px; color: #a0aec0; position: absolute; bottom: 14px; text-transform: uppercase; font-weight: 700; }
+        .ko-text { font-size: 32px; font-weight: 800; color: #1a202c; }
+        .vi-text { font-size: 24px; font-weight: 600; color: #4a5568; }
+        .card-hint { font-size: 10px; color: #a0aec0; position: absolute; bottom: 12px; text-transform: uppercase; font-weight: 700; }
 
         .fc-speaker-row { display: flex; gap: 10px; margin-top: 6px; }
 
@@ -276,7 +276,7 @@
         .typing-word { font-size: 26px; font-weight: 800; color: #1a202c; margin-bottom: 20px; }
 
         .listen-frame { display: flex; align-items: center; justify-content: center; padding: 20px; background: var(--bg-color); border-radius: var(--radius-md); margin-bottom: 16px; box-shadow: var(--neu-concave); min-height: 120px; position: relative; }
-        .listen-circle-btn { background: #ffffff; border: none; width: 60px; height: 64px; border-radius: 50%; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; box-shadow: var(--neu-convex); color: var(--text-color); }
+        .listen-circle-btn { background: #ffffff; border: none; padding: 10px 18px; border-radius: 24px; cursor: pointer; font-size: 13px; font-weight: 700; box-shadow: var(--neu-convex); color: var(--text-color); display: flex; align-items: center; gap: 4px; }
         .word-pool { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
         .pool-btn { padding: 8px 16px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: var(--neu-convex); }
         .pool-btn.selected-correct { background: var(--success-color) !important; color: white !important; }
@@ -294,7 +294,7 @@
         .counter { font-size: 12px; color: var(--sub-text); font-weight: 600; background: var(--bg-color); padding: 4px 12px; border-radius: 20px; box-shadow: var(--neu-concave); }
 
         /* ==========================================================================
-           4. 🌟 MODAL POPUP BOUNCE NỘI BỘ XỊN SÒ (THAY THẾ ALERT)
+           4. MODAL POPUP BOUNCE KHEN NGỢI NỘI BỘ 
            ========================================================================== */
         .bounce-popup-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 32, 44, 0.4);
@@ -316,12 +316,15 @@
         .bounce-popup-box h3 { font-size: 18px; font-weight: 800; color: #1a202c; margin-bottom: 10px; }
         .bounce-popup-box p { font-size: 13px; color: var(--sub-text); line-height: 1.4; margin-bottom: 24px; }
 
+        /* NÚT ĐIỀU HƯỚNG */
         .btn { padding: 8px 16px; border-radius: var(--radius-sm); border: none; background: #ffffff; font-size: 12px; font-weight: 700; color: var(--text-color); cursor: pointer; box-shadow: var(--neu-convex); outline: none; transition: 0.2s; }
         .btn:hover { background: var(--bg-color); }
         .btn-primary { background: var(--point-color); color: white; box-shadow: none; }
         .btn-primary:hover { background: var(--point-hover); }
 
-        .btn-submit-login { width: 100%; padding: 14px; font-size: 14px; background: var(--point-color); color: white; border: none; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(97, 76, 255, 0.2); }
+        .loading-screen { display: none; text-align: center; padding: 30px; }
+        .spinner { width: 36px; height: 36px; border: 4px solid rgba(97, 76, 255, 0.1); border-left-color: var(--point-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -336,7 +339,7 @@
     </div>
     <div class="login-right-form">
         <h2>Xin chào học viên 👋</h2>
-        <p class="info-p">Vui lòng đăng nhập tài khoản lớp học để học từ vựng.</p>
+        <p class="info-p">Vui lòng đăng nhập tài khoản lớp học để tiếp tục bài ôn tập.</p>
         
         <div class="form-group">
             <label>Tên đăng nhập / Mã học sinh</label>
@@ -356,7 +359,7 @@
     </div>
 </div>
 
-<div class="dashboard-layout" id="main-app-layout">
+<div class="dashboard-layout" id="main-app-layout" style="display: none;">
     
     <aside class="sidebar-left">
         <div class="upper-nav">
@@ -378,7 +381,7 @@
         </div>
         <div class="lower-nav">
             <ul class="menu-list">
-                <li class="menu-item" onclick="executeStudentLogout()"><a href="#" style="color: var(--error-color);">
+                <li class="menu-item" onclick="executeStudentLogout()"><a href="#" class="logout-link">
                     <svg viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Rời phòng học</a>
                 </li>
             </ul>
@@ -395,7 +398,7 @@
             <div class="top-meta-area">
                 <div class="workspace-header">
                     <h1>Ngoc Quyen's Classroom</h1>
-                    <p id="main-subtitle">Vui lòng chọn bài học phía trên để bắt đầu bài ôn luyện</p>
+                    <p id="main-subtitle">Vui lòng chọn bài học phía trên để tải tài liệu</p>
                 </div>
 
                 <div class="workspace-tabs" id="main-tabs-nav" style="display: none;">
@@ -467,8 +470,8 @@
 
             <div id="listen-tab" class="tab-render-view">
                 <div class="listen-frame">
-                    <button class="listen-circle-btn" onclick="speakPremiumGeneric('listen')"><span>🔊</span>듣기</button>
-                    <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡</button>
+                    <button class="listen-circle-btn" onclick="speakPremiumGeneric('listen')"><span>🔊</span>듣기 (Nghe)</button>
+                    <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡 Gợi ý</button>
                     <div class="text-hint-display" style="position: absolute; bottom: 12px; left: 16px;" id="listen-hint-text"></div>
                 </div>
                 <div class="fill-sentence">Nghĩa: <span id="listen-vi-meaning" style="color: #4a5568;">...</span></div>
@@ -477,8 +480,8 @@
 
             <div id="guess-tab" class="tab-render-view">
                 <div class="listen-frame">
-                    <button class="listen-circle-btn" onclick="speakPremiumGeneric('guess')"><span>🔊</span>듣기</button>
-                    <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡</button>
+                    <button class="listen-circle-btn" onclick="speakPremiumGeneric('guess')"><span>🔊</span>듣기 (Nghe)</button>
+                    <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡 Gợi ý</button>
                     <div class="text-hint-display" style="position: absolute; bottom: 12px; left: 16px;" id="guess-hint-text"></div>
                 </div>
                 <div class="quiz-question">Cụm từ vừa nghe mang ý nghĩa nào dưới đây?</div>
@@ -572,10 +575,12 @@
         document.getElementById('popup-message').innerText = text;
         document.getElementById('custom-bounce-popup').classList.add('active');
     }
+    
     function closeCustomBouncePopup() {
         document.getElementById('custom-bounce-popup').classList.remove('active');
     }
 
+    // --- CƠ CHẾ ĐĂNG NHẬP TUẦN TỰ ĐỒNG BỘ ---
     async function executeStudentLogin() {
         const user = document.getElementById('login-username').value.trim();
         const pass = document.getElementById('login-password').value.trim();
@@ -584,7 +589,7 @@
         if(!user || !pass) { alert("Vui lòng điền đầy đủ tài khoản và mật khẩu!"); return; }
         
         document.getElementById('login-panel-screen').style.display = 'none';
-        document.getElementById('main-app-layout').style.display = 'flex';
+        document.getElementById('main-app-layout').style.display = 'grid'; // Hiển thị chuẩn Grid 3 cột
         document.getElementById('loading-area').style.display = 'block';
         document.getElementById('loading-text').innerText = "Đang xác thực thông tin học viên...";
         
@@ -609,10 +614,7 @@
 
     function showModalError(msg) {
         alert(msg);
-        localStorage.removeItem('studentSession_QuyenClass');
-        localStorage.removeItem('saved_user_QuyenClass');
-        localStorage.removeItem('saved_pass_QuyenClass');
-        window.location.reload();
+        executeStudentLogout();
     }
 
     function executeStudentLogout() {
@@ -631,7 +633,7 @@
         document.getElementById('student-avatar-letter').innerText = currentUser.charAt(0).toUpperCase();
         
         document.getElementById('login-panel-screen').style.display = 'none';
-        document.getElementById('main-app-layout').style.display = 'flex';
+        document.getElementById('main-app-layout').style.display = 'grid';
         document.getElementById('loading-area').style.display = 'block';
         document.getElementById('loading-text').innerText = "Đang đồng bộ giáo trình lớp học...";
         
@@ -651,12 +653,14 @@
                 renderUnitGrid(newUnitsFound);
                 localStorage.setItem('historyUnits_QuyenClass', JSON.stringify(allowedUnitsList));
                 
-                // Đồng bộ bộ nhớ đệm
-                allowedUnitsList.forEach(unit => {
-                    fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unit}&pass=PRE_AUTHED`)
-                    .then(r => r.json())
-                    .then(d => { if(d.success) allVocabCache[unit] = d.vocab; });
-                });
+                // Đồng bộ nạp sẵn bộ nhớ đệm
+                for (let unit of allowedUnitsList) {
+                    try {
+                        let vRes = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unit}&pass=PRE_AUTHED`);
+                        let vData = await vRes.json();
+                        if(vData.success) allVocabCache[unit] = vData.vocab;
+                    } catch(err) { console.log(err); }
+                }
             }
         } catch(e) {
             console.log(e);
@@ -779,11 +783,13 @@
         else if (tabName === 'visual') generateVisualQuestion();
     }
 
+    // HỆ THỐNG PHÁT ÂM PREMIUM ĐỒNG BỘ 100%
     function playMalePremiumVoice(text) {
         let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
         if(clean.includes('/')) clean = clean.split('/')[0];
         responsiveVoice.speak(clean, "Korean Male", {pitch: 1, rate: 0.85, volume: 1});
     }
+    
     function playPremium(text) {
         let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
         if(clean.includes('/')) clean = clean.split('/')[0];
@@ -826,7 +832,9 @@
         document.getElementById('fcard').classList.remove('flipped');
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
+    
     function toggleFlip() { document.getElementById('fcard').classList.toggle('flipped'); }
+    
     function handleFlashcardModeChange(toggleElement) {
         let state = tabState.flashcard;
         state.isShuffleMode = toggleElement.checked;
@@ -878,6 +886,7 @@
             optsContainer.appendChild(btn);
         });
     }
+    
     function handleQuizAnswer(selectedBtn, selectedOpt, correctOpt) {
         let state = tabState.quiz;
         if (state.answered) return; state.answered = true;
@@ -892,9 +901,10 @@
 
     function toggleTypingDirection() {
         tabState.typing.direction = tabState.typing.direction === 'vi-to-ko' ? 'ko-to-vi' : 'vi-to-ko';
-        document.getElementById('typing-dir-btn').innerText = tabState.typing.direction === 'vi-to-ko' ? 'Tiếng Việt ➔ Tiếng Hàn' : 'Tiếng Hàn ➔ Tiếng Việt';
+        document.getElementById('typing-dir-btn').innerText = tabState.typing.direction === 'vi-to-ko' ? 'Chế độ: Tiếng Việt ➔ Tiếng Hàn' : 'Chế độ: Tiếng Hàn ➔ Tiếng Việt';
         renderTypingQuestion();
     }
+    
     function renderTypingQuestion() {
         clearFeedback();
         let state = tabState.typing;
@@ -912,8 +922,10 @@
         }
         input.focus();
     }
+    
     function checkTypingEnter(e) { if (e.key === 'Enter') submitTypingAnswer(); }
     function cleanString(str) { return str.toLowerCase().replace(/[^a-zA-Z0-9가-힣]/g, '').trim(); }
+    
     function submitTypingAnswer() {
         let state = tabState.typing;
         const item = vocabData[state.indices[state.current]];
@@ -959,10 +971,12 @@
             poolContainer.appendChild(btn);
         });
     }
+    
     function toggleListenHint() {
         const hintBox = document.getElementById(currentTab + '-hint-text');
         hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
     }
+    
     function handleListenAnswer(btn, selectedChoice, correctChoice) {
         let state = tabState.listen;
         if (state.answered) return; state.answered = true;
@@ -1002,6 +1016,7 @@
             optsContainer.appendChild(btn);
         });
     }
+    
     function handleGuessAnswer(selectedBtn, selectedOpt, correctOpt) {
         let state = tabState.guess;
         if (state.answered) return; state.answered = true;
@@ -1045,6 +1060,7 @@
             optsContainer.appendChild(btn);
         });
     }
+    
     function handleVisualAnswer(selectedBtn, selectedOpt, correctOpt) {
         let state = tabState.visual;
         if (state.answered) return; state.answered = true;
@@ -1084,19 +1100,20 @@
             switchTab(currentTab);
         }
     }
+    function clearFeedback() { const fb = document.getElementById('global-feedback'); fb.style.display = 'none'; fb.className = 'feedback'; }
+    function setFeedback(msg, type) { const fb = document.getElementById('global-feedback'); fb.innerText = msg; fb.className = "feedback " + type; fb.style.display = 'block'; }
 
-    // 🌟 THIẾT LẬP LUỒNG KHỞI CHẠY TUẦN TỰ ĐỒNG BỘ TUYỆT ĐỐI (SỬA LỖI TREO WEB)
+    // 🌟 TUẦN TỰ KHỞI CHẠY ĐỒNG BỘ KHI TẢI TRANG (SỬA LỖI TREO DATA)
     window.onload = async function() {
         const savedUser = localStorage.getItem('saved_user_QuyenClass');
         const savedPass = localStorage.getItem('saved_pass_QuyenClass');
         const sessionUser = localStorage.getItem('studentSession_QuyenClass');
         
         if (sessionUser && savedUser && savedPass) {
-            // Trường hợp có phiên chạy, giấu màn đăng nhập trước khi fetch data ngầm
             document.getElementById('login-panel-screen').style.display = 'none';
-            document.getElementById('main-app-layout').style.display = 'flex';
+            document.getElementById('main-app-layout').style.display = 'grid'; // Bật chuẩn lưới 3 cột liền
             document.getElementById('loading-area').style.display = 'block';
-            document.getElementById('loading-text').innerText = "Đang kết nối lại phiên học tập...";
+            document.getElementById('loading-text').innerText = "Đang kết nối lại phiên học tập cũ...";
             
             try {
                 let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
@@ -1110,7 +1127,6 @@
                 executeStudentLogout(); 
             }
         } else {
-            // Không có phiên lưu, mở màn hình đăng nhập Neumorphism
             document.getElementById('login-panel-screen').style.display = 'flex';
             document.getElementById('main-app-layout').style.display = 'none';
         }
