@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ngoc Quyen's Classroom - Ôn tập từ vựng</title>
-    <!-- Nhúng Font chữ yêu thích của Pen -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -14,13 +13,12 @@
             --card-color: #ffffff;
             --text-color: #2d3748;
             --sub-text: #718096;
-            --point-color: #614CFF; /* Màu xanh tím đặc trưng của Pen */
+            --point-color: #614CFF; 
             --point-hover: #4b36e3;
             --google-voice-color: #4285F4;
             --success-color: #48bb78;
             --error-color: #f56565;
             
-            /* Neumorphism Shadows mượt mà */
             --neu-convex: 6px 6px 12px #d1d9e6, -6px -6px 12px #ffffff;
             --neu-concave: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
             --neu-card-shadow: 0 10px 25px rgba(97, 76, 255, 0.05), 0 4px 12px rgba(0,0,0,0.02);
@@ -48,7 +46,6 @@
             padding: 20px;
         }
 
-        /* Responsive Wrapper */
         .app-wrapper {
             width: 100%;
             max-width: 1000px;
@@ -57,7 +54,6 @@
             gap: 20px;
         }
 
-        /* Neumorphism Unit Selector Panel */
         .unit-panel {
             background: var(--card-color);
             padding: 20px;
@@ -120,7 +116,6 @@
             cursor: not-allowed;
         }
 
-        /* Main Container */
         .container {
             width: 100%;
             background: var(--card-color);
@@ -152,7 +147,6 @@
             font-weight: 500;
         }
 
-        /* Tabs UI Neumorphism */
         .tabs {
             display: flex;
             background: var(--bg-color);
@@ -189,7 +183,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* TAB 1: EMBED LECTURE SCREEN */
         .embed-wrapper {
             width: 100%;
             height: 480px;
@@ -212,7 +205,6 @@
             color: var(--sub-text);
         }
 
-        /* CHẤT LƯỢNG UI CHUNG CỦA FLASHCARD VÀ FLASHCARD 3D */
         .fc-mode-container { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 16px; gap: 10px; }
         .fc-mode-label { font-size: 13px; font-weight: 700; color: var(--sub-text); }
         .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
@@ -237,7 +229,6 @@
         .audio-inline-btn.google-voice { color: var(--google-voice-color); }
         .audio-inline-btn:hover { transform: scale(1.05); }
 
-        /* QUIZ & INPUT */
         .quiz-question { font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 20px; text-align: center; }
         .quiz-options { display: flex; flex-direction: column; gap: 12px; }
         .option-btn { width: 100%; padding: 16px; text-align: left; background: var(--card-color); border: 1px solid rgba(226, 232, 240, 0.6); border-radius: var(--radius-sm); font-size: 15px; font-weight: 500; color: var(--text-color); cursor: pointer; box-shadow: var(--neu-convex); transition: all 0.2s; outline: none; }
@@ -252,7 +243,6 @@
         .input-field:focus { border-color: var(--point-color); }
         .toggle-mode { font-size: 11px; color: var(--point-color); background: var(--card-color); border: none; cursor: pointer; font-weight: 700; padding: 8px 16px; border-radius: 20px; box-shadow: var(--neu-convex); margin-bottom: 16px; outline: none; }
 
-        /* LISTEN SYSTEM */
         .listen-box { display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--bg-color); border-radius: var(--radius-md); margin-bottom: 20px; box-shadow: var(--neu-concave); position: relative; min-height: 150px; }
         .listen-circle-btn { background: var(--card-color); border: none; width: 64px; height: 64px; border-radius: 50%; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; box-shadow: var(--neu-convex); transition: all 0.2s; color: var(--text-color); outline: none; }
         .listen-circle-btn:hover { transform: scale(1.05); color: var(--point-color); }
@@ -266,11 +256,9 @@
         .pool-btn.selected-correct { background: var(--success-color) !important; color: white !important; box-shadow: none; border: none; }
         .pool-btn.selected-wrong { background: var(--error-color) !important; color: white !important; box-shadow: none; border: none; }
 
-        /* VISUAL SCENE IMAGE */
         .scene-image-frame { width: 100%; height: 220px; background: var(--bg-color); border-radius: var(--radius-md); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-concave); overflow: hidden; }
         .scene-image-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* FOOTER CONTROLS & LOCK DIALOG MODAL */
         .feedback-reserved-space { min-height: 50px; margin-bottom: 16px; display: flex; align-items: center; }
         .feedback { width: 100%; font-size: 13px; font-weight: 600; padding: 12px; border-radius: var(--radius-sm); display: none; }
         .feedback.success { display: block; background: #e6fffa; color: #234e52; border-left: 4px solid var(--success-color); }
@@ -284,7 +272,6 @@
         .btn-primary:hover { background: var(--point-hover); }
         .counter { font-size: 13px; color: var(--sub-text); font-weight: 600; background: var(--bg-color); padding: 6px 14px; border-radius: 20px; box-shadow: var(--neu-concave); }
 
-        /* NEUMORPHISM MODAL (PASSWORD SYSTEM) */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(240,244,248,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-box { background: var(--card-color); padding: 30px; border-radius: var(--radius-lg); box-shadow: var(--neu-convex); width: 90%; max-width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.8); }
@@ -293,12 +280,10 @@
         .modal-box .input-field { margin-bottom: 20px; }
         .modal-buttons { display: flex; gap: 12px; justify-content: center; }
 
-        /* LOADING SPINNER */
         .loading-screen { display: none; text-align: center; padding: 40px; }
         .spinner { width: 40px; height: 40px; border: 4px solid rgba(97, 76, 255, 0.1); border-left-color: var(--point-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Responsive Breakpoints cho máy tính bảng và điện thoại */
         @media(max-width: 768px) {
             body { padding: 10px; }
             .container { padding: 20px; min-height: 550px; }
@@ -311,15 +296,11 @@
 <body>
 
 <div class="app-wrapper">
-    <!-- Khu vực chọn Unit dập nổi Neumorphism -->
     <div class="unit-panel">
         <h2 id="unit-panel-title">Chọn bài học (Unit)</h2>
-        <div class="unit-grid" id="unit-buttons-container">
-            <!-- Render danh sách Unit tự động từ Apps Script -->
-        </div>
+        <div class="unit-grid" id="unit-buttons-container"></div>
     </div>
 
-    <!-- Khung chức năng chính -->
     <div class="container">
         <div class="content-body">
             <header>
@@ -327,7 +308,6 @@
                 <p class="subtitle" id="main-subtitle">Vui lòng chọn hoặc mở khóa bài học để bắt đầu</p>
             </header>
 
-            <!-- Hệ thống 7 Tabs theo đúng số thứ tự của Pen -->
             <div class="tabs" id="main-tabs-nav" style="display: none;">
                 <button id="btn-lecture" class="tab-btn active" onclick="switchTab('lecture')">1. Xem bài giảng</button>
                 <button id="btn-flashcard" class="tab-btn" onclick="switchTab('flashcard')">2. Flashcard</button>
@@ -338,13 +318,11 @@
                 <button id="btn-visual" class="tab-btn" onclick="switchTab('visual')">7. Nhìn hình chọn câu</button>
             </div>
 
-            <!-- Màn hình Loading -->
             <div id="loading-area" class="loading-screen">
                 <div class="spinner"></div>
-                <p style="color: var(--sub-text); font-weight: 600;">Đang tải dữ liệu từ Google Sheet...</p>
+                <p style="color: var(--sub-text); font-weight: 600;">Đang nạp bộ nhớ đệm dữ liệu...</p>
             </div>
 
-            <!-- TAB 1: XEM BÀI GIẢNG (MỚI) -->
             <div id="lecture-tab" class="tab-content active">
                 <div class="embed-wrapper">
                     <div class="no-embed-msg" id="lecture-empty-msg">Không có slide bài giảng cho Unit này.</div>
@@ -352,7 +330,6 @@
                 </div>
             </div>
 
-            <!-- TAB 2: FLASHCARD -->
             <div id="flashcard-tab" class="tab-content">
                 <div class="fc-mode-container">
                     <span class="fc-mode-label" id="fc-toggle-text">Chế độ: Theo thứ tự</span>
@@ -367,13 +344,11 @@
                             <div class="ko-vertical-wrapper">
                                 <div class="ko-text" id="fc-ko">...</div>
                                 <div class="fc-speaker-row">
-                                    <button class="audio-inline-btn google-voice" onclick="speakGoogle(event)">
-                                        <!-- Inline SVG icon Loa Nam -->
+                                    <button class="audio-inline-btn google-voice" onclick="speakGoogleNative(event)">
                                         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
                                         Nam
                                     </button>
                                     <button class="audio-inline-btn" onclick="speakPremium(event)">
-                                        <!-- Inline SVG icon Loa Nữ -->
                                         <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
                                         Nữ
                                     </button>
@@ -389,13 +364,11 @@
                 </div>
             </div>
 
-            <!-- TAB 3: TRẮC NGHIỆM -->
             <div id="quiz-tab" class="tab-content">
                 <div class="quiz-question" id="quiz-q">Đang tạo câu hỏi...</div>
                 <div class="quiz-options" id="quiz-opts"></div>
             </div>
 
-            <!-- TAB 4: GÕ TỪ VỰNG -->
             <div id="typing-tab" class="tab-content">
                 <div style="text-align: center;">
                     <button class="toggle-mode" onclick="toggleTypingDirection()" id="typing-dir-btn">Chế độ: Tiếng Việt ➔ Tiếng Hàn</button>
@@ -407,7 +380,6 @@
                 </div>
             </div>
 
-            <!-- TAB 5: NGHE & ĐIỀN TỪ -->
             <div id="listen-tab" class="tab-content">
                 <div class="listen-box">
                     <button class="listen-circle-btn" onclick="speakPremiumGeneric('listen')">
@@ -421,7 +393,6 @@
                 <div class="word-pool" id="listen-word-pool"></div>
             </div>
 
-            <!-- TAB 6: NGHE & ĐOÁN NGHĨA -->
             <div id="guess-tab" class="tab-content">
                 <div class="listen-box">
                     <button class="listen-circle-btn" onclick="speakPremiumGeneric('guess')">
@@ -435,7 +406,6 @@
                 <div class="quiz-options" id="guess-opts"></div>
             </div>
 
-            <!-- TAB 7: NHÌN HÌNH CHỌN CÂU -->
             <div id="visual-tab" class="tab-content">
                 <div class="scene-image-frame">
                     <img id="visual-native-img" src="" alt="Hình ảnh tình huống từ vựng">
@@ -444,13 +414,11 @@
                 <div class="quiz-options" id="visual-opts"></div>
             </div>
 
-            <!-- Phản hồi trạng thái Đúng/Sai không gây giật lag UI -->
             <div class="feedback-reserved-space">
                 <div class="feedback" id="global-feedback"></div>
             </div>
         </div>
 
-        <!-- Thanh điều hướng chân trang -->
         <div class="controls" id="footer-controls" style="visibility: hidden;">
             <div class="controls-left">
                 <span class="counter" id="global-counter">0 / 0</span>
@@ -464,7 +432,6 @@
     </div>
 </div>
 
-<!-- MODAL NHẬP MẬT KHẨU UNLOCK UNIT -->
 <div class="modal-overlay" id="lock-modal">
     <div class="modal-box">
         <h3 id="modal-unit-name">Unlock Unit</h3>
@@ -483,6 +450,7 @@
 
     let unitsConfig = []; 
     let unlockedUnits = JSON.parse(localStorage.getItem('unlockedUnits_QuyenClass')) || [];
+    let allVocabCache = {}; // Lưu toàn bộ dữ liệu 15 Unit để chuyển trang trong 0 giây!
     let vocabData = []; 
     let currentUnit = null;
     let currentTab = "lecture";
@@ -499,7 +467,6 @@
 
     let targetUnlockUnit = null;
 
-    // TẢI DANH SÁCH UNIT BAN ĐẦU
     async function loadUnitsStructure() {
         document.getElementById('loading-area').style.display = 'block';
         try {
@@ -539,7 +506,7 @@
             document.getElementById('lock-modal').classList.add('active');
             document.getElementById('modal-password-input').focus();
         } else {
-            selectUnit(unitNum);
+            selectUnitLocal(unitNum);
         }
     }
 
@@ -562,61 +529,66 @@
                     unlockedUnits.push(String(targetUnlockUnit));
                     localStorage.setItem('unlockedUnits_QuyenClass', JSON.stringify(unlockedUnits));
                 }
-                renderUnitGrid();
-                vocabData = data.vocab;
+                allVocabCache[targetUnlockUnit] = data.vocab; // Nạp vào cache cục bộ
                 currentUnit = targetUnlockUnit;
+                vocabData = allVocabCache[currentUnit];
+                
+                renderUnitGrid();
                 initTabIndices();
-                document.getElementById('main-tabs-nav').style.display = 'flex';
-                document.getElementById('footer-controls').style.visibility = 'visible';
-                document.getElementById('main-subtitle').innerText = `Chủ đề bài học: Unit ${currentUnit}`;
-                switchTab('lecture');
+                activateMainUI();
             } else {
-                alert(data.message || "Sai mật khẩu mở khóa rồi!");
+                alert(data.message || "Sai mật khẩu rồi bạn ơi!");
             }
         } catch(e) {
-            alert("Có lỗi xảy ra trong quá trình mở khóa!");
+            alert("Có lỗi xảy ra trong quá trình kết nối!");
         }
         document.getElementById('loading-area').style.display = 'none';
     }
 
-    async function selectUnit(unitNum) {
-        document.getElementById('loading-area').style.display = 'block';
-        try {
-            // Đọc dữ liệu từ vựng thông qua API ẩn mật khẩu
-            let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unitNum}&pass=PRE_AUTHED`);
-            let data = await res.json();
-            if(data.success) {
-                vocabData = data.vocab;
-                currentUnit = unitNum;
-                renderUnitGrid();
-                initTabIndices();
-                document.getElementById('main-tabs-nav').style.display = 'flex';
-                document.getElementById('footer-controls').style.visibility = 'visible';
-                document.getElementById('main-subtitle').innerText = `Chủ đề bài học: Unit ${currentUnit}`;
-                switchTab('lecture');
+    async function selectUnitLocal(unitNum) {
+        currentUnit = unitNum;
+        renderUnitGrid();
+        
+        // Nếu đã có sẵn trong cache thì load lập tức (0 GIÂY TRỄ)
+        if(allVocabCache[unitNum]) {
+            vocabData = allVocabCache[unitNum];
+            initTabIndices();
+            activateMainUI();
+        } else {
+            // Trường hợp F5 trang tải lại máy, kéo lại từ Google Sheet
+            document.getElementById('loading-area').style.display = 'block';
+            try {
+                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unitNum}&pass=PRE_AUTHED`);
+                let data = await res.json();
+                if(data.success) {
+                    allVocabCache[unitNum] = data.vocab;
+                    vocabData = data.vocab;
+                    initTabIndices();
+                    activateMainUI();
+                }
+            } catch(e) {
+                alert("Không thể kết nối tải từ vựng!");
             }
-        } catch(e) {
-            alert("Không thể load dữ liệu từ vựng!");
+            document.getElementById('loading-area').style.display = 'none';
         }
-        document.getElementById('loading-area').style.display = 'none';
+    }
+
+    function activateMainUI() {
+        document.getElementById('main-tabs-nav').style.display = 'flex';
+        document.getElementById('footer-controls').style.visibility = 'visible';
+        document.getElementById('main-subtitle').innerText = `Chủ đề bài học: Unit ${currentUnit}`;
+        switchTab('lecture');
     }
 
     function initTabIndices() {
         let fullIndices = Array.from({length: vocabData.length}, (_, i) => i);
-        let phraseIndices = [];
-        // Phục vụ riêng chức năng số 7: Chỉ chọn ra các cụm từ có ảnh
-        vocabData.forEach((item, idx) => { if(item.img !== "") phraseIndices.push(idx); });
-
         tabState.flashcard.indices = [...fullIndices];
         tabState.flashcard.current = 0;
 
-        ["quiz", "typing", "listen", "guess"].forEach(t => {
+        ["quiz", "typing", "listen", "guess", "visual"].forEach(t => {
             tabState[t].indices = shuffleArray(fullIndices);
             tabState[t].current = 0;
         });
-        
-        tabState.visual.indices = phraseIndices.length > 0 ? shuffleArray(phraseIndices) : [...fullIndices];
-        tabState.visual.current = 0;
     }
 
     function shuffleArray(array) {
@@ -648,7 +620,46 @@
         else if (tabName === 'visual') generateVisualQuestion();
     }
 
-    // --- FUNCTION 1: XEM BÀI GIẢNG ---
+    // --- SỬA LỖI GIỌNG NAM NATIVE (WEB SPEECH API CHUẨN TRÌNH DUYỆT) ---
+    function playGoogleNativeVoice(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // Tắt âm thanh cũ đang phát dở
+            let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").trim();
+            if(clean.includes('/')) clean = clean.split('/')[0];
+            
+            let utterance = new SpeechSynthesisUtterance(clean);
+            utterance.lang = 'ko-KR';
+            
+            // Tìm kiếm cấu hình giọng đọc nam tiếng Hàn trên hệ thống máy tính
+            let voices = window.speechSynthesis.getVoices();
+            let selectedVoice = voices.find(voice => voice.lang === 'ko-KR' && (voice.name.toLowerCase().includes('male') || voice.name.toLowerCase().includes('david') || voice.name.toLowerCase().includes('yunjin')));
+            if(selectedVoice) utterance.voice = selectedVoice;
+            
+            utterance.rate = 0.75; // Tối ưu tốc độ phát âm chuẩn lớp học
+            window.speechSynthesis.speak(utterance);
+        } else {
+            // Phương án dự phòng nếu máy học sinh quá cũ
+            playGoogleFallback(text);
+        }
+    }
+
+    function playGoogleFallback(text) {
+        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").trim();
+        let url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=" + encodeURIComponent(clean);
+        new Audio(url).play();
+    }
+
+    function playPremium(text) {
+        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
+        if(clean.includes('/')) clean = clean.split('/')[0];
+        let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + encodeURIComponent(clean) + "&lang=ko&engine=g3&name=ko-KR-Neural2-A&pitch=0.5&rate=0.4&volume=1";
+        new Audio(url).play().catch(e => console.log(e));
+    }
+
+    function speakGoogleNative(e) { e.stopPropagation(); playGoogleNativeVoice(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
+    function speakPremium(e) { e.stopPropagation(); playPremium(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
+    function speakPremiumGeneric(t) { playPremium(vocabData[tabState[t].indices[tabState[t].current]].ko); }
+
     function renderLectureTab() {
         clearFeedback();
         let config = unitsConfig.find(c => c.unit == currentUnit);
@@ -670,7 +681,6 @@
         }
     }
 
-    // --- FUNCTION 2: FLASHCARD ---
     function renderFlashcard() {
         clearFeedback();
         if(vocabData.length === 0) return;
@@ -681,7 +691,6 @@
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
         document.getElementById('fcard').classList.remove('flipped');
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
-        document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
     }
     function toggleFlip() { document.getElementById('fcard').classList.toggle('flipped'); }
     function handleFlashcardModeChange(toggleElement) {
@@ -700,23 +709,6 @@
         renderFlashcard();
     }
 
-    // AUDIO SYSTEM (GOOGLE & MICROSOFT PREMIUM)
-    function playGoogle(text) {
-        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").trim();
-        let url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=" + encodeURIComponent(clean);
-        new Audio(url).play();
-    }
-    function playPremium(text) {
-        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
-        if(clean.includes('/')) clean = clean.split('/')[0];
-        let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + encodeURIComponent(clean) + "&lang=ko&engine=g3&name=ko-KR-Neural2-A&pitch=0.5&rate=0.4&volume=1";
-        new Audio(url).play().catch(e => console.log(e));
-    }
-    function speakGoogle(e) { e.stopPropagation(); playGoogle(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
-    function speakPremium(e) { e.stopPropagation(); playPremium(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
-    function speakPremiumGeneric(t) { playPremium(vocabData[tabState[t].indices[tabState[t].current]].ko); }
-
-    // --- FUNCTION 3: TRẮC NGHIỆM ---
     function generateQuizQuestion() {
         clearFeedback();
         let state = tabState.quiz;
@@ -748,28 +740,23 @@
         optsContainer.innerHTML = "";
         
         allOptions.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerText = opt;
+            const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
             btn.onclick = function() { handleQuizAnswer(btn, opt, correctAnswer); };
             optsContainer.appendChild(btn);
         });
     }
     function handleQuizAnswer(selectedBtn, selectedOpt, correctOpt) {
         let state = tabState.quiz;
-        if (state.answered) return;
-        state.answered = true;
+        if (state.answered) return; state.answered = true;
         document.querySelectorAll('#quiz-opts .option-btn').forEach(btn => {
             if (btn.innerText === correctOpt) btn.classList.add('correct');
             else if (btn === selectedBtn) btn.classList.add('wrong');
         });
         if(selectedOpt === correctOpt) setFeedback("🎉 Chính xác! Bạn nhớ bài tốt lắm.", "success");
-        else setFeedback("😢 Chưa chính xác rồi nè, thử lại ở câu sau nha.", "error");
-        document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
+        else setFeedback("😢 Chưa chính xác rồi nè, cố lên câu tiếp theo nha.", "error");
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
-    // --- FUNCTION 4: GÕ TỪ VỰNG ---
     function toggleTypingDirection() {
         tabState.typing.direction = tabState.typing.direction === 'vi-to-ko' ? 'ko-to-vi' : 'vi-to-ko';
         document.getElementById('typing-dir-btn').innerText = tabState.typing.direction === 'vi-to-ko' ? 'Chế độ: Tiếng Việt ➔ Tiếng Hàn' : 'Chế độ: Tiếng Hàn ➔ Tiếng Việt';
@@ -812,7 +799,6 @@
         }
     }
 
-    // --- FUNCTION 5: NGHE & ĐIỀN TỪ ---
     function generateListenQuestion() {
         clearFeedback();
         let state = tabState.listen;
@@ -832,8 +818,7 @@
         let correctAnswer = currentItem.ko;
         let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
         let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 4)]);
-        const poolContainer = document.getElementById('listen-word-pool'); 
-        poolContainer.innerHTML = "";
+        const poolContainer = document.getElementById('listen-word-pool'); poolContainer.innerHTML = "";
 
         allChoices.forEach(choice => {
             const btn = document.createElement('button'); btn.className = 'pool-btn'; btn.innerText = choice;
@@ -853,13 +838,12 @@
         if (selectedChoice === correctChoice) {
             btn.classList.add('selected-correct'); setFeedback("🎉 Nghe chuẩn quá tai bạn đỉnh thật sự!", "success");
         } else {
-            btn.classList.add('selected-wrong'); setFeedback("😢 Chưa đúng rồi nè, hãy bấm nghe lại nhé.", "error");
+            btn.classList.add('selected-wrong'); setFeedback("😢 Chưa đúng rồi nè, cùng nghe lại nhé.", "error");
             document.querySelectorAll('#listen-word-pool .pool-btn').forEach(b => { if(b.innerText === correctChoice) b.classList.add('selected-correct'); });
         }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
-    // --- FUNCTION 6: NGHE & ĐOÁN NGHĨA ---
     function generateGuessQuestion() {
         clearFeedback();
         let state = tabState.guess;
@@ -877,8 +861,7 @@
         let correctAnswer = currentItem.vi;
         let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.vi);
         let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
-        const optsContainer = document.getElementById('guess-opts');
-        optsContainer.innerHTML = "";
+        const optsContainer = document.getElementById('guess-opts'); optsContainer.innerHTML = "";
 
         allChoices.forEach(opt => {
             const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
@@ -902,16 +885,10 @@
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
-    // --- FUNCTION 7: NHÌN HÌNH CHỌN CÂU ---
+    // --- FUNCTION 7: NHÌN HÌNH CHỌN CÂU (TỰ ĐỘNG LOAD ẢNH TRÊN MẠNG) ---
     function generateVisualQuestion() {
         clearFeedback();
         let state = tabState.visual;
-        if(state.indices.length === 0) {
-            document.getElementById('visual-native-img').src = "";
-            document.getElementById('visual-opts').innerHTML = "<p style='color:var(--sub-text); text-align:center; width:100%;'>Bài học này không chứa dữ liệu hình ảnh minh họa.</p>";
-            document.getElementById('global-counter').innerText = "0 / 0";
-            return;
-        }
         state.answered = false;
         document.getElementById('ctrl-next-btn').style.display = 'none';
         
@@ -919,7 +896,20 @@
         const currentItem = vocabData[actualIndex];
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
         
-        document.getElementById('visual-native-img').src = currentItem.img;
+        const imgElement = document.getElementById('visual-native-img');
+        
+        // KIỂM TRA: NẾU SHEET TRỐNG ẢNH, TỰ ĐỘNG LẤY ẢNH MIỄN PHÍ TỪ UNSPLASH THEO TỪ KHÓA NGHĨA TIẾNG VIỆT
+        if (currentItem.img && currentItem.img.trim() !== "") {
+            imgElement.src = currentItem.img;
+        } else {
+            let keyword = encodeURIComponent(currentItem.vi.split('/')[0].trim());
+            imgElement.src = `https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&auto=format&fit=crop&q=60&sig=${actualIndex}`; 
+            
+            // Tìm ảnh động theo ngữ cảnh từ vựng
+            if(keyword) {
+                imgElement.src = `https://source.unsplash.com/featured/600x400/?${keyword},korea,object`;
+            }
+        }
 
         let correctAnswer = currentItem.ko;
         let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
@@ -949,7 +939,6 @@
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
-    // GLOBAL ACTIONS NAVIGATION
     function handleNextAction() {
         if(currentTab === "lecture") { switchTab("flashcard"); return; }
         let state = tabState[currentTab];
@@ -976,9 +965,10 @@
     function clearFeedback() { const fb = document.getElementById('global-feedback'); fb.style.display = 'none'; fb.className = 'feedback'; }
     function setFeedback(msg, type) { const fb = document.getElementById('global-feedback'); fb.innerText = msg; fb.className = "feedback " + type; fb.style.display = 'block'; }
 
-    // KHỞI CHẠY KHI TẢI TRANG
     window.onload = function() {
         loadUnitsStructure();
+        // Kích hoạt nạp giọng đọc hệ thống trình duyệt
+        if ('speechSynthesis' in window) { window.speechSynthesis.getVoices(); }
     };
 </script>
 
