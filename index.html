@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngoc Quyen's Classroom - Ôn tập từ vựng</title>
+    <!-- Nhúng Font chữ yêu thích của Pen -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --card-color: #ffffff;
+            --text-color: #2d3748;
+            --sub-text: #718096;
+            --point-color: #614CFF; /* Màu xanh tím đặc trưng của Pen */
+            --point-hover: #4b36e3;
+            --google-voice-color: #4285F4;
+            --success-color: #48bb78;
+            --error-color: #f56565;
+            
+            /* Neumorphism Shadows mượt mà */
+            --neu-convex: 6px 6px 12px #d1d9e6, -6px -6px 12px #ffffff;
+            --neu-concave: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
+            --neu-card-shadow: 0 10px 25px rgba(97, 76, 255, 0.05), 0 4px 12px rgba(0,0,0,0.02);
+            
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Chiron GoRound TC", -apple-system, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Responsive Wrapper */
+        .app-wrapper {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Neumorphism Unit Selector Panel */
+        .unit-panel {
+            background: var(--card-color);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--neu-convex);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .unit-panel h2 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--text-color);
+            font-weight: 700;
+        }
+
+        .unit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 12px;
+        }
+
+        .unit-btn {
+            padding: 12px;
+            background: var(--card-color);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--sub-text);
+            cursor: pointer;
+            box-shadow: var(--neu-convex);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            outline: none;
+        }
+
+        .unit-btn:hover {
+            color: var(--text-color);
+            transform: translateY(-2px);
+        }
+
+        .unit-btn.unlocked {
+            color: var(--point-color);
+            border: 1px solid rgba(97, 76, 255, 0.2);
+        }
+
+        .unit-btn.active {
+            color: white;
+            background: var(--point-color);
+            box-shadow: var(--neu-concave);
+        }
+
+        .unit-btn.locked {
+            opacity: 0.6;
+            background: #e6ecf2;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* Main Container */
+        .container {
+            width: 100%;
+            background: var(--card-color);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--neu-card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            min-height: 650px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1a202c;
+            margin-bottom: 6px;
+        }
+
+        p.subtitle {
+            font-size: 13px;
+            color: var(--sub-text);
+            font-weight: 500;
+        }
+
+        /* Tabs UI Neumorphism */
+        .tabs {
+            display: flex;
+            background: var(--bg-color);
+            padding: 6px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--neu-concave);
+            margin-bottom: 24px;
+            gap: 4px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 6px;
+            background: none;
+            border: none;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--sub-text);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+            outline: none;
+        }
+
+        .tab-btn:hover { color: var(--text-color); }
+        .tab-btn.active {
+            color: var(--point-color);
+            background: var(--card-color);
+            box-shadow: var(--neu-convex);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* TAB 1: EMBED LECTURE SCREEN */
+        .embed-wrapper {
+            width: 100%;
+            height: 480px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--neu-concave);
+            overflow: hidden;
+            background: #e2e8f0;
+            position: relative;
+        }
+        .embed-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .no-embed-msg {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--sub-text);
+        }
+
+        /* CHẤT LƯỢNG UI CHUNG CỦA FLASHCARD VÀ FLASHCARD 3D */
+        .fc-mode-container { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 16px; gap: 10px; }
+        .fc-mode-label { font-size: 13px; font-weight: 700; color: var(--sub-text); }
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e0; transition: .3s; border-radius: 34px; box-shadow: var(--neu-concave); }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--point-color); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        .card-container { perspective: 1000px; width: 100%; height: 240px; margin-bottom: 24px; cursor: pointer; }
+        .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s ease; border-radius: var(--radius-md); box-shadow: var(--neu-convex); }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; border-radius: var(--radius-md); background: var(--card-color); text-align: center; }
+        .card-back { transform: rotateY(180deg); background-color: #fafbfc; }
+        .ko-vertical-wrapper { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .ko-text { font-size: 32px; font-weight: 800; color: #1a202c; }
+        .vi-text { font-size: 24px; font-weight: 600; color: #4a5568; }
+        .card-hint { font-size: 11px; color: #a0aec0; position: absolute; bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        
+        .fc-speaker-row { display: flex; gap: 12px; margin-top: 4px; }
+        .audio-inline-btn { background: var(--bg-color); border: none; padding: 6px 12px; height: 34px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; box-shadow: var(--neu-convex); color: var(--point-color); outline: none; }
+        .audio-inline-btn.google-voice { color: var(--google-voice-color); }
+        .audio-inline-btn:hover { transform: scale(1.05); }
+
+        /* QUIZ & INPUT */
+        .quiz-question { font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 20px; text-align: center; }
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { width: 100%; padding: 16px; text-align: left; background: var(--card-color); border: 1px solid rgba(226, 232, 240, 0.6); border-radius: var(--radius-sm); font-size: 15px; font-weight: 500; color: var(--text-color); cursor: pointer; box-shadow: var(--neu-convex); transition: all 0.2s; outline: none; }
+        .option-btn:hover { background: var(--bg-color); }
+        .option-btn.correct { background: #e6fffa !important; border-color: var(--success-color) !important; color: #234e52 !important; font-weight: 700; box-shadow: none; }
+        .option-btn.wrong { background: #fff5f5 !important; border-color: var(--error-color) !important; color: #742a2a !important; box-shadow: none; }
+
+        .typing-container-box { width: 100%; max-width: 600px; margin: 0 auto; background: var(--card-color); padding: 24px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); text-align: center; }
+        .typing-prompt { font-size: 13px; color: var(--sub-text); margin-bottom: 10px; font-weight: 600; text-align: left; }
+        .typing-word { font-size: 28px; font-weight: 800; color: #1a202c; margin-bottom: 20px; }
+        .input-field { width: 100%; padding: 14px; font-size: 16px; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: var(--radius-sm); outline: none; background: var(--card-color); box-shadow: var(--neu-concave); text-align: center; transition: all 0.2s; }
+        .input-field:focus { border-color: var(--point-color); }
+        .toggle-mode { font-size: 11px; color: var(--point-color); background: var(--card-color); border: none; cursor: pointer; font-weight: 700; padding: 8px 16px; border-radius: 20px; box-shadow: var(--neu-convex); margin-bottom: 16px; outline: none; }
+
+        /* LISTEN SYSTEM */
+        .listen-box { display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--bg-color); border-radius: var(--radius-md); margin-bottom: 20px; box-shadow: var(--neu-concave); position: relative; min-height: 150px; }
+        .listen-circle-btn { background: var(--card-color); border: none; width: 64px; height: 64px; border-radius: 50%; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; box-shadow: var(--neu-convex); transition: all 0.2s; color: var(--text-color); outline: none; }
+        .listen-circle-btn:hover { transform: scale(1.05); color: var(--point-color); }
+        .listen-circle-btn svg { width: 20px; height: 20px; fill: currentColor; margin-bottom: 2px; }
+        .hint-btn-bottom-right { position: absolute; bottom: 12px; right: 12px; background: var(--card-color); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex); outline: none; }
+        .text-hint-display { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 13px; font-weight: 700; color: var(--point-color); background: var(--card-color); padding: 4px 12px; border-radius: 20px; box-shadow: var(--neu-convex); display: none; }
+        
+        .fill-sentence { font-size: 17px; font-weight: 700; text-align: center; margin-bottom: 20px; }
+        .word-pool { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
+        .pool-btn { padding: 10px 18px; background: var(--card-color); border: 1px solid rgba(226, 232, 240, 0.5); border-radius: 24px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: var(--neu-convex); transition: all 0.2s; outline: none; }
+        .pool-btn.selected-correct { background: var(--success-color) !important; color: white !important; box-shadow: none; border: none; }
+        .pool-btn.selected-wrong { background: var(--error-color) !important; color: white !important; box-shadow: none; border: none; }
+
+        /* VISUAL SCENE IMAGE */
+        .scene-image-frame { width: 100%; height: 220px; background: var(--bg-color); border-radius: var(--radius-md); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-concave); overflow: hidden; }
+        .scene-image-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        /* FOOTER CONTROLS & LOCK DIALOG MODAL */
+        .feedback-reserved-space { min-height: 50px; margin-bottom: 16px; display: flex; align-items: center; }
+        .feedback { width: 100%; font-size: 13px; font-weight: 600; padding: 12px; border-radius: var(--radius-sm); display: none; }
+        .feedback.success { display: block; background: #e6fffa; color: #234e52; border-left: 4px solid var(--success-color); }
+        .feedback.error { display: block; background: #fff5f5; color: #742a2a; border-left: 4px solid var(--error-color); }
+
+        .controls { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid rgba(226,232,240,0.4); }
+        .controls-left { display: flex; align-items: center; gap: 12px; }
+        .btn { padding: 10px 20px; border-radius: var(--radius-sm); border: none; background: var(--card-color); font-size: 13px; font-weight: 700; color: var(--text-color); cursor: pointer; box-shadow: var(--neu-convex); transition: all 0.2s; outline: none; }
+        .btn:hover { background: var(--bg-color); }
+        .btn-primary { background: var(--point-color); color: white; }
+        .btn-primary:hover { background: var(--point-hover); }
+        .counter { font-size: 13px; color: var(--sub-text); font-weight: 600; background: var(--bg-color); padding: 6px 14px; border-radius: 20px; box-shadow: var(--neu-concave); }
+
+        /* NEUMORPHISM MODAL (PASSWORD SYSTEM) */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(240,244,248,0.85); display: flex; align-items: center; justify-content: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box { background: var(--card-color); padding: 30px; border-radius: var(--radius-lg); box-shadow: var(--neu-convex); width: 90%; max-width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.8); }
+        .modal-box h3 { font-size: 18px; margin-bottom: 12px; color: #1a202c; }
+        .modal-box p { font-size: 13px; color: var(--sub-text); margin-bottom: 20px; }
+        .modal-box .input-field { margin-bottom: 20px; }
+        .modal-buttons { display: flex; gap: 12px; justify-content: center; }
+
+        /* LOADING SPINNER */
+        .loading-screen { display: none; text-align: center; padding: 40px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(97, 76, 255, 0.1); border-left-color: var(--point-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Responsive Breakpoints cho máy tính bảng và điện thoại */
+        @media(max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 20px; min-height: 550px; }
+            .ko-text { font-size: 26px; }
+            .vi-text { font-size: 20px; }
+            .embed-wrapper { height: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <!-- Khu vực chọn Unit dập nổi Neumorphism -->
+    <div class="unit-panel">
+        <h2 id="unit-panel-title">Chọn bài học (Unit)</h2>
+        <div class="unit-grid" id="unit-buttons-container">
+            <!-- Render danh sách Unit tự động từ Apps Script -->
+        </div>
+    </div>
+
+    <!-- Khung chức năng chính -->
+    <div class="container">
+        <div class="content-body">
+            <header>
+                <h1 id="main-title">Ngoc Quyen's Classroom</h1>
+                <p class="subtitle" id="main-subtitle">Vui lòng chọn hoặc mở khóa bài học để bắt đầu</p>
+            </header>
+
+            <!-- Hệ thống 7 Tabs theo đúng số thứ tự của Pen -->
+            <div class="tabs" id="main-tabs-nav" style="display: none;">
+                <button id="btn-lecture" class="tab-btn active" onclick="switchTab('lecture')">1. Xem bài giảng</button>
+                <button id="btn-flashcard" class="tab-btn" onclick="switchTab('flashcard')">2. Flashcard</button>
+                <button id="btn-quiz" class="tab-btn" onclick="switchTab('quiz')">3. Trắc nghiệm</button>
+                <button id="btn-typing" class="tab-btn" onclick="switchTab('typing')">4. Gõ từ vựng</button>
+                <button id="btn-listen" class="tab-btn" onclick="switchTab('listen')">5. Nghe & Điền từ</button>
+                <button id="btn-guess" class="tab-btn" onclick="switchTab('guess')">6. Nghe & Đoán nghĩa</button>
+                <button id="btn-visual" class="tab-btn" onclick="switchTab('visual')">7. Nhìn hình chọn câu</button>
+            </div>
+
+            <!-- Màn hình Loading -->
+            <div id="loading-area" class="loading-screen">
+                <div class="spinner"></div>
+                <p style="color: var(--sub-text); font-weight: 600;">Đang tải dữ liệu từ Google Sheet...</p>
+            </div>
+
+            <!-- TAB 1: XEM BÀI GIẢNG (MỚI) -->
+            <div id="lecture-tab" class="tab-content active">
+                <div class="embed-wrapper">
+                    <div class="no-embed-msg" id="lecture-empty-msg">Không có slide bài giảng cho Unit này.</div>
+                    <iframe id="lecture-iframe" src="" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- TAB 2: FLASHCARD -->
+            <div id="flashcard-tab" class="tab-content">
+                <div class="fc-mode-container">
+                    <span class="fc-mode-label" id="fc-toggle-text">Chế độ: Theo thứ tự</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="fc-shuffle-toggle" onchange="handleFlashcardModeChange(this)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="card-container">
+                    <div class="flashcard" id="fcard">
+                        <div class="card-face card-front" onclick="toggleFlip()">
+                            <div class="ko-vertical-wrapper">
+                                <div class="ko-text" id="fc-ko">...</div>
+                                <div class="fc-speaker-row">
+                                    <button class="audio-inline-btn google-voice" onclick="speakGoogle(event)">
+                                        <!-- Inline SVG icon Loa Nam -->
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                                        Nam
+                                    </button>
+                                    <button class="audio-inline-btn" onclick="speakPremium(event)">
+                                        <!-- Inline SVG icon Loa Nữ -->
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                                        Nữ
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-hint">Bấm vào thẻ để xem nghĩa</div>
+                        </div>
+                        <div class="card-face card-back" onclick="toggleFlip()">
+                            <div class="vi-text" id="fc-vi">...</div>
+                            <div class="card-hint">Bấm vào thẻ để xem từ gốc</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: TRẮC NGHIỆM -->
+            <div id="quiz-tab" class="tab-content">
+                <div class="quiz-question" id="quiz-q">Đang tạo câu hỏi...</div>
+                <div class="quiz-options" id="quiz-opts"></div>
+            </div>
+
+            <!-- TAB 4: GÕ TỪ VỰNG -->
+            <div id="typing-tab" class="tab-content">
+                <div style="text-align: center;">
+                    <button class="toggle-mode" onclick="toggleTypingDirection()" id="typing-dir-btn">Chế độ: Tiếng Việt ➔ Tiếng Hàn</button>
+                </div>
+                <div class="typing-container-box">
+                    <div class="typing-prompt" id="type-prompt-label">Hãy gõ cụm từ Tiếng Hàn tương ứng:</div>
+                    <div class="typing-word" id="type-word">...</div>
+                    <input type="text" class="input-field" id="type-input" placeholder="Nhập câu trả lời tại đây..." autocomplete="off" onkeydown="checkTypingEnter(event)">
+                </div>
+            </div>
+
+            <!-- TAB 5: NGHE & ĐIỀN TỪ -->
+            <div id="listen-tab" class="tab-content">
+                <div class="listen-box">
+                    <button class="listen-circle-btn" onclick="speakPremiumGeneric('listen')">
+                        <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                        듣기 (Nghe)
+                    </button>
+                    <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡</button>
+                    <div class="text-hint-display" id="listen-hint-text"></div>
+                </div>
+                <div class="fill-sentence">Nội dung nghe được: <span id="listen-vi-meaning" style="color: #4a5568;">...</span></div>
+                <div class="word-pool" id="listen-word-pool"></div>
+            </div>
+
+            <!-- TAB 6: NGHE & ĐOÁN NGHĨA -->
+            <div id="guess-tab" class="tab-content">
+                <div class="listen-box">
+                    <button class="listen-circle-btn" onclick="speakPremiumGeneric('guess')">
+                        <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                        듣기 (Nghe)
+                    </button>
+                    <button class="hint-btn-bottom-right" onclick="toggleGuessHint()">💡</button>
+                    <div class="text-hint-display" id="guess-hint-text"></div>
+                </div>
+                <div class="quiz-question">Cụm từ bạn nghe được mang nghĩa là gì?</div>
+                <div class="quiz-options" id="guess-opts"></div>
+            </div>
+
+            <!-- TAB 7: NHÌN HÌNH CHỌN CÂU -->
+            <div id="visual-tab" class="tab-content">
+                <div class="scene-image-frame">
+                    <img id="visual-native-img" src="" alt="Hình ảnh tình huống từ vựng">
+                </div>
+                <div class="quiz-question">Nhìn tình huống ảnh trên và lựa chọn đáp án chính xác:</div>
+                <div class="quiz-options" id="visual-opts"></div>
+            </div>
+
+            <!-- Phản hồi trạng thái Đúng/Sai không gây giật lag UI -->
+            <div class="feedback-reserved-space">
+                <div class="feedback" id="global-feedback"></div>
+            </div>
+        </div>
+
+        <!-- Thanh điều hướng chân trang -->
+        <div class="controls" id="footer-controls" style="visibility: hidden;">
+            <div class="controls-left">
+                <span class="counter" id="global-counter">0 / 0</span>
+                <button class="btn" id="ctrl-prev-btn" onclick="handlePrevAction()">Trước đó</button>
+                <button class="btn" id="ctrl-mix-btn" onclick="handleMixAction()">🔀 Trộn bài</button>
+            </div>
+            <div class="controls-right">
+                <button class="btn btn-primary" id="ctrl-next-btn" onclick="handleNextAction()">Tiếp theo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL NHẬP MẬT KHẨU UNLOCK UNIT -->
+<div class="modal-overlay" id="lock-modal">
+    <div class="modal-box">
+        <h3 id="modal-unit-name">Unlock Unit</h3>
+        <p>Vui lòng cung cấp mật khẩu lớp học để mở khóa toàn bộ 7 tính năng ôn tập của bài học này.</p>
+        <input type="password" class="input-field" id="modal-password-input" placeholder="Nhập mật khẩu tại đây..." onkeydown="if(event.key==='Enter') submitUnlockPassword()">
+        <div class="modal-buttons">
+            <button class="btn" onclick="closeUnlockModal()">Hủy bỏ</button>
+            <button class="btn btn-primary" onclick="submitUnlockPassword()">Mở khóa 🔓</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 🌟 ĐIỀN ĐƯỜNG LINK WEB APP URL CỦA PEN VÀO ĐÂY NHA:
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoiuvhY5MANz416-ST3q4CdVl9_oajWD-yUrmi-gGxdaFW2s_Rx_U7abytzY5VuL5v/exec";
+
+    let unitsConfig = []; 
+    let unlockedUnits = JSON.parse(localStorage.getItem('unlockedUnits_QuyenClass')) || [];
+    let vocabData = []; 
+    let currentUnit = null;
+    let currentTab = "lecture";
+
+    let tabState = {
+        lecture: { indices: [0], current: 0 },
+        flashcard: { indices: [], current: 0, isShuffleMode: false },
+        quiz: { indices: [], current: 0, answered: false },
+        typing: { indices: [], current: 0, direction: "vi-to-ko" },
+        listen: { indices: [], current: 0, answered: false },
+        guess: { indices: [], current: 0, answered: false },
+        visual: { indices: [], current: 0, answered: false }
+    };
+
+    let targetUnlockUnit = null;
+
+    // TẢI DANH SÁCH UNIT BAN ĐẦU
+    async function loadUnitsStructure() {
+        document.getElementById('loading-area').style.display = 'block';
+        try {
+            let res = await fetch(`${SCRIPT_URL}?action=getUnits`);
+            let data = await res.json();
+            if(data.success) {
+                unitsConfig = data.units;
+                renderUnitGrid();
+            }
+        } catch(e) {
+            alert("Lỗi kết nối dữ liệu Google Sheet!");
+        }
+        document.getElementById('loading-area').style.display = 'none';
+    }
+
+    function renderUnitGrid() {
+        const container = document.getElementById('unit-buttons-container');
+        container.innerHTML = "";
+        unitsConfig.forEach(cfg => {
+            const btn = document.createElement('button');
+            const isUnlocked = unlockedUnits.includes(String(cfg.unit));
+            
+            btn.className = `unit-btn ${isUnlocked ? 'unlocked' : 'locked'}`;
+            if(currentUnit == cfg.unit) btn.classList.add('active');
+            
+            btn.innerHTML = `${isUnlocked ? '' : '🔒 '}Unit ${cfg.unit}`;
+            btn.onclick = () => handleUnitClick(cfg.unit, isUnlocked);
+            container.appendChild(btn);
+        });
+    }
+
+    function handleUnitClick(unitNum, isUnlocked) {
+        if(!isUnlocked) {
+            targetUnlockUnit = unitNum;
+            document.getElementById('modal-unit-name').innerText = `Mở khóa Unit ${unitNum}`;
+            document.getElementById('modal-password-input').value = "";
+            document.getElementById('lock-modal').classList.add('active');
+            document.getElementById('modal-password-input').focus();
+        } else {
+            selectUnit(unitNum);
+        }
+    }
+
+    function closeUnlockModal() {
+        document.getElementById('lock-modal').classList.remove('active');
+    }
+
+    async function submitUnlockPassword() {
+        const pass = document.getElementById('modal-password-input').value.trim();
+        if(!pass) return;
+        
+        closeUnlockModal();
+        document.getElementById('loading-area').style.display = 'block';
+        
+        try {
+            let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${targetUnlockUnit}&pass=${encodeURIComponent(pass)}`);
+            let data = await res.json();
+            if(data.success) {
+                if(!unlockedUnits.includes(String(targetUnlockUnit))) {
+                    unlockedUnits.push(String(targetUnlockUnit));
+                    localStorage.setItem('unlockedUnits_QuyenClass', JSON.stringify(unlockedUnits));
+                }
+                renderUnitGrid();
+                vocabData = data.vocab;
+                currentUnit = targetUnlockUnit;
+                initTabIndices();
+                document.getElementById('main-tabs-nav').style.display = 'flex';
+                document.getElementById('footer-controls').style.visibility = 'visible';
+                document.getElementById('main-subtitle').innerText = `Chủ đề bài học: Unit ${currentUnit}`;
+                switchTab('lecture');
+            } else {
+                alert(data.message || "Sai mật khẩu mở khóa rồi!");
+            }
+        } catch(e) {
+            alert("Có lỗi xảy ra trong quá trình mở khóa!");
+        }
+        document.getElementById('loading-area').style.display = 'none';
+    }
+
+    async function selectUnit(unitNum) {
+        document.getElementById('loading-area').style.display = 'block';
+        try {
+            // Đọc dữ liệu từ vựng thông qua API ẩn mật khẩu
+            let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unitNum}&pass=PRE_AUTHED`);
+            let data = await res.json();
+            if(data.success) {
+                vocabData = data.vocab;
+                currentUnit = unitNum;
+                renderUnitGrid();
+                initTabIndices();
+                document.getElementById('main-tabs-nav').style.display = 'flex';
+                document.getElementById('footer-controls').style.visibility = 'visible';
+                document.getElementById('main-subtitle').innerText = `Chủ đề bài học: Unit ${currentUnit}`;
+                switchTab('lecture');
+            }
+        } catch(e) {
+            alert("Không thể load dữ liệu từ vựng!");
+        }
+        document.getElementById('loading-area').style.display = 'none';
+    }
+
+    function initTabIndices() {
+        let fullIndices = Array.from({length: vocabData.length}, (_, i) => i);
+        let phraseIndices = [];
+        // Phục vụ riêng chức năng số 7: Chỉ chọn ra các cụm từ có ảnh
+        vocabData.forEach((item, idx) => { if(item.img !== "") phraseIndices.push(idx); });
+
+        tabState.flashcard.indices = [...fullIndices];
+        tabState.flashcard.current = 0;
+
+        ["quiz", "typing", "listen", "guess"].forEach(t => {
+            tabState[t].indices = shuffleArray(fullIndices);
+            tabState[t].current = 0;
+        });
+        
+        tabState.visual.indices = phraseIndices.length > 0 ? shuffleArray(phraseIndices) : [...fullIndices];
+        tabState.visual.current = 0;
+    }
+
+    function shuffleArray(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function switchTab(tabName) {
+        currentTab = tabName;
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        
+        document.getElementById('btn-' + tabName).classList.add('active');
+        document.getElementById(tabName + '-tab').classList.add('active');
+        
+        document.getElementById('ctrl-prev-btn').style.visibility = (tabName === 'flashcard' || tabName === 'typing') ? 'visible' : 'hidden';
+        document.getElementById('ctrl-mix-btn').style.visibility = (tabName === 'lecture') ? 'hidden' : 'visible';
+        
+        if (tabName === 'lecture') renderLectureTab();
+        else if (tabName === 'flashcard') renderFlashcard();
+        else if (tabName === 'quiz') generateQuizQuestion();
+        else if (tabName === 'typing') renderTypingQuestion();
+        else if (tabName === 'listen') generateListenQuestion();
+        else if (tabName === 'guess') generateGuessQuestion();
+        else if (tabName === 'visual') generateVisualQuestion();
+    }
+
+    // --- FUNCTION 1: XEM BÀI GIẢNG ---
+    function renderLectureTab() {
+        clearFeedback();
+        let config = unitsConfig.find(c => c.unit == currentUnit);
+        const iframe = document.getElementById('lecture-iframe');
+        const emptyMsg = document.getElementById('lecture-empty-msg');
+        
+        document.getElementById('global-counter').innerText = "1 / 1";
+        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
+        document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
+
+        if(config && config.lectureLink) {
+            iframe.src = config.lectureLink;
+            iframe.style.display = "block";
+            emptyMsg.style.display = "none";
+        } else {
+            iframe.src = "";
+            iframe.style.display = "none";
+            emptyMsg.style.display = "block";
+        }
+    }
+
+    // --- FUNCTION 2: FLASHCARD ---
+    function renderFlashcard() {
+        clearFeedback();
+        if(vocabData.length === 0) return;
+        let state = tabState.flashcard;
+        const card = vocabData[state.indices[state.current]];
+        document.getElementById('fc-ko').innerText = card.ko;
+        document.getElementById('fc-vi').innerText = card.vi;
+        document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+        document.getElementById('fcard').classList.remove('flipped');
+        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
+        document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
+    }
+    function toggleFlip() { document.getElementById('fcard').classList.toggle('flipped'); }
+    function handleFlashcardModeChange(toggleElement) {
+        let state = tabState.flashcard;
+        state.isShuffleMode = toggleElement.checked;
+        let toggleText = document.getElementById('fc-toggle-text');
+        let fullIndices = Array.from({length: vocabData.length}, (_, i) => i);
+        if (state.isShuffleMode) {
+            toggleText.innerText = "Chế độ: Trộn ngẫu nhiên";
+            state.indices = shuffleArray(fullIndices);
+        } else {
+            toggleText.innerText = "Chế độ: Theo thứ tự";
+            state.indices = [...fullIndices];
+        }
+        state.current = 0;
+        renderFlashcard();
+    }
+
+    // AUDIO SYSTEM (GOOGLE & MICROSOFT PREMIUM)
+    function playGoogle(text) {
+        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").trim();
+        let url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=" + encodeURIComponent(clean);
+        new Audio(url).play();
+    }
+    function playPremium(text) {
+        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
+        if(clean.includes('/')) clean = clean.split('/')[0];
+        let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + encodeURIComponent(clean) + "&lang=ko&engine=g3&name=ko-KR-Neural2-A&pitch=0.5&rate=0.4&volume=1";
+        new Audio(url).play().catch(e => console.log(e));
+    }
+    function speakGoogle(e) { e.stopPropagation(); playGoogle(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
+    function speakPremium(e) { e.stopPropagation(); playPremium(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
+    function speakPremiumGeneric(t) { playPremium(vocabData[tabState[t].indices[tabState[t].current]].ko); }
+
+    // --- FUNCTION 3: TRẮC NGHIỆM ---
+    function generateQuizQuestion() {
+        clearFeedback();
+        let state = tabState.quiz;
+        state.answered = false;
+        document.getElementById('ctrl-next-btn').style.display = 'none';
+        
+        let actualIndex = state.indices[state.current];
+        const currentItem = vocabData[actualIndex];
+        document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+        
+        const isKoQuestion = Math.random() > 0.5;
+        let questionText = "", correctAnswer = "", wrongAnswers = [];
+
+        if (isKoQuestion) {
+            questionText = `Nghĩa của từ "${currentItem.ko}" là gì?`;
+            correctAnswer = currentItem.vi;
+            let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.vi);
+            wrongAnswers = shuffleArray(pool).slice(0, 3);
+        } else {
+            questionText = `Từ nào mang nghĩa: "${currentItem.vi}"?`;
+            correctAnswer = currentItem.ko;
+            let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
+            wrongAnswers = shuffleArray(pool).slice(0, 3);
+        }
+
+        document.getElementById('quiz-q').innerText = questionText;
+        let allOptions = shuffleArray([correctAnswer, ...wrongAnswers]);
+        const optsContainer = document.getElementById('quiz-opts');
+        optsContainer.innerHTML = "";
+        
+        allOptions.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = function() { handleQuizAnswer(btn, opt, correctAnswer); };
+            optsContainer.appendChild(btn);
+        });
+    }
+    function handleQuizAnswer(selectedBtn, selectedOpt, correctOpt) {
+        let state = tabState.quiz;
+        if (state.answered) return;
+        state.answered = true;
+        document.querySelectorAll('#quiz-opts .option-btn').forEach(btn => {
+            if (btn.innerText === correctOpt) btn.classList.add('correct');
+            else if (btn === selectedBtn) btn.classList.add('wrong');
+        });
+        if(selectedOpt === correctOpt) setFeedback("🎉 Chính xác! Bạn nhớ bài tốt lắm.", "success");
+        else setFeedback("😢 Chưa chính xác rồi nè, thử lại ở câu sau nha.", "error");
+        document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
+        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
+    }
+
+    // --- FUNCTION 4: GÕ TỪ VỰNG ---
+    function toggleTypingDirection() {
+        tabState.typing.direction = tabState.typing.direction === 'vi-to-ko' ? 'ko-to-vi' : 'vi-to-ko';
+        document.getElementById('typing-dir-btn').innerText = tabState.typing.direction === 'vi-to-ko' ? 'Chế độ: Tiếng Việt ➔ Tiếng Hàn' : 'Chế độ: Tiếng Hàn ➔ Tiếng Việt';
+        renderTypingQuestion();
+    }
+    function renderTypingQuestion() {
+        clearFeedback();
+        let state = tabState.typing;
+        const item = vocabData[state.indices[state.current]];
+        const input = document.getElementById('type-input');
+        input.value = ""; input.style.borderColor = '';
+        document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+        
+        if (state.direction === 'vi-to-ko') {
+            document.getElementById('type-prompt-label').innerText = "Hãy gõ cụm từ Tiếng Hàn tương ứng:";
+            document.getElementById('type-word').innerText = item.vi;
+        } else {
+            document.getElementById('type-prompt-label').innerText = "Hãy gõ nghĩa Tiếng Việt tương ứng:";
+            document.getElementById('type-word').innerText = item.ko;
+        }
+        input.focus();
+    }
+    function checkTypingEnter(e) { if (e.key === 'Enter') submitTypingAnswer(); }
+    function cleanString(str) { return str.toLowerCase().replace(/[^a-zA-Z0-9가-힣]/g, '').trim(); }
+    function submitTypingAnswer() {
+        let state = tabState.typing;
+        const item = vocabData[state.indices[state.current]];
+        const userInput = document.getElementById('type-input').value.trim();
+        if (!userInput) return;
+
+        let isCorrect = false, targetAns = state.direction === 'vi-to-ko' ? item.ko : item.vi;
+        if (cleanString(targetAns) === cleanString(userInput)) isCorrect = true;
+
+        if (isCorrect) {
+            setFeedback("🎉 Xuất sắc! Bạn đã gõ đúng hoàn toàn.", "success");
+            document.getElementById('type-input').style.borderColor = "var(--success-color)";
+        } else {
+            setFeedback(`😢 Chưa đúng rồi. Đáp án chuẩn là: "${targetAns}"`, "error");
+            document.getElementById('type-input').style.borderColor = "var(--error-color)";
+        }
+    }
+
+    // --- FUNCTION 5: NGHE & ĐIỀN TỪ ---
+    function generateListenQuestion() {
+        clearFeedback();
+        let state = tabState.listen;
+        state.answered = false;
+        document.getElementById('ctrl-next-btn').style.display = 'none';
+        document.getElementById('listen-hint-text').style.display = 'none';
+        
+        let actualIndex = state.indices[state.current];
+        const currentItem = vocabData[actualIndex];
+        document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+        
+        document.getElementById('listen-hint-text').innerText = currentItem.vi;
+        document.getElementById('listen-vi-meaning').innerText = "...";
+        
+        setTimeout(() => { speakPremiumGeneric('listen'); }, 300);
+
+        let correctAnswer = currentItem.ko;
+        let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
+        let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 4)]);
+        const poolContainer = document.getElementById('listen-word-pool'); 
+        poolContainer.innerHTML = "";
+
+        allChoices.forEach(choice => {
+            const btn = document.createElement('button'); btn.className = 'pool-btn'; btn.innerText = choice;
+            btn.onclick = function() { handleListenAnswer(btn, choice, correctAnswer); };
+            poolContainer.appendChild(btn);
+        });
+    }
+    function toggleListenHint() {
+        const hintBox = document.getElementById('listen-hint-text');
+        hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
+    }
+    function handleListenAnswer(btn, selectedChoice, correctChoice) {
+        let state = tabState.listen;
+        if (state.answered) return; state.answered = true;
+        document.getElementById('listen-vi-meaning').innerText = vocabData[state.indices[state.current]].vi;
+        
+        if (selectedChoice === correctChoice) {
+            btn.classList.add('selected-correct'); setFeedback("🎉 Nghe chuẩn quá tai bạn đỉnh thật sự!", "success");
+        } else {
+            btn.classList.add('selected-wrong'); setFeedback("😢 Chưa đúng rồi nè, hãy bấm nghe lại nhé.", "error");
+            document.querySelectorAll('#listen-word-pool .pool-btn').forEach(b => { if(b.innerText === correctChoice) b.classList.add('selected-correct'); });
+        }
+        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
+    }
+
+    // --- FUNCTION 6: NGHE & ĐOÁN NGHĨA ---
+    function generateGuessQuestion() {
+        clearFeedback();
+        let state = tabState.guess;
+        state.answered = false;
+        document.getElementById('ctrl-next-btn').style.display = 'none';
+        document.getElementById('guess-hint-text').style.display = 'none';
+        
+        let actualIndex = state.indices[state.current];
+        const currentItem = vocabData[actualIndex];
+        document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+        document.getElementById('guess-hint-text').innerText = currentItem.ko;
+        
+        setTimeout(() => { speakPremiumGeneric('guess'); }, 300);
+
+        let correctAnswer = currentItem.vi;
+        let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.vi);
+        let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
+        const optsContainer = document.getElementById('guess-opts');
+        optsContainer.innerHTML = "";
+
+        allChoices.forEach(opt => {
+            const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
+            btn.onclick = function() { handleGuessAnswer(btn, opt, correctAnswer); };
+            optsContainer.appendChild(btn);
+        });
+    }
+    function toggleGuessHint() {
+        const hintBox = document.getElementById('guess-hint-text');
+        hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
+    }
+    function handleGuessAnswer(selectedBtn, selectedOpt, correctOpt) {
+        let state = tabState.guess;
+        if (state.answered) return; state.answered = true;
+        document.querySelectorAll('#guess-opts .option-btn').forEach(btn => {
+            if (btn.innerText === correctOpt) btn.classList.add('correct');
+            else if (btn === selectedBtn) btn.classList.add('wrong');
+        });
+        if (selectedOpt === correctOpt) setFeedback("🎉 Quá chuẩn! Chúc mừng bạn chọn đúng nghĩa.", "success");
+        else setFeedback("😢 Sai mất rồi, cùng cố gắng ở từ tiếp theo nhé!", "error");
+        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
+    }
+
+    // --- FUNCTION 7: NHÌN HÌNH CHỌN CÂU ---
+    function generateVisualQuestion() {
+        clearFeedback();
+        let state = tabState.visual;
+        if(state.indices.length === 0) {
+            document.getElementById('visual-native-img').src = "";
+            document.getElementById('visual-opts').innerHTML = "<p style='color:var(--sub-text); text-align:center; width:100%;'>Bài học này không chứa dữ liệu hình ảnh minh họa.</p>";
+            document.getElementById('global-counter').innerText = "0 / 0";
+            return;
+        }
+        state.answered = false;
+        document.getElementById('ctrl-next-btn').style.display = 'none';
+        
+        let actualIndex = state.indices[state.current];
+        const currentItem = vocabData[actualIndex];
+        document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+        
+        document.getElementById('visual-native-img').src = currentItem.img;
+
+        let correctAnswer = currentItem.ko;
+        let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
+        let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
+        const optsContainer = document.getElementById('visual-opts');
+        optsContainer.innerHTML = "";
+
+        allChoices.forEach(opt => {
+            const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
+            btn.onclick = function() { handleVisualAnswer(btn, opt, correctAnswer); };
+            optsContainer.appendChild(btn);
+        });
+    }
+    function handleVisualAnswer(selectedBtn, selectedOpt, correctOpt) {
+        let state = tabState.visual;
+        if (state.answered) return; state.answered = true;
+        document.querySelectorAll('#visual-opts .option-btn').forEach(btn => {
+            if (btn.innerText === correctOpt) btn.classList.add('correct');
+            else if (btn === selectedBtn) btn.classList.add('wrong');
+        });
+        if (selectedOpt === correctOpt) {
+            setFeedback("🎉 Giỏi quá! Đáp án hoàn toàn chính xác với ngữ cảnh ảnh.", "success");
+            playPremium(correctOpt);
+        } else {
+            setFeedback(`😢 Chưa đúng rồi. Đáp án đúng là: "${correctOpt}"`, "error");
+        }
+        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
+    }
+
+    // GLOBAL ACTIONS NAVIGATION
+    function handleNextAction() {
+        if(currentTab === "lecture") { switchTab("flashcard"); return; }
+        let state = tabState[currentTab];
+        state.current = (state.current + 1) % state.indices.length;
+        switchTab(currentTab);
+    }
+    function handlePrevAction() {
+        let state = tabState[currentTab];
+        state.current = (state.current - 1 + state.indices.length) % state.indices.length;
+        switchTab(currentTab);
+    }
+    function handleMixAction() {
+        if (currentTab === 'flashcard') {
+            const toggleElement = document.getElementById('fc-shuffle-toggle');
+            toggleElement.checked = true;
+            handleFlashcardModeChange(toggleElement);
+        } else {
+            let state = tabState[currentTab];
+            state.indices = shuffleArray(state.indices);
+            state.current = 0;
+            switchTab(currentTab);
+        }
+    }
+    function clearFeedback() { const fb = document.getElementById('global-feedback'); fb.style.display = 'none'; fb.className = 'feedback'; }
+    function setFeedback(msg, type) { const fb = document.getElementById('global-feedback'); fb.innerText = msg; fb.className = "feedback " + type; fb.style.display = 'block'; }
+
+    // KHỞI CHẠY KHI TẢI TRANG
+    window.onload = function() {
+        loadUnitsStructure();
+    };
+</script>
+
+</body>
+</html>
