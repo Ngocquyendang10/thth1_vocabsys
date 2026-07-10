@@ -986,6 +986,24 @@ async function executeStudentLogin() {
     function handlePrevAction() { let state = tabState[currentTab]; state.current = (state.current - 1 + state.indices.length) % state.indices.length; switchTab(currentTab); }
     function handleMixAction() { let state = tabState[currentTab]; state.indices = shuffleArray(state.indices); state.current = 0; switchTab(currentTab); }
     // Hàm trộn mảng ngẫu nhiên chuẩn thuật toán để kích hoạt các game từ vựng
+    // Hàm xóa thông báo phản hồi hiển thị trên giao diện
+    function clearFeedback() {
+        const fb = document.getElementById('global-feedback');
+        if (fb) {
+            fb.innerText = "";
+            fb.className = "feedback";
+        }
+    }
+
+    // Hàm hiển thị thông báo đúng/sai có hiệu ứng màu sắc cho học sinh
+    function setFeedback(text, type) {
+        const fb = document.getElementById('global-feedback');
+        if (fb) {
+            fb.innerText = text;
+            fb.className = `feedback ${type}`; // type có thể là 'success' hoặc 'error'
+        }
+    }
+    
     function shuffleArray(array) {
         let currentIndex = array.length, randomIndex;
         while (currentIndex != 0) {
