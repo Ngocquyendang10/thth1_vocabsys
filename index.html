@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ngoc Quyen's Classroom - Hệ thống ôn tập từ vựng</title>
-    <script src="https://code.responsivevoice.org/voice.js?key=7w64YI2V"></script> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -533,20 +532,28 @@
     // --- HỆ THỐNG PHÁT ÂM AUDIO CHUẨN XỊN ---
 function triggerKoreanVoice(text, isMale) {
     if (typeof text === 'undefined' || !text) return;
-    if (typeof responsiveVoice !== 'undefined') {
-        // Tắt âm thanh đang phát dở trước đó để không bị chồng tiếng
-        responsiveVoice.cancel();
-        
-        // Làm sạch cụm từ Tiếng Hàn chuẩn phong cách của Pen
-        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
-        if(clean.includes('/')) clean = clean.split('/')[0];
-        
-        // Định vị chính xác giọng đọc từ thư viện
-        let voiceName = isMale ? "Korean Male" : "Korean Female";
-        
-        // Phát âm thanh với tốc độ 0.82 (vừa vặn cho học viên nghe)
-        responsiveVoice.speak(clean, voiceName, {pitch: 1, rate: 0.82, volume: 1});
+    
+    // Làm sạch cụm từ Tiếng Hàn chuẩn phong cách của Pen
+    let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
+    if(clean.includes('/')) clean = clean.split('/')[0];
+    
+    let url = "";
+    
+    if (isMale) {
+        // 🌟 GIỌNG NAM: Bốc thẳng từ API Google Translate chuẩn chỉnh, không lo chặn domain
+        // Sử dụng tld=co.kr để tối ưu hóa máy chủ phát âm tiếng Hàn
+        url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=" + 
+              encodeURIComponent(clean) + "&ttsspeed=1&tld=co.kr";
+    } else {
+        // 🌟 GIỌNG NỮ: Giữ nguyên link Stream Premium xịn sò cũ của Pen
+        url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + 
+              encodeURIComponent(clean) + 
+              "&lang=ko&engine=g3&name=Korean%20Female" + 
+              "&pitch=0.5&rate=0.45&volume=1";
     }
+              
+    let audio = new Audio(url);
+    audio.play().catch(e => console.log("Lỗi phát audio:", e));
 }
 async function executeStudentLogin() {
         const user = document.getElementById('login-username').value.trim();
