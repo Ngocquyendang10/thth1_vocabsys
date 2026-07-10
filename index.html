@@ -532,25 +532,25 @@
 
     // --- HỆ THỐNG PHÁT ÂM AUDIO CHUẨN XỊN ---
     function triggerKoreanVoice(text, isMale) {
-        if (typeof text === 'undefined' || !text) return;
-        
-        // Làm sạch chuỗi ký tự Tiếng Hàn trước khi đọc giống các dự án trước của Pen
-        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
-        if(clean.includes('/')) clean = clean.split('/')[0];
-        
-        // Chọn giọng AI Neural tối ưu phát âm (Neural2-C cho Nam và Neural2-A cho Nữ)
-        let voiceName = isMale ? "ko-KR-Neural2-C" : "ko-KR-Neural2-A";
-        
-        // Gọi trực tiếp API Stream Audio giống hàm playPremium của Pen
-        let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + 
-                  encodeURIComponent(clean) + 
-                  "&lang=ko&engine=g3&name=" + voiceName + 
-                  "&pitch=0.5&rate=0.45&volume=1"; // Giữ nguyên độ cao và tốc độ chuẩn của Pen
-                  
-        let audio = new Audio(url);
-        audio.play().catch(e => console.log("Lỗi phát audio:", e));
-    }
-
+    if (typeof text === 'undefined' || !text) return;
+    
+    // Làm sạch cụm từ Tiếng Hàn chuẩn phong cách của Pen
+    let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
+    if(clean.includes('/')) clean = clean.split('/')[0];
+    
+    // 🌟 ĐÂY RỒI: Tên chuẩn hệ thống giọng AI Premium của ResponsiveVoice
+    // Giọng Nam chuẩn AI là "Korean Male" và Nữ là "Korean Female" khi đi với engine=g3
+    let voiceName = isMale ? "Korean Male" : "Korean Female";
+    
+    // Gọi API stream trực tiếp từ nguồn Premium giống y hệt dự án cũ của Pen
+    let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + 
+              encodeURIComponent(clean) + 
+              "&lang=ko&engine=g3&name=" + voiceName + 
+              "&pitch=0.5&rate=0.45&volume=1";
+              
+    let audio = new Audio(url);
+    audio.play().catch(e => console.log("Lỗi phát audio:", e));
+}
 async function executeStudentLogin() {
         const user = document.getElementById('login-username').value.trim();
         const pass = document.getElementById('login-password').value.trim();
