@@ -332,8 +332,9 @@
                                 <div class="ko-vertical-wrapper">
                                     <div class="ko-text" id="fc-ko">...</div>
                                     <div class="fc-speaker-row">
-                                        <button class="audio-inline-btn" id="btn-speaker-male" onclick="event.stopPropagation()">🔊 남</button>
-                                        <button class="audio-inline-btn" id="btn-speaker-female" onclick="event.stopPropagation()">🔊 여</button>
+                                        <!-- Đổi thành truyền trực tiếp biến vào hàm -->
+                                        <button class="audio-inline-btn" onclick="triggerKoreanVoice(document.getElementById('fc-ko').innerText, true); event.stopPropagation();">🔊 남</button>
+                                        <button class="audio-inline-btn" onclick="triggerKoreanVoice(document.getElementById('fc-ko').innerText, false); event.stopPropagation();">🔊 여</button>
                                     </div>
                                 </div>
                                 <div class="card-hint">BẤM VÀO THẺ ĐỂ XEM NGHĨA</div>
@@ -367,7 +368,8 @@
                 <!-- 5. ĐIỀN TỪ CHUẨN KHUNG DẬP CHÌM MỊN (HÌNH 4) -->
                 <div id="listen-tab" class="tab-render-view">
                     <div class="listen-box">
-                        <button class="listen-circle-btn" id="btn-listen-play"><span>🔊</span>듣기</button>
+                        <!-- Thêm onclick gọi hàm phát âm giọng Nữ mặc định -->                    
+                        <button class="listen-circle-btn" id="btn-listen-play" onclick="triggerKoreanVoice(vocabData[tabState.listen.indices[tabState.listen.current]].ko, false); event.stopPropagation();"><span>🔊</span>듣기</button>
                         <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡</button>
                         <div class="text-hint-display" id="listen-hint-text"></div>
                     </div>
@@ -378,7 +380,8 @@
                 <!-- 6. ĐOÁN NGHĨA CHUẨN ABCD DỌC (HÌNH 5) -->
                 <div id="guess-tab" class="tab-render-view">
                     <div class="listen-box">
-                        <button class="listen-circle-btn" id="btn-guess-play"><span>🔊</span>듣기</button>
+                        <!-- Thêm onclick tương tự cho tab đoán nghĩa -->
+                        <button class="listen-circle-btn" id="btn-guess-play" onclick="triggerKoreanVoice(vocabData[tabState.guess.indices[tabState.guess.current]].ko, false); event.stopPropagation();"><span>🔊</span>듣기</button>
                         <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡</button>
                         <div class="text-hint-display" id="guess-hint-text"></div>
                     </div>
@@ -538,22 +541,6 @@
             responsiveVoice.speak(clean, voiceName, {pitch: 1, rate: 0.82, volume: 1});
         }
     }
-
-    document.addEventListener('click', function(e) {
-        if(vocabData.length === 0) return;
-    
-        // Kiểm tra an toàn xem tab hiện tại có mảng chỉ số indices và vị trí hợp lệ không
-        let state = tabState[currentTab];
-        let activeIdx = (state && state.indices && state.indices.length > 0) ? state.indices[state.current] : 0;
-    
-        let currentItem = vocabData[activeIdx];
-        if(!currentItem) return;
-    
-        // Xử lý bắt trúng nút loa kể cả khi click vào biểu tượng cảm xúc hoặc chữ bên trong
-        if(e.target && e.target.closest('#btn-speaker-male')) { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, true); }
-        if(e.target && e.target.closest('#btn-speaker-female')) { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, false); }
-        if(e.target && (e.target.closest('#btn-listen-play') || e.target.closest('#btn-guess-play'))) { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, false); }
-    });
 
 async function executeStudentLogin() {
         const user = document.getElementById('login-username').value.trim();
