@@ -532,14 +532,23 @@
 
     // --- HỆ THỐNG PHÁT ÂM AUDIO CHUẨN XỊN ---
     function triggerKoreanVoice(text, isMale) {
-        if (typeof responsiveVoice !== 'undefined') {
-            responsiveVoice.cancel();
-            let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
-            if(clean.includes('/')) clean = clean.split('/')[0];
-            
-            let voiceName = isMale ? "Korean Male" : "Korean Female";
-            responsiveVoice.speak(clean, voiceName, {pitch: 1, rate: 0.82, volume: 1});
-        }
+        if (typeof text === 'undefined' || !text) return;
+        
+        // Làm sạch chuỗi ký tự Tiếng Hàn trước khi đọc giống các dự án trước của Pen
+        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
+        if(clean.includes('/')) clean = clean.split('/')[0];
+        
+        // Chọn giọng AI Neural tối ưu phát âm (Neural2-C cho Nam và Neural2-A cho Nữ)
+        let voiceName = isMale ? "ko-KR-Neural2-C" : "ko-KR-Neural2-A";
+        
+        // Gọi trực tiếp API Stream Audio giống hàm playPremium của Pen
+        let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + 
+                  encodeURIComponent(clean) + 
+                  "&lang=ko&engine=g3&name=" + voiceName + 
+                  "&pitch=0.5&rate=0.45&volume=1"; // Giữ nguyên độ cao và tốc độ chuẩn của Pen
+                  
+        let audio = new Audio(url);
+        audio.play().catch(e => console.log("Lỗi phát audio:", e));
     }
 
 async function executeStudentLogin() {
@@ -891,23 +900,33 @@ async function executeStudentLogin() {
     }
 
     function generateListenQuestion() {
-        clearFeedback();
-        let state = tabState.listen; state.answered = false;
-        document.getElementById('ctrl-next-btn').style.display = 'none'; document.getElementById('listen-hint-text').style.display = 'none';
-        
-        let actualIndex = state.indices[state.current]; const currentItem = vocabData[actualIndex];
-        document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
-        document.getElementById(currentTab + '-hint-text').innerText = currentItem.vi; document.getElementById('listen-vi-meaning').innerText = "...";
-        
-        let correctAnswer = currentItem.ko; let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
-        let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 4)]);
-        const poolContainer = document.getElementById('listen-word-pool'); poolContainer.innerHTML = "";
-
-        allChoices.forEach(choice => {
-            const btn = document.createElement('button'); btn.className = 'pool-btn'; btn.innerText = choice;
-            btn.onclick = function() { handleListenAnswer(btn, choice, correctAnswer); }; poolContainer.appendChild(btn);
-        });
+    clearFeedback();
+    let state = tabState.listen; state.answered = false;
+    document.getElementById('ctrl-next-btn').style.display = 'none'; document.getElementById('listen-hint-text').style.display = 'none';
+    
+    let actualIndex = state.indices[state.current]; const currentItem = vocabData[actualIndex];
+    document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+    document.getElementById(currentTab + '-hint-text').innerText = currentItem.vi; document.getElementById('listen-vi-meaning').innerText = "...";
+    
+    // === CHÈN ĐOẠN NÀY VÀO: Kích hoạt nút loa của Tab 5 phát giọng AI ===
+    const listenPlayBtn = document.getElementById('btn-listen-play');
+    if (listenPlayBtn) {
+        listenPlayBtn.onclick = function(e) {
+            e.stopPropagation();
+            triggerKoreanVoice(currentItem.ko, false); // false để mặc định giọng Nữ Neural2-A của Pen
+        };
     }
+    // ==================================================================
+
+    let correctAnswer = currentItem.ko; let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
+    let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 4)]);
+    const poolContainer = document.getElementById('listen-word-pool'); poolContainer.innerHTML = "";
+
+    allChoices.forEach(choice => {
+        const btn = document.createElement('button'); btn.className = 'pool-btn'; btn.innerText = choice;
+        btn.onclick = function() { handleListenAnswer(btn, choice, correctAnswer); }; poolContainer.appendChild(btn);
+    });
+}
     
     function toggleListenHint() { 
     const hintBox = document.getElementById(currentTab === 'listen' ? 'listen-hint-text' : 'guess-hint-text'); 
@@ -921,24 +940,35 @@ async function executeStudentLogin() {
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
-    function generateGuessQuestion() {
-        clearFeedback();
-        let state = tabState.guess; state.answered = false;
-        document.getElementById('ctrl-next-btn').style.display = 'none'; document.getElementById('guess-hint-text').style.display = 'none';
-        
-        let actualIndex = state.indices[state.current]; const currentItem = vocabData[actualIndex];
-        document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
-        document.getElementById('guess-hint-text').innerText = currentItem.ko;
+function generateGuessQuestion() {
+    clearFeedback();
+    let state = tabState.guess; state.answered = false;
+    document.getElementById('ctrl-next-btn').style.display = 'none'; document.getElementById('guess-hint-text').style.display = 'none';
+    
+    let actualIndex = state.indices[state.current]; const currentItem = vocabData[actualIndex];
+    document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+    document.getElementById('guess-hint-text').innerText = currentItem.ko;
 
-        let correctAnswer = currentItem.vi; let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.vi);
-        let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
-        const optsContainer = document.getElementById('guess-opts'); optsContainer.innerHTML = "";
-
-        allChoices.forEach(opt => {
-            const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
-            btn.onclick = function() { handleGuessAnswer(btn, opt, correctAnswer); }; optsContainer.appendChild(btn);
-        });
+    // === CHÈN ĐOẠN NÀY VÀO: Kích hoạt nút loa của Tab 6 phát giọng AI ===
+    const guessPlayBtn = document.getElementById('btn-guess-play');
+    if (guessPlayBtn) {
+        guessPlayBtn.onclick = function(e) {
+            e.stopPropagation();
+            triggerKoreanVoice(currentItem.ko, false); // false để mặc định giọng Nữ Neural2-A của Pen
+        };
     }
+    // ==================================================================
+
+    let correctAnswer = currentItem.vi; let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.vi);
+    let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
+    const optsContainer = document.getElementById('guess-opts'); optsContainer.innerHTML = "";
+
+    allChoices.forEach(opt => {
+        const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
+        btn.onclick = function() { handleGuessAnswer(btn, opt, correctAnswer); }; optsContainer.appendChild(btn);
+    });
+}
+    
     function handleGuessAnswer(selectedBtn, selectedOpt, correctOpt) {
         let state = tabState.guess; if (state.answered) return; state.answered = true;
         document.querySelectorAll('#guess-opts .option-btn').forEach(btn => { if (btn.innerText === correctOpt) btn.classList.add('correct'); else if (btn === selectedBtn) btn.classList.add('wrong'); });
