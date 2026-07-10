@@ -541,12 +541,17 @@
 
     document.addEventListener('click', function(e) {
         if(vocabData.length === 0) return;
-        let activeIdx = tabState[currentTab].indices ? tabState[currentTab].indices[tabState[currentTab].current] : 0;
+    
+        // Kiểm tra an toàn xem tab hiện tại có mảng chỉ số indices và vị trí hợp lệ không
+        let state = tabState[currentTab];
+        let activeIdx = (state && state.indices && state.indices.length > 0) ? state.indices[state.current] : 0;
+    
         let currentItem = vocabData[activeIdx];
         if(!currentItem) return;
-
-        if(e.target && e.target.id === 'btn-speaker-male') { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, true); }
-        if(e.target && e.target.id === 'btn-speaker-female') { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, false); }
+    
+        // Xử lý bắt trúng nút loa kể cả khi click vào biểu tượng cảm xúc hoặc chữ bên trong
+        if(e.target && e.target.closest('#btn-speaker-male')) { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, true); }
+        if(e.target && e.target.closest('#btn-speaker-female')) { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, false); }
         if(e.target && (e.target.closest('#btn-listen-play') || e.target.closest('#btn-guess-play'))) { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, false); }
     });
 
