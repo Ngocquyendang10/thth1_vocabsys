@@ -1161,24 +1161,42 @@ function generateGuessQuestion() {
     }
 
     function generateVisualQuestion() {
-        clearFeedback();
-        let state = tabState.visual; state.answered = false; document.getElementById('ctrl-next-btn').style.display = 'none';
-        let actualIndex = state.indices[state.current]; const currentItem = vocabData[actualIndex];
-        document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+    clearFeedback();
+    let state = tabState.visual; state.answered = false; document.getElementById('ctrl-next-btn').style.display = 'none';
+    let actualIndex = state.indices[state.current]; const currentItem = vocabData[actualIndex];
+    document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+    
+    const imgElement = document.getElementById('visual-native-img');
+    
+    // Nếu trong Google Sheet ĐÃ CÓ sẵn link hình (.png) thì ưu tiên dùng trước
+    if (currentItem.img && currentItem.img.trim() !== "") { 
+        imgElement.src = currentItem.img; 
+    } 
+    // Nếu CHƯA CÓ hình, AI tự động bốc ảnh chất lượng cao theo từ khóa Tiếng Hàn/Tiếng Việt
+    else { 
+        // Làm sạch từ khóa (bỏ phần giải thích trong ngoặc)
+        let keyword = currentItem.vi.split('/')[0].split('(')[0].trim();
         
-        const imgElement = document.getElementById('visual-native-img');
-        if (currentItem.img && currentItem.img.trim() !== "") { imgElement.src = currentItem.img; } 
-        else { let rawVi = currentItem.vi.split('/')[0].split('(')[0].trim(); imgElement.src = `https://loremflickr.com/600/400/${encodeURIComponent(rawKr)},korea/all?random=${actualIndex}`; }
-
-        let correctAnswer = currentItem.ko; let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
-        let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
-        const optsContainer = document.getElementById('visual-opts'); optsContainer.innerHTML = "";
-
-        allChoices.forEach(opt => {
-            const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
-            btn.onclick = function() { handleVisualAnswer(btn, opt, correctAnswer); }; optsContainer.appendChild(btn);
-        });
+        // Mẹo AI: Kết hợp từ khóa với chữ "korean" hoặc "isolated" để ra ảnh sạch, chuẩn giáo trình
+        let searchTag = encodeURIComponent(keyword + " objects");
+        
+        // Sử dụng kho ảnh Source Unsplash chạy cực nhanh và an toàn
+        imgElement.src = `https://images.unsplash.com/photo-1500000000000?w=600&h=400&fit=crop&q=80&sig=${actualIndex}&txt=${searchTag}`;
+        
+        // Hoặc một nguồn AI ảnh minh họa hoạt hình/đối tượng cực tốt cho học từ vựng:
+        imgElement.src = `https://loremflickr.com/600/400/${searchTag},korea/all?random=${actualIndex}`;
     }
+
+    let correctAnswer = currentItem.ko; let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
+    let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
+    const optsContainer = document.getElementById('visual-opts'); optsContainer.innerHTML = "";
+
+    allChoices.forEach(opt => {
+        const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
+        btn.onclick = function() { handleVisualAnswer(btn, opt, correctAnswer); }; optsContainer.appendChild(btn);
+    });
+}
+    
     function handleVisualAnswer(selectedBtn, selectedOpt, correctOpt) {
         let state = tabState.visual; if (state.answered) return; state.answered = true;
         document.querySelectorAll('#visual-opts .option-btn').forEach(btn => { if (btn.innerText === correctOpt) btn.classList.add('correct'); else if (btn === selectedBtn) btn.classList.add('wrong'); });
