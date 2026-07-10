@@ -985,7 +985,16 @@ async function executeStudentLogin() {
     function handleNextAction() { if(currentTab === "lecture") { switchTab("flashcard"); return; } let state = tabState[currentTab]; state.current = (state.current + 1) % state.indices.length; switchTab(currentTab); }
     function handlePrevAction() { let state = tabState[currentTab]; state.current = (state.current - 1 + state.indices.length) % state.indices.length; switchTab(currentTab); }
     function handleMixAction() { let state = tabState[currentTab]; state.indices = shuffleArray(state.indices); state.current = 0; switchTab(currentTab); }
-
+    // Hàm trộn mảng ngẫu nhiên chuẩn thuật toán để kích hoạt các game từ vựng
+    function shuffleArray(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
     window.onload = async function() {
         const savedUser = localStorage.getItem('saved_user_QuyenClass'); 
         const savedPass = localStorage.getItem('saved_pass_QuyenClass');
