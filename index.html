@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngoc Quyen's Classroom - Hệ thống ôn tập</title>
+    <title>Ngoc Quyen's Classroom - Hệ thống ôn tập chính thức</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -47,7 +47,7 @@
             overflow-x: hidden;
         }
 
-        /* FORM ĐĂNG NHẬP CHIA ĐÔI */
+        /* LOGIN SCREEN CHIA ĐÔI */
         .login-page-container {
             display: flex; width: 100%; max-width: 1000px; height: 600px; background: var(--card-color);
             border-radius: var(--radius-lg); box-shadow: var(--neu-card-shadow); overflow: hidden;
@@ -122,17 +122,17 @@
         .todo-item { display: flex; gap: 8px; padding: 10px; background: var(--bg-color); border-radius: var(--radius-sm); margin-bottom: 6px; font-size: 11px; border-left: 3px solid var(--point-color); }
         .todo-item p { font-weight: 600; color: #2d3748; }
 
-        /* NỘI DUNG 7 CHỨC NĂNG ÔN TẬP */
+        /* NỘI DUNG CHỨC NĂNG GAME ÔN TẬP GỐC */
         .tab-render-view { display: none; width: 100%; }
         .tab-render-view.active { display: block; }
         .lecture-iframe-box { width: 100%; height: 440px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden; border: none; background: #e2e8f0; }
 
-        /* TAB 2: FLASHCARD */
+        /* TAB 2: FLASHCARD NGUYÊN BẢN (HÌNH 1) */
         .card-container { perspective: 1000px; width: 100%; height: 260px; margin-bottom: 24px; cursor: pointer; }
         .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255, 255, 255, 0.7); }
         .flashcard.flipped { transform: rotateY(180deg); }
         .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; border-radius: var(--radius-md); background: var(--card-color); text-align: center; }
-        .card-back { transform: rotateY(180deg); background-color: #fafbfc; }
+        .card-face card-back { transform: rotateY(180deg); background-color: #fafbfc; }
         .ko-text { font-size: 34px; font-weight: 800; color: #1a202c; }
         .vi-text { font-size: 26px; font-weight: 600; color: #4a5568; }
         .card-hint { font-size: 11px; color: #a0aec0; position: absolute; bottom: 20px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
@@ -152,7 +152,7 @@
         input:checked + .slider { background-color: var(--point-color); }
         input:checked + .slider:before { transform: translateX(22px); }
 
-        /* TAB 3 & 6: ABCD DỌC */
+        /* TAB 3 & 6: ABCD DỌC NGUYÊN BẢN (HÌNH 2 & 5) */
         .quiz-question { font-size: 17px; font-weight: 700; color: #1a202c; margin-bottom: 16px; text-align: center; }
         .quiz-options { display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px; width: 100%; }
         .option-btn { width: 100%; padding: 18px; text-align: left; background: var(--card-color); border: 1px solid rgba(226, 232, 240, 0.6); border-radius: var(--radius-sm); font-size: 15px; font-weight: 500; color: var(--text-color); cursor: pointer; transition: all 0.2s; box-shadow: var(--neu-convex); outline: none; }
@@ -160,7 +160,7 @@
         .option-btn.correct { background: #e6fffa !important; border-color: var(--success-color) !important; color: #234e52 !important; font-weight: 700; box-shadow: none; }
         .option-btn.wrong { background: #fff5f5 !important; border-color: var(--error-color) !important; color: #742a2a !important; box-shadow: none; }
 
-        /* TAB 4: GÕ TỪ */
+        /* TAB 4: GÕ TỪ CHUẨN TRUNG TÂM (HÌNH 3) */
         .typing-container-box { width: 100%; max-width: 650px; margin: 0 auto 24px auto; background: var(--card-color); padding: 32px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255, 255, 255, 0.7); text-align: center; }
         .typing-prompt { font-size: 14px; color: var(--sub-text); margin-bottom: 12px; font-weight: 600; text-align: left; }
         .typing-word { font-size: 32px; font-weight: 800; color: #1a202c; margin-bottom: 28px; line-height: 1.3; }
@@ -168,7 +168,7 @@
         .input-field-typing:focus { border-color: var(--point-color); }
         .toggle-mode { font-size: 12px; color: var(--point-color); background: var(--card-color); border: none; cursor: pointer; font-weight: 700; padding: 8px 18px; border-radius: 20px; box-shadow: var(--neu-convex); margin-bottom: 24px; display: inline-block; outline: none; transition: all 0.2s ease; }
 
-        /* TAB 5: ĐIỀN TỪ */
+        /* TAB 5: ĐIỀN TỪ CHUẨN BOX DẬP CHÌM (HÌNH 4) */
         .listen-box { display: flex; align-items: center; justify-content: center; padding: 32px; background: var(--bg-color); border-radius: var(--radius-md); margin-bottom: 26px; box-shadow: var(--neu-concave); position: relative; min-height: 180px; }
         .listen-circle-btn { background: var(--card-color); border: none; width: 72px; height: 72px; border-radius: 50%; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--text-color); box-shadow: var(--neu-convex); transition: all 0.2s ease; outline: none; }
         .listen-circle-btn span { font-size: 20px; margin-bottom: 2px; }
@@ -180,11 +180,11 @@
         .pool-btn.selected-correct { background: var(--success-color) !important; color: white !important; border-color: var(--success-color) !important; box-shadow: none; }
         .pool-btn.selected-wrong { background: var(--error-color) !important; color: white !important; border-color: var(--error-color) !important; box-shadow: none; }
 
-        /* TAB 7: NHÌN HÌNH */
+        /* TAB 7: NHÌN HÌNH CHỌN CÂU */
         .scene-image-frame { width: 100%; height: 240px; background: var(--bg-color); border-radius: var(--radius-md); margin-bottom: 24px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-concave); overflow: hidden; }
         .scene-image-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* SỔ TAY NHẮC LẠI TỪ VỰNG */
+        /* BẢNG SỔ TAY NHẮC LẠI TỪ VỰNG */
         .review-table-container { width: 100%; overflow-x: auto; margin-top: 10px; background: #ffffff; padding: 20px; border-radius: var(--radius-lg); box-shadow: var(--neu-convex); }
         .review-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
         .review-table th { padding: 14px; background: var(--bg-color); color: var(--text-color); font-weight: 800; border-bottom: 2px solid #edf2f7; text-transform: uppercase; font-size: 11px; }
@@ -204,11 +204,9 @@
         .btn:hover { background: var(--bg-color); }
         .btn-primary { background: var(--point-color); color: white; box-shadow: none; }
         .btn-primary:hover { background: var(--point-hover); }
-        .counter { font-size: 14px; color: var(--sub-text); font-weight: 600; background: var(--bg-color); padding: 8px 18px; border-radius: 20px; box-shadow: var(--neu-concave); }
 
         .bounce-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 32, 44, 0.4); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .bounce-popup-box { background: #ffffff; padding: 30px; border-radius: var(--radius-lg); width: 90%; max-width: 410px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.8); transform: scale(0.7); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .bounce-popup-overlay.active { opacity: 1; pointer-events: auto; }
         .popup-icon-animate { font-size: 42px; margin-bottom: 10px; animation: pulseIcon 1s infinite alternate; }
 
         .loading-screen { display: none; text-align: center; padding: 30px; }
@@ -218,7 +216,7 @@
 </head>
 <body>
 
-<!-- SCREEN LOGIN -->
+<!-- MÀN HÌNH ĐĂNG NHẬP -->
 <div class="login-page-container" id="login-panel-screen">
     <div class="login-left-art">
         <div class="art-3d-mockup">
@@ -246,10 +244,10 @@
     </div>
 </div>
 
-<!-- WORKSPACE CHÍNH 3 CỘT RỘNG RÃI -->
+<!-- WORKSPACE CHÍNH RỘNG RÃI CĂN BIÊN SÁT LỀ (HÌNH 6) -->
 <div class="dashboard-layout" id="main-app-layout" style="display: none;">
     
-    <!-- CỘT 1: SIDEBAR TRÁI NÂNG CẤP MENU -->
+    <!-- CỘT 1: SIDEBAR NAV TRÁI -->
     <aside class="sidebar-left">
         <div class="upper-nav">
             <div class="brand-logo-area">
@@ -280,7 +278,7 @@
     <!-- CỘT 2: KHU VỰC TRUNG TÂM -->
     <main class="main-center-content" id="center-workspace-area">
         
-        <!-- PHÂN HỆ: TỪ VỰNG -->
+        <!-- TỪ VỰNG PHÂN HỆ -->
         <div id="mode-vocab-section" style="display: flex; flex-direction: column; gap: 12px; width:100%; height:100%;">
             <div class="unit-panel-box">
                 <h4>Bảng phân quyền giáo trình (Units)</h4>
@@ -291,7 +289,7 @@
                 <div class="top-meta-area">
                     <div class="workspace-header">
                         <h1>Ngoc Quyen's Classroom</h1>
-                        <p id="main-subtitle">Vui lòng chọn bài học phía trên để nạp tài liệu</p>
+                        <p id="main-subtitle">Vui lòng chọn bài học phía trên để tải tài liệu</p>
                     </div>
 
                     <div class="workspace-tabs" id="main-tabs-nav" style="display: none;">
@@ -318,7 +316,7 @@
                     </div>
                 </div>
 
-                <!-- 2. FLASHCARD -->
+                <!-- 2. FLASHCARD CHUẨN UI NGUYÊN TÁC (HÌNH 1) -->
                 <div id="flashcard-tab" class="tab-render-view">
                     <div class="fc-mode-container">
                         <span class="fc-mode-label" id="fc-toggle-text">Chế độ: Theo thứ tự</span>
@@ -347,13 +345,13 @@
                     </div>
                 </div>
 
-                <!-- 3. TRẮC NGHIỆM -->
+                <!-- 3. TRẮC NGHIỆM CHUẨN ABCD DỌC (HÌNH 2) -->
                 <div id="quiz-tab" class="tab-render-view">
                     <div class="quiz-question" id="quiz-q">Đang tạo câu hỏi trắc nghiệm...</div>
                     <div class="quiz-options" id="quiz-opts"></div>
                 </div>
 
-                <!-- 4. GÕ TỪ -->
+                <!-- 4. GÕ TỪ CHUẨN KHUNG BOX TRUNG TÂM (HÌNH 3) -->
                 <div id="typing-tab" class="tab-render-view">
                     <div style="text-align: center;">
                         <button class="toggle-mode" onclick="toggleTypingDirection()" id="typing-dir-btn">Chế độ: Tiếng Việt ➔ Tiếng Hàn</button>
@@ -365,7 +363,7 @@
                     </div>
                 </div>
 
-                <!-- 5. ĐIỀN TỪ -->
+                <!-- 5. ĐIỀN TỪ CHUẨN KHUNG DẬP CHÌM MỊN (HÌNH 4) -->
                 <div id="listen-tab" class="tab-render-view">
                     <div class="listen-box">
                         <button class="listen-circle-btn" id="btn-listen-play"><span>🔊</span>듣기</button>
@@ -376,7 +374,7 @@
                     <div class="word-pool" id="listen-word-pool"></div>
                 </div>
 
-                <!-- 6. ĐOÁN NGHĨA -->
+                <!-- 6. ĐOÁN NGHĨA CHUẨN ABCD DỌC (HÌNH 5) -->
                 <div id="guess-tab" class="tab-render-view">
                     <div class="listen-box">
                         <button class="listen-circle-btn" id="btn-guess-play"><span>🔊</span>듣기</button>
@@ -387,7 +385,7 @@
                     <div class="quiz-options" id="guess-opts"></div>
                 </div>
 
-                <!-- 7. NHÌN HÌNH CHỌN CÂU -->
+                <!-- 7. NHÌN HÌNH -->
                 <div id="visual-tab" class="tab-render-view">
                     <div class="scene-image-frame">
                         <img id="visual-native-img" src="" alt="Hình ảnh minh họa">
@@ -413,7 +411,7 @@
             </div>
         </div>
 
-        <!-- PHÂN HỆ: NGỮ PHÁP -->
+        <!-- NGỮ PHÁP PHÂN HỆ -->
         <div id="mode-grammar-section" style="display: none; width:100%; height:100%;">
             <div class="work-workspace-container" style="justify-content: center; text-align: center;">
                 <h2>📚 Tính năng Ngữ pháp</h2>
@@ -421,7 +419,7 @@
             </div>
         </div>
 
-        <!-- PHÂN HỆ: NHẮC LẠI TỪ VỰNG -->
+        <!-- NHẮC LẠI TỪ VỰNG PHÂN HỆ (SỐ TAY TỪ SAI) -->
         <div id="mode-review-section" style="display: none; width:100%; height:100%;">
             <div class="work-workspace-container" style="justify-content: flex-start;">
                 <div class="workspace-header">
@@ -476,7 +474,7 @@
     </aside>
 </div>
 
-<!-- POPUP MODAL NỘI BỘ KHEN NGỢI -->
+<!-- POPUP MODAL KHEN NGỢI -->
 <div class="bounce-popup-overlay" id="custom-bounce-popup">
     <div class="bounce-popup-box">
         <div class="popup-icon-animate">🎉</div>
@@ -528,7 +526,7 @@
         if (modeName === 'review') renderReviewTable();
     }
 
-    // --- HỆ THỐNG AUDIO PREMIUM PHÁT ÂM TIẾNG HÀN CHUẨN XỊN ---
+    // --- HỆ THỐNG PHÁT ÂM AUDIO CHUẨN XỊN ---
     function triggerKoreanVoice(text, isMale) {
         if (typeof responsiveVoice !== 'undefined') {
             responsiveVoice.cancel();
@@ -540,7 +538,6 @@
         }
     }
 
-    // ĐĂNG KÝ SỰ KIỆN AUDIO KHÔNG LO BỊ ĐƠ HÌNH KHI UP DATA
     document.addEventListener('click', function(e) {
         if(vocabData.length === 0) return;
         let activeIdx = tabState[currentTab].indices ? tabState[currentTab].indices[tabState[currentTab].current] : 0;
@@ -615,7 +612,6 @@
                 renderUnitGrid(newUnitsFound);
                 localStorage.setItem('historyUnits_QuyenClass', JSON.stringify(allowedUnitsList));
                 
-                // Đồng bộ nạp sẵn 15 Unit vào bộ nhớ tạm
                 for (let unit of allowedUnitsList) {
                     try {
                         let vRes = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unit}&pass=PRE_AUTHED`);
@@ -624,7 +620,6 @@
                     } catch(err) {}
                 }
 
-                // 🌟 SỬA LỖI: Tự động kích hoạt nạp Unit đầu tiên khi chạy đăng nhập ngầm để tránh ẩn tab
                 if(allowedUnitsList.length > 0) {
                     await selectUnitLocal(allowedUnitsList[0]);
                 }
@@ -692,7 +687,6 @@
         }
     }
 
-    // KÍCH HOẠT THANH CÔNG CỤ 7 TABS LUNG LINH
     function activateMainUI() {
         document.getElementById('main-tabs-nav').style.display = 'flex';
         document.getElementById('footer-controls').style.visibility = 'visible';
@@ -707,15 +701,6 @@
             tabState[t].indices = shuffleArray(fullIndices);
             tabState[t].current = 0;
         });
-    }
-
-    function shuffleArray(array) {
-        let arr = [...array];
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
     }
 
     function switchTab(tabName) {
@@ -750,6 +735,7 @@
         }
     }
 
+    // 🌟 SỬA ĐÚNG TRIỆT ĐỂ LUỒNG BIẾN CỦA HÀM HIỂN THỊ REVIEW TỪ VỰNG
     function renderReviewTable() {
         const body = document.getElementById('review-table-body'); body.innerHTML = "";
         if(wrongWordsList.length === 0) {
@@ -763,8 +749,8 @@
             tr.innerHTML = `
                 <td><span class="${koClass}">${item.ko}</span></td>
                 <td><span class="${viClass}">${item.vi}</span></td>
-                <td><span style="color:var(--point-color); font-weight:700;">${item.ex}</span></td>
-                <td><span style="color:var(--sub-text); font-style:italic;">${item.exVi}</span></td>
+                <td><span style="color:var(--point-color); font-weight:700;">${item.ex || '...'}</span></td>
+                <td><span style="color:var(--sub-text); font-style:italic;">${item.exVi || '...'}</span></td>
                 <td><span class="counter" style="box-shadow:none; padding:2px 8px;">${item.date}</span></td>
                 <td><input type="checkbox" ${item.remembered ? 'checked' : ''} onchange="toggleWordRemembered(${index}, this.checked)"></td>
             `;
@@ -772,7 +758,6 @@
         });
     }
 
-    // 🌟 SỬA LỖI ĐÁNH MÁY BIẾN HỆ THỐNG
     function toggleBlurReviewColumn(type) { blurColumns[type] = !blurColumns[type]; renderReviewTable(); }
     
     function toggleWordRemembered(index, isChecked) {
@@ -980,28 +965,19 @@
     function handlePrevAction() { let state = tabState[currentTab]; state.current = (state.current - 1 + state.indices.length) % state.indices.length; switchTab(currentTab); }
     function handleMixAction() { let state = tabState[currentTab]; state.indices = shuffleArray(state.indices); state.current = 0; switchTab(currentTab); }
 
-    // --- KHỞI CHẠY TUẦN TỰ AN TOÀN ---
     window.onload = async function() {
         const savedUser = localStorage.getItem('saved_user_QuyenClass'); 
         const savedPass = localStorage.getItem('saved_pass_QuyenClass');
         const sessionUser = localStorage.getItem('studentSession_QuyenClass');
-        
         if (sessionUser && savedUser && savedPass) {
             document.getElementById('login-panel-screen').style.display = 'none'; 
             document.getElementById('main-app-layout').style.display = 'grid';
             try {
                 let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
                 let data = await res.json();
-                if(data.success) { 
-                    await parseAndInitApp(data.allowedUnits); 
-                } else { 
-                    executeStudentLogout(); 
-                }
+                if(data.success) { await parseAndInitApp(data.allowedUnits); } else { executeStudentLogout(); }
             } catch(e) { executeStudentLogout(); }
-        } else { 
-            document.getElementById('login-panel-screen').style.display = 'flex'; 
-            document.getElementById('main-app-layout').style.display = 'none'; 
-        }
+        } else { document.getElementById('login-panel-screen').style.display = 'flex'; document.getElementById('main-app-layout').style.display = 'none'; }
     };
 </script>
 </body>
