@@ -332,8 +332,8 @@
                                 <div class="ko-vertical-wrapper">
                                     <div class="ko-text" id="fc-ko">...</div>
                                     <div class="fc-speaker-row">
-                                        <button class="audio-inline-btn" id="btn-speaker-male">🔊 남 (Nam)</button>
-                                        <button class="audio-inline-btn" id="btn-speaker-female">🔊 여 (Nữ)</button>
+                                        <button class="audio-inline-btn" id="btn-speaker-male" onclick="event.stopPropagation()">🔊 남</button>
+                                        <button class="audio-inline-btn" id="btn-speaker-female" onclick="event.stopPropagation()">🔊 여</button>
                                     </div>
                                 </div>
                                 <div class="card-hint">BẤM VÀO THẺ ĐỂ XEM NGHĨA</div>
@@ -547,7 +547,7 @@
 
         if(e.target && e.target.id === 'btn-speaker-male') { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, true); }
         if(e.target && e.target.id === 'btn-speaker-female') { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, false); }
-        if(e.target && (e.target.id === 'btn-listen-play' || e.target.id === 'btn-guess-play')) { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, false); }
+        if(e.target && (e.target.closest('#btn-listen-play') || e.target.closest('#btn-guess-play'))) { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, false); }
     });
 
 async function executeStudentLogin() {
