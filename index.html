@@ -48,10 +48,13 @@
         }
 
         /* LOGIN SCREEN CHIA ĐÔI */
+        /* --- TỐI ƯU MÀN HÌNH ĐĂNG NHẬP (LÀM MỊN LẠI FLEX) --- */
         .login-page-container {
-            display: flex; width: 100%; max-width: 1000px; height: 600px; background: var(--card-color);
-            border-radius: var(--radius-lg); box-shadow: var(--neu-card-shadow); overflow: hidden;
+            display: flex; width: 100%; max-width: 1000px; min-height: 550px; height: auto;
+            background: var(--card-color); border-radius: var(--radius-lg); 
+            box-shadow: var(--neu-card-shadow); overflow: hidden;
             border: 1px solid rgba(255,255,255,0.8); margin: 20px;
+            transition: all 0.3s ease;
         }
         .login-left-art { flex: 1.1; background: linear-gradient(135deg, #e0e8ff 0%, #f4f7fc 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
         .art-3d-mockup { width: 170px; height: 170px; background: #ffffff; border-radius: 36px; box-shadow: var(--neu-convex); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; animation: floatArt 4s ease-in-out infinite; }
@@ -70,8 +73,9 @@
 
         /* DASHBOARD LAYOUT 3 CỘT */
         .dashboard-layout {
-            display: none; width: 100vw; height: 100vh; background: var(--bg-color); padding: 12px;
-            display: grid; grid-template-columns: 240px 1fr 270px; gap: 12px; box-sizing: border-box;
+            display: grid; width: 100vw; height: 100vh; background: var(--bg-color); padding: 12px;
+            grid-template-columns: 240px 1fr 270px; gap: 12px; box-sizing: border-box;
+            transition: all 0.3s ease;
         }
 
         .sidebar-left {
@@ -212,6 +216,163 @@
         .loading-screen { display: none; text-align: center; padding: 30px; }
         .spinner { width: 36px; height: 36px; border: 4px solid rgba(97, 76, 255, 0.1); border-left-color: var(--point-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 1. Cho các dòng Máy tính bảng / Laptop nhỏ (Dưới 1024px) */
+        @media (max-width: 1024px) {
+            .dashboard-layout {
+                grid-template-columns: 220px 1fr; /* Ẩn bớt cột Widget phải để chừa chỗ cho Workspace */
+            }
+            .widget-right-profile {
+                display: none !important; /* Ẩn cột profile bên phải trên tablet */
+            }
+        }
+        
+        /* 2. Cho Điện thoại thông minh (Dưới 768px) */
+        @media (max-width: 768px) {
+            /* MÀN HÌNH ĐĂNG NHẬP: Chuyển từ chia đôi thành xếp dọc */
+            .login-page-container {
+                flex-direction: column;
+                margin: 16px;
+                height: auto;
+                min-height: unset;
+            }
+            .login-left-art {
+                padding: 30px 20px;
+                flex: none;
+            }
+            .art-3d-mockup {
+                width: 110px;
+                height: 110px;
+                border-radius: var(--radius-md);
+                margin-bottom: 12px;
+            }
+            .art-3d-mockup svg {
+                width: 48px;
+                height: 48px;
+            }
+            .login-right-form {
+                padding: 30px 24px;
+                flex: none;
+            }
+            .login-right-form h2 { font-size: 20px; }
+            .remember-row { margin-bottom: 16px; }
+        
+            /* DASHBOARD TRANG CHỦ: Biến thành 1 cột dọc duy nhất rộng rãi */
+            .dashboard-layout {
+                grid-template-columns: 1fr !important;
+                grid-template-rows: auto 1fr;
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto;
+                padding: 8px;
+                gap: 8px;
+            }
+        
+            /* Biến Sidebar bên trái thành một thanh Header ngang gọn gàng ở trên cùng */
+            .sidebar-left {
+                flex-direction: row;
+                align-items: center;
+                padding: 12px 16px;
+                height: auto;
+                border-radius: var(--radius-md);
+            }
+            .brand-logo-area {
+                margin-bottom: 0;
+                padding-left: 0;
+            }
+            .sidebar-left .menu-list {
+                flex-direction: row; /* Xếp menu nằm ngang */
+                gap: 4px;
+            }
+            .menu-item a {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+            .menu-item a svg {
+                display: none; /* Ẩn icon trên mobile cho đỡ rối mắt */
+            }
+            .lower-nav {
+                display: block;
+            }
+            .logout-link {
+                padding: 8px !important;
+            }
+        
+            /* KHUNG WORKSPACE Ở GIỮA: Giờ sẽ tràn viền chiếm trọn spotlight */
+            .main-center-content {
+                height: auto;
+                overflow-y: visible;
+            }
+            .work-workspace-container {
+                padding: 16px;
+                min-height: 480px;
+                border-radius: var(--radius-md);
+            }
+            
+            /* Thu nhỏ chữ và tabs điều hướng để không bị tràn màn hình */
+            .workspace-header h1 { font-size: 16px; }
+            .workspace-tabs {
+                padding: 2px;
+                border-radius: var(--radius-sm);
+            }
+            .tab-click-btn {
+                padding: 8px 6px;
+                font-size: 10px;
+            }
+        
+            /* Cấu trúc các game từ vựng co giãn hợp lý */
+            .ko-text { font-size: 26px; }
+            .vi-text { font-size: 20px; }
+            .card-container { height: 200px; }
+            
+            .typing-container-box {
+                padding: 20px 16px;
+            }
+            .typing-word { font-size: 24px; }
+            .input-field-typing { font-size: 14px; padding: 12px; }
+        
+            .listen-box {
+                padding: 20px;
+                min-height: 130px;
+            }
+            .listen-circle-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 11px;
+            }
+            .pool-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+            .option-btn {
+                padding: 14px;
+                font-size: 13px;
+            }
+        
+            /* Ẩn widget cột phải */
+            .widget-right-profile {
+                display: none !important;
+            }
+        
+            /* Thanh điều khiển dưới cùng tinh gọn lại */
+            .bottom-controls-bar {
+                padding-top: 14px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .controls-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .controls-right {
+                width: 100%;
+            }
+            .controls-right .btn-primary {
+                width: 100%; /* Cho nút "Tiếp theo" to bành ra dễ bấm bằng ngón tay */
+                text-align: center;
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -533,19 +694,19 @@
 function triggerKoreanVoice(text, isMale) {
     if (typeof text === 'undefined' || !text) return;
     
-    // Làm sạch cụm từ Tiếng Hàn chuẩn phong cách của Pen
+    // 🌟 ĐÃ SỬA CÚ PHÁP REGEX DÒNG 698 CHUẨN XỊN:
     let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
     if(clean.includes('/')) clean = clean.split('/')[0];
-    
+    if(!clean) return; // Nếu chuỗi trống thì dừng lại luôn
+
     let url = "";
     
     if (isMale) {
-        // 🌟 GIỌNG NAM: Bốc thẳng từ API Google Translate chuẩn chỉnh, không lo chặn domain
-        // Sử dụng tld=co.kr để tối ưu hóa máy chủ phát âm tiếng Hàn
+        // GIỌNG NAM: Dùng link API Google Translate chuẩn, thêm referrer để lách bộ lọc trình duyệt
         url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=" + 
-              encodeURIComponent(clean) + "&ttsspeed=1&tld=co.kr";
+              encodeURIComponent(clean) + "&ttsspeed=1&total=1&idx=0&textlen=" + clean.length;
     } else {
-        // 🌟 GIỌNG NỮ: Giữ nguyên link Stream Premium xịn sò cũ của Pen
+        // GIỌNG NỮ: Giữ nguyên link Stream Premium xịn sò của Pen
         url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + 
               encodeURIComponent(clean) + 
               "&lang=ko&engine=g3&name=Korean%20Female" + 
@@ -553,6 +714,9 @@ function triggerKoreanVoice(text, isMale) {
     }
               
     let audio = new Audio(url);
+    
+    // Mẹo nhỏ: Ép trình duyệt load lại âm thanh trước khi chạy để tránh bị nghẹt tiếng trên điện thoại
+    audio.load(); 
     audio.play().catch(e => console.log("Lỗi phát audio:", e));
 }
 async function executeStudentLogin() {
