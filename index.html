@@ -550,23 +550,44 @@
         if(e.target && (e.target.id === 'btn-listen-play' || e.target.id === 'btn-guess-play')) { e.stopPropagation(); triggerKoreanVoice(currentItem.ko, false); }
     });
 
-    async function executeStudentLogin() {
+async function executeStudentLogin() {
         const user = document.getElementById('login-username').value.trim();
         const pass = document.getElementById('login-password').value.trim();
         const rememberMe = document.getElementById('login-remember-me').checked;
         
-        if(!user || !pass) { alert("Vui lòng điền đầy đủ tài khoản và mật khẩu!"); return; }
+        console.log("=== BẮT ĐẦU TIẾN TRÌNH ĐĂNG NHẬP ===");
+        console.log("Tài khoản nhập:", user);
+        console.log("Mật khẩu nhập:", pass);
+        
+        if(!user || !pass) { 
+            alert("Vui lòng điền đầy đủ tài khoản và mật khẩu!"); 
+            return; 
+        }
         
         document.getElementById('login-panel-screen').style.display = 'none';
         document.getElementById('main-app-layout').style.display = 'grid';
         document.getElementById('loading-area').style.display = 'block';
         document.getElementById('loading-text').innerText = "Đang xác thực thông tin học viên...";
         
+        // Tạo URL chuẩn mã hóa để gửi đi
+        const targetUrl = `${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(user + "||" + pass)}`;
+        console.log("Gửi yêu cầu tới URL:", targetUrl);
+        
         try {
-            let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(user + "||" + pass)}`);
+            // Ép cấu hình fetch xử lý CORS và chuyển hướng dữ liệu từ Google
+            let res = await fetch(targetUrl, {
+                method: "GET",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                }
+            });
+            
             let data = await res.json();
+            console.log("Dữ liệu phản hồi từ Google Sheets:", data);
             
             if(data.success) {
+                console.log("➔ ĐĂNG NHẬP THÀNH CÔNG! Đang nạp các Unit:", data.allowedUnits);
                 if(rememberMe) {
                     localStorage.setItem('saved_user_QuyenClass', user);
                     localStorage.setItem('saved_pass_QuyenClass', pass);
@@ -574,11 +595,13 @@
                 localStorage.setItem('studentSession_QuyenClass', user);
                 await parseAndInitApp(data.allowedUnits);
             } else {
+                console.warn("➔ ĐĂNG NHẬP THẤT BẠI: Sai tài khoản hoặc mật khẩu");
                 alert("Tài khoản hoặc mật khẩu chưa chuẩn xác!");
                 window.location.reload();
             }
         } catch(e) {
-            alert("Lỗi kết nối máy chủ đồng bộ!");
+            console.error("➔ LỖI KẾT NỐI NGHIÊM TRỌNG:", e);
+            alert("Lỗi kết nối máy chủ đồng bộ! Chi tiết lỗi đã in ra Console.");
             window.location.reload();
         }
     }
