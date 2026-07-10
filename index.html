@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://code.responsivevoice.org/voice.js?key=7w64YI2V"></script>
     <style>
         :root {
             --bg-color: #f0f4f8;
@@ -47,65 +48,28 @@
             overflow-x: hidden;
         }
 
-        /* GIAO DIỆN ĐĂNG NHẬP CHIA ĐÔI */
+        /* LOGIN SCREEN */
         .login-page-container {
-            display: flex;
-            width: 100%;
-            max-width: 1000px;
-            height: 600px;
-            background: var(--card-color);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--neu-card-shadow);
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.8);
-            margin: 20px;
+            display: flex; width: 100%; max-width: 1000px; height: 600px; background: var(--card-color);
+            border-radius: var(--radius-lg); box-shadow: var(--neu-card-shadow); overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.8); margin: 20px;
         }
-
-        .login-left-art {
-            flex: 1.1;
-            background: linear-gradient(135deg, #e0e8ff 0%, #f4f7fc 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-        }
-
-        .art-3d-mockup {
-            width: 170px;
-            height: 170px;
-            background: #ffffff;
-            border-radius: 36px;
-            box-shadow: var(--neu-convex);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            animation: floatArt 4s ease-in-out infinite;
-        }
+        .login-left-art { flex: 1.1; background: linear-gradient(135deg, #e0e8ff 0%, #f4f7fc 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
+        .art-3d-mockup { width: 170px; height: 170px; background: #ffffff; border-radius: 36px; box-shadow: var(--neu-convex); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; animation: floatArt 4s ease-in-out infinite; }
         @keyframes floatArt { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         .art-3d-mockup svg { width: 74px; height: 74px; color: var(--point-color); }
-
         .login-left-art h3 { font-size: 20px; font-weight: 800; color: #1a202c; margin-bottom: 6px; }
         .login-left-art p { font-size: 13px; color: var(--sub-text); text-align: center; max-width: 280px; }
-
         .login-right-form { flex: 0.9; padding: 40px 45px; display: flex; flex-direction: column; justify-content: center; }
         .login-right-form h2 { font-size: 24px; font-weight: 800; color: #1a202c; margin-bottom: 6px; }
         .login-right-form p.info-p { font-size: 13px; color: var(--sub-text); margin-bottom: 28px; }
-
         .form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
         .form-group label { font-size: 11px; font-weight: 700; color: var(--sub-text); text-transform: uppercase; }
-
-        .input-field {
-            width: 100%; padding: 13px 16px; font-size: 14px; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: var(--radius-sm); outline: none; background: #ffffff; box-shadow: var(--neu-concave); transition: all 0.2s; text-align: center;
-        }
-        .input-field:focus { border-color: var(--point-color); }
-
         .remember-row { display: flex; align-items: center; gap: 8px; margin: 6px 0 20px 0; font-size: 13px; color: var(--text-color); cursor: pointer; }
         .remember-row input { width: 16px; height: 16px; accent-color: var(--point-color); cursor: pointer; }
         .btn-submit-login { width: 100%; padding: 14px; font-size: 14px; background: var(--point-color); color: white; border: none; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(97, 76, 255, 0.2); }
 
-        /* DASHBOARD LAYOUT HÌNH BIÊN RỘNG RÃI */
+        /* DASHBOARD WORKSPACE 3 CỘT */
         .dashboard-layout {
             display: none; width: 100vw; height: 100vh; background: var(--bg-color); padding: 12px;
             display: grid; grid-template-columns: 240px 1fr 270px; gap: 12px; box-sizing: border-box;
@@ -114,19 +78,17 @@
         .sidebar-left {
             background: var(--sidebar-color); border-radius: var(--radius-lg); box-shadow: var(--neu-card-shadow); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(255,255,255,0.7); height: 100%;
         }
-
         .brand-logo-area { display: flex; align-items: center; gap: 10px; padding-left: 10px; margin-bottom: 30px; }
         .brand-logo-area svg { width: 26px; height: 22px; color: var(--point-color); }
         .brand-logo-area span { font-size: 14px; font-weight: 800; color: #1a202c; }
 
         .menu-list { display: flex; flex-direction: column; gap: 4px; list-style: none; }
+        .menu-item { cursor: pointer; }
         .menu-item a { display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: var(--sub-text); font-size: 12px; font-weight: 700; text-decoration: none; border-radius: var(--radius-sm); transition: all 0.2s; }
         .menu-item.active a, .menu-item a:hover { color: var(--point-color); background: var(--point-light); }
         .menu-item a svg { width: 16px; height: 18px; fill: currentColor; }
-        .logout-link { font-size: 12px; color: var(--error-color) !important; font-weight: 700; cursor: pointer; }
 
         .main-center-content { display: flex; flex-direction: column; gap: 12px; height: 100%; overflow-y: auto; }
-
         .unit-panel-box { background: #ffffff; padding: 12px 18px; border-radius: var(--radius-md); box-shadow: var(--neu-card-shadow); border: 1px solid rgba(255,255,255,0.7); }
         .unit-panel-box h4 { font-size: 11px; color: var(--sub-text); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
         .unit-grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 6px; }
@@ -134,26 +96,20 @@
         .unit-btn {
             padding: 8px 4px; background: #ffffff; border: none; border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; color: var(--sub-text); cursor: pointer; box-shadow: var(--neu-convex); display: flex; flex-direction: column; align-items: center; position: relative; outline: none;
         }
-        .unit-btn:hover { color: var(--text-color); transform: translateY(-1px); }
         .unit-btn.unlocked { color: var(--point-color); border: 1px solid rgba(97, 76, 255, 0.15); }
         .unit-btn.active { color: white; background: var(--point-color); box-shadow: var(--neu-concave); border: none; }
         .unit-btn.locked { opacity: 0.45; background: #e6ecf2; box-shadow: none; cursor: not-allowed; }
-
         .bounce-new-tag { font-size: 7px; background: var(--success-color); color: white; padding: 1px 3px; border-radius: 5px; position: absolute; top: -6px; font-weight: 800; animation: miniBounce 0.6s infinite alternate; }
         @keyframes miniBounce { from { transform: translateY(0); } to { transform: translateY(-2px); } }
 
-        /* WORKSPACE KHUNG LÀM BÀI */
         .work-workspace-container {
             background: #ffffff; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--neu-card-shadow); border: 1px solid rgba(255,255,255,0.8); flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-height: 520px;
         }
-
-        .workspace-header h1 { font-size: 18px; font-weight: 800; color: #1a202c; }
-        .workspace-header p { font-size: 11px; color: var(--sub-text); margin-top: 2px; margin-bottom: 14px; }
-
         .workspace-tabs { display: flex; background: var(--bg-color); padding: 4px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); margin-bottom: 20px; gap: 2px; overflow-x: auto; }
         .tab-click-btn { flex: 1; padding: 10px 2px; background: none; border: none; font-size: 11px; font-weight: 700; color: var(--sub-text); cursor: pointer; border-radius: var(--radius-sm); white-space: nowrap; outline: none; }
         .tab-click-btn.active { color: var(--point-color); background: #ffffff; box-shadow: var(--neu-convex); }
 
+        /* WIDGET CỘT PHẢI */
         .widget-right-profile { background: #ffffff; border-radius: var(--radius-lg); box-shadow: var(--neu-card-shadow); padding: 24px 16px; display: flex; flex-direction: column; gap: 20px; border: 1px solid rgba(255,255,255,0.7); height: 100%; }
         .profile-card-box { display: flex; flex-direction: column; align-items: center; text-align: center; padding-bottom: 16px; border-bottom: 1px solid #edf2f7; }
         .avatar-circle-wrapper { width: 64px; height: 64px; border-radius: 50%; background: var(--bg-color); box-shadow: var(--neu-convex); padding: 4px; margin-bottom: 10px; }
@@ -161,65 +117,52 @@
         .profile-card-box h3 { font-size: 13px; font-weight: 800; color: #1a202c; }
         .profile-card-box span { font-size: 11px; color: var(--sub-text); }
 
-        .todo-list-widget h4 { font-size: 11px; color: var(--text-color); font-weight: 800; margin-bottom: 10px; text-transform: uppercase; }
-        .todo-item { display: flex; gap: 8px; padding: 10px; background: var(--bg-color); border-radius: var(--radius-sm); margin-bottom: 6px; font-size: 11px; border-left: 3px solid var(--point-color); }
-        .todo-item p { font-weight: 600; color: #2d3748; }
-        .todo-item span { color: var(--sub-text); font-size: 10px; display: block; margin-top: 2px; }
-
-        /* CORE NEUMORPHISM INTERFACE FOR 7 CHỨC NĂNG */
+        /* CHỨC NĂNG CHUYỂN HOÀN TOÀN THEO NGUYÊN TÁC */
         .tab-render-view { display: none; width: 100%; }
         .tab-render-view.active { display: block; }
+        .lecture-iframe-box { width: 100%; height: 440px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden; border: none; background: #e2e8f0; }
 
-        .lecture-iframe-box { width: 100%; height: 430px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden; border: none; background: #e2e8f0; }
-
-        .card-container { perspective: 1000px; width: 100%; height: 220px; margin-bottom: 16px; cursor: pointer; }
-        .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.5s ease; border-radius: var(--radius-md); box-shadow: var(--neu-convex); }
+        /* 🌟 KHÔI PHỤC FLASHCARD UI GỐC CHUẨN NEUMORPHISM (HÌNH 1) */
+        .card-container { perspective: 1000px; width: 100%; height: 260px; margin-bottom: 24px; cursor: pointer; }
+        .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255, 255, 255, 0.7); }
         .flashcard.flipped { transform: rotateY(180deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; border-radius: var(--radius-md); background: #ffffff; text-align: center; }
-        .card-back { transform: rotateY(180deg); background-color: #fafdff; }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; border-radius: var(--radius-md); background: var(--card-color); text-align: center; }
+        .card-back { transform: rotateY(180deg); background-color: #fafbfc; }
+        .ko-text { font-size: 34px; font-weight: 800; color: #1a202c; }
+        .vi-text { font-size: 26px; font-weight: 600; color: #4a5568; }
+        .card-hint { font-size: 11px; color: #a0aec0; position: absolute; bottom: 20px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+        .fc-speaker-row { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
         
-        .ko-text { font-size: 32px; font-weight: 800; color: #1a202c; letter-spacing: -0.5px; }
-        .vi-text { font-size: 24px; font-weight: 600; color: #4a5568; }
-        .card-hint { font-size: 11px; color: #a0aec0; position: absolute; bottom: 12px; font-weight: 700; text-transform: uppercase; }
-
-        .fc-speaker-row { display: flex; gap: 10px; margin-top: 12px; }
+        /* 🌟 NÚT LOA VÀ THIẾT KẾ BO TRÒN MỊN NGUYÊN BẢN */
         .audio-inline-btn {
-            background: var(--bg-color); border: none; padding: 6px 14px; height: 34px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; box-shadow: var(--neu-convex); color: var(--point-color); outline: none;
+            background: var(--bg-color); border: none; padding: 6px 18px; height: 36px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; font-weight: 700; transition: all 0.2s; box-shadow: var(--neu-convex); color: var(--point-color); outline: none;
         }
-        .audio-inline-btn:hover { transform: scale(1.04); }
+        .audio-inline-btn:hover { transform: scale(1.05); }
 
-        .fc-mode-container { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 14px; gap: 8px; }
-        .fc-mode-label { font-size: 12px; font-weight: 700; color: var(--sub-text); }
-        .toggle-switch { position: relative; display: inline-block; width: 46px; height: 24px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e0; transition: .3s; border-radius: 24px; box-shadow: var(--neu-concave); }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .3s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--point-color); }
-        input:checked + .slider:before { transform: translateX(22px); }
-
-        .quiz-question { font-size: 17px; font-weight: 700; color: #1a202c; margin-bottom: 16px; text-align: center; }
-        .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        .option-btn { width: 100%; padding: 15px; text-align: left; background: #ffffff; border: 1px solid #edf2f7; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: var(--neu-convex); outline: none; transition: 0.2s; }
+        /* 🌟 TRẮC NGHIỆM ABCD DỌC TOÀN MÀN HÌNH (HÌNH 2 & 5) */
+        .quiz-options { display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px; width: 100%; }
+        .option-btn { width: 100%; padding: 18px; text-align: left; background: var(--card-color); border: 1px solid rgba(226, 232, 240, 0.6); border-radius: var(--radius-sm); font-size: 15px; font-weight: 500; color: var(--text-color); cursor: pointer; transition: all 0.2s; box-shadow: var(--neu-convex); outline: none; }
         .option-btn:hover { background: var(--bg-color); }
-        .option-btn.correct { background: #e6fffa !important; border-color: var(--success-color) !important; color: #234e52 !important; font-weight: 700; }
-        .option-btn.wrong { background: #fff5f5 !important; border-color: var(--error-color) !important; color: #742a2a !important; }
 
-        .typing-box { background: #ffffff; padding: 20px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); text-align: center; }
-        .typing-prompt { font-size: 12px; color: var(--sub-text); margin-bottom: 6px; text-align: left; font-weight: bold; }
-        .typing-word { font-size: 26px; font-weight: 800; color: #1a202c; margin-bottom: 20px; }
+        /* 🌟 KHUNG HỘP GÕ TỪ VỰNG TRUNG TÂM (HÌNH 3) */
+        .typing-container-box { width: 100%; max-width: 650px; margin: 0 auto 24px auto; background: var(--card-color); padding: 32px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255, 255, 255, 0.7); text-align: center; }
+        .typing-prompt { font-size: 14px; color: var(--sub-text); margin-bottom: 12px; font-weight: 600; text-align: left; }
+        .typing-word { font-size: 32px; font-weight: 800; color: #1a202c; margin-bottom: 28px; line-height: 1.3; }
 
-        .listen-frame { display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--bg-color); border-radius: var(--radius-md); margin-bottom: 16px; box-shadow: var(--neu-concave); min-height: 120px; position: relative; }
-        .listen-circle-btn { background: #ffffff; border: none; padding: 12px 22px; border-radius: 24px; cursor: pointer; font-size: 13px; font-weight: 700; box-shadow: var(--neu-convex); color: var(--text-color); display: flex; align-items: center; gap: 6px; outline: none; }
-        .hint-btn-bottom-right { position: absolute; bottom: 12px; right: 12px; background: #ffffff; border: none; padding: 6px 12px; border-radius: 14px; cursor: pointer; font-size: 11px; font-weight: 700; box-shadow: var(--neu-convex); outline: none; }
-        .text-hint-display { position: absolute; bottom: 12px; left: 16px; font-size: 12px; font-weight: 700; color: var(--point-color); background: #ffffff; padding: 4px 10px; border-radius: 8px; box-shadow: var(--neu-convex); display: none; }
-        
-        .word-pool { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
-        .pool-btn { padding: 10px 18px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: var(--neu-convex); outline: none; }
-        .pool-btn.selected-correct { background: var(--success-color) !important; color: white !important; border-color: var(--success-color) !important; }
-        .pool-btn.selected-wrong { background: var(--error-color) !important; color: white !important; border-color: var(--error-color) !important; }
+        /* 🌟 KHUNG BOX NGHE ĐIỀN TỪ (HÌNH 4) */
+        .listen-box { display: flex; align-items: center; justify-content: center; padding: 32px; background: var(--bg-color); border-radius: var(--radius-md); margin-bottom: 26px; box-shadow: var(--neu-concave); position: relative; min-height: 180px; }
+        .listen-circle-btn { background: var(--card-color); border: none; width: 72px; height: 72px; border-radius: 50%; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--text-color); box-shadow: var(--neu-convex); transition: all 0.2s ease; outline: none; }
+        .listen-circle-btn span { font-size: 20px; margin-bottom: 2px; }
+        .hint-btn-bottom-right { position: absolute; bottom: 16px; right: 16px; background: var(--card-color); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: var(--neu-convex); outline: none; }
 
-        .scene-image-frame { width: 100%; height: 220px; background: var(--bg-color); border-radius: var(--radius-md); margin-bottom: 16px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-concave); overflow: hidden; }
-        .scene-image-frame img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        /* HỆ THỐNG NHẮC LẠI TỪ VỰNG (MÀN HÌNH MỚI) */
+        .review-table-container { width: 100%; overflow-x: auto; margin-top: 10px; background: #ffffff; padding: 20px; border-radius: var(--radius-lg); box-shadow: var(--neu-convex); }
+        .review-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+        .review-table th { padding: 14px; background: var(--bg-color); color: var(--text-color); font-weight: 800; border-bottom: 2px solid #edf2f7; text-transform: uppercase; font-size: 11px; }
+        .review-table td { padding: 14px; border-bottom: 1px solid #edf2f7; color: var(--text-color); font-weight: 500; }
+        .cell-toggle-blur { filter: blur(5px); background: #cbd5e0; border-radius: 4px; color: transparent; user-select: none; }
+        .action-eye-btn { background: none; border: none; cursor: pointer; color: var(--point-color); display: inline-flex; align-items: center; vertical-align: middle; margin-left: 6px; outline: none; }
+        .action-eye-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
         .feedback-reserved-space { min-height: 44px; display: flex; align-items: center; margin-top: 8px; }
         .feedback { width: 100%; font-size: 12px; font-weight: 600; padding: 10px; border-radius: var(--radius-sm); display: none; }
@@ -233,21 +176,11 @@
         .btn-primary { background: var(--point-color); color: white; box-shadow: none; }
         .btn-primary:hover { background: var(--point-hover); }
 
-        /* BOUNCE MODAL POPUP */
-        .bounce-popup-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 32, 44, 0.4);
-            display: flex; align-items: center; justify-content: center; z-index: 1000;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-        }
+        .bounce-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 32, 44, 0.4); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .bounce-popup-overlay.active { opacity: 1; pointer-events: auto; }
-        .bounce-popup-box {
-            background: #ffffff; padding: 30px; border-radius: var(--radius-lg); width: 90%; max-width: 410px; text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.8);
-            transform: scale(0.7); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .bounce-popup-box { background: #ffffff; padding: 30px; border-radius: var(--radius-lg); width: 90%; max-width: 410px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.8); transform: scale(0.7); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .bounce-popup-overlay.active .bounce-popup-box { transform: scale(1); }
         .popup-icon-animate { font-size: 42px; margin-bottom: 10px; animation: pulseIcon 1s infinite alternate; }
-        @keyframes pulseIcon { from { transform: scale(1); } to { transform: scale(1.1); } }
         .bounce-popup-box h3 { font-size: 17px; font-weight: 800; color: #1a202c; margin-bottom: 8px; }
         .bounce-popup-box p { font-size: 13px; color: var(--sub-text); line-height: 1.4; margin-bottom: 20px; }
 
@@ -258,6 +191,7 @@
 </head>
 <body>
 
+<!-- MÀN HÌNH ĐĂNG NHẬP -->
 <div class="login-page-container" id="login-panel-screen">
     <div class="login-left-art">
         <div class="art-3d-mockup">
@@ -285,8 +219,10 @@
     </div>
 </div>
 
+<!-- WORKSPACE CHÍNH 3 CỘT -->
 <div class="dashboard-layout" id="main-app-layout" style="display: none;">
     
+    <!-- CỘT 1: SIDEBAR TRÁI NÂNG CẤP MENU (HÌNH 6) -->
     <aside class="sidebar-left">
         <div class="upper-nav">
             <div class="brand-logo-area">
@@ -294,14 +230,14 @@
                 <span>NQ CLASSROOM</span>
             </div>
             <ul class="menu-list">
-                <li class="menu-item active"><a href="#">
-                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Tổng quan học tập</a>
+                <li class="menu-item active" id="menu-vocab" onclick="showAppMode('vocab')"><a href="#">
+                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Từ vựng</a>
                 </li>
-                <li class="menu-item"><a href="#">
-                    <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>Kho audio từ vựng</a>
+                <li class="menu-item" id="menu-grammar" onclick="showAppMode('grammar')"><a href="#">
+                    <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>Ngữ pháp</a>
                 </li>
-                <li class="menu-item"><a href="#">
-                    <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>Lịch kiểm tra từ</a>
+                <li class="menu-item" id="menu-review" onclick="showAppMode('review')"><a href="#">
+                    <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm0 16H5V8h14v11z"/></svg>Nhắc lại từ vựng</a>
                 </li>
             </ul>
         </div>
@@ -314,131 +250,181 @@
         </div>
     </aside>
 
-    <main class="main-center-content">
-        <div class="unit-panel-box">
-            <h4>Bảng phân quyền giáo trình (Units)</h4>
-            <div class="unit-grid-layout" id="unit-buttons-container"></div>
-        </div>
-
-        <div class="work-workspace-container">
-            <div class="top-meta-area">
-                <div class="workspace-header">
-                    <h1>Ngoc Quyen's Classroom</h1>
-                    <p id="main-subtitle">Vui lòng chọn bài học phía trên để nạp tài liệu</p>
-                </div>
-
-                <div class="workspace-tabs" id="main-tabs-nav" style="display: none;">
-                    <button id="btn-lecture" class="tab-click-btn active" onclick="switchTab('lecture')">1. Bài giảng</button>
-                    <button id="btn-flashcard" class="tab-click-btn" onclick="switchTab('flashcard')">2. Flashcard</button>
-                    <button id="btn-quiz" class="tab-click-btn" onclick="switchTab('quiz')">3. Trắc nghiệm</button>
-                    <button id="btn-typing" class="tab-click-btn" onclick="switchTab('typing')">4. Gõ từ</button>
-                    <button id="btn-listen" class="tab-click-btn" onclick="switchTab('listen')">5. Điền từ</button>
-                    <button id="btn-guess" class="tab-click-btn" onclick="switchTab('guess')">6. Đoán nghĩa</button>
-                    <button id="btn-visual" class="tab-click-btn" onclick="switchTab('visual')">7. Nhìn hình</button>
-                </div>
+    <!-- CỘT 2: KHU VỰC TRUNG TÂM GIẢI PHÓNG DIỆN TÍCH SÁT BIÊN -->
+    <main class="main-center-content" id="center-workspace-area">
+        
+        <!-- PHÂN HỆ 1: TỪ VỰNG (MẶC ĐỊNH) -->
+        <div id="mode-vocab-section" style="display: flex; flex-direction: column; gap: 12px; width:100%; height:100%;">
+            <div class="unit-panel-box">
+                <h4>Bảng phân quyền giáo trình (Units)</h4>
+                <div class="unit-grid-layout" id="unit-buttons-container"></div>
             </div>
 
-            <div id="loading-area" class="loading-screen">
-                <div class="spinner"></div>
-                <p id="loading-text" style="color: var(--sub-text); font-weight: 600; font-size: 13px;">Đang nạp dữ liệu...</p>
-            </div>
+            <div class="work-workspace-container">
+                <div class="top-meta-area">
+                    <div class="workspace-header">
+                        <h1>Ngoc Quyen's Classroom</h1>
+                        <p id="main-subtitle">Vui lòng chọn bài học phía trên để nạp tài liệu</p>
+                    </div>
 
-            <div id="lecture-tab" class="tab-render-view active">
-                <div class="embed-wrapper">
-                    <div class="no-embed-msg" id="lecture-empty-msg">Không có slide bài giảng cho Unit này.</div>
-                    <iframe id="lecture-iframe" class="lecture-iframe-box" src="" allowfullscreen></iframe>
+                    <div class="workspace-tabs" id="main-tabs-nav" style="display: none;">
+                        <button id="btn-lecture" class="tab-click-btn active" onclick="switchTab('lecture')">1. Bài giảng</button>
+                        <button id="btn-flashcard" class="tab-click-btn" onclick="switchTab('flashcard')">2. Flashcard</button>
+                        <button id="btn-quiz" class="tab-click-btn" onclick="switchTab('quiz')">3. Trắc nghiệm</button>
+                        <button id="btn-typing" class="tab-click-btn" onclick="switchTab('typing')">4. Gõ từ</button>
+                        <button id="btn-listen" class="tab-click-btn" onclick="switchTab('listen')">5. Điền từ</button>
+                        <button id="btn-guess" class="tab-click-btn" onclick="switchTab('guess')">6. Đoán nghĩa</button>
+                        <button id="btn-visual" class="tab-click-btn" onclick="switchTab('visual')">7. Nhìn hình</button>
+                    </div>
                 </div>
-            </div>
 
-            <div id="flashcard-tab" class="tab-render-view">
-                <div class="fc-mode-container">
-                    <span class="fc-mode-label" id="fc-toggle-text">Chế độ: Theo thứ tự</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="fc-shuffle-toggle" onchange="handleFlashcardModeChange(this)">
-                        <span class="slider"></span>
-                    </label>
+                <div id="loading-area" class="loading-screen">
+                    <div class="spinner"></div>
+                    <p id="loading-text" style="color: var(--sub-text); font-weight: 600; font-size: 13px;">Đang nạp dữ liệu...</p>
                 </div>
-                <div class="card-container">
-                    <div class="flashcard" id="fcard">
-                        <div class="card-face card-front" onclick="toggleFlip()">
-                            <div class="ko-vertical-wrapper">
-                                <div class="ko-text" id="fc-ko">...</div>
-                                <div class="fc-speaker-row">
-                                    <button class="audio-inline-btn" style="color: #4285F4;" onclick="speakMalePremium(event)">🔊 Nam (AI)</button>
-                                    <button class="audio-inline-btn" onclick="speakPremium(event)">🔊 Nữ (MS)</button>
+
+                <!-- 1. BÀI GIẢNG -->
+                <div id="lecture-tab" class="tab-render-view active">
+                    <div class="embed-wrapper">
+                        <div class="no-embed-msg" id="lecture-empty-msg">Không có slide bài giảng cho Unit này.</div>
+                        <iframe id="lecture-iframe" class="lecture-iframe-box" src="" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- 2. FLASHCARD -->
+                <div id="flashcard-tab" class="tab-render-view">
+                    <div class="fc-mode-container">
+                        <span class="fc-mode-label" id="fc-toggle-text">Chế độ: Theo thứ tự</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="fc-shuffle-toggle" onchange="handleFlashcardModeChange(this)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="card-container">
+                        <div class="flashcard" id="fcard">
+                            <div class="card-face card-front" onclick="toggleFlip()">
+                                <div class="ko-vertical-wrapper">
+                                    <div class="ko-text" id="fc-ko">...</div>
+                                    <div class="fc-speaker-row">
+                                        <button class="audio-inline-btn" onclick="speakMalePremium(event)">🔊 남 (Nam)</button>
+                                        <button class="audio-inline-btn" onclick="speakPremium(event)">🔊 여 (Nữ)</button>
+                                    </div>
                                 </div>
+                                <div class="card-hint">BẤM VÀO THẺ ĐỂ XEM NGHĨA</div>
                             </div>
-                            <div class="card-hint">Bấm vào thẻ để lật xem nghĩa</div>
-                        </div>
-                        <div class="card-face card-back" onclick="toggleFlip()">
-                            <div class="vi-text" id="fc-vi">...</div>
-                            <div class="card-hint">Bấm vào thẻ để xem từ gốc</div>
+                            <div class="card-face card-back" onclick="toggleFlip()">
+                                <div class="vi-text" id="fc-vi">...</div>
+                                <div class="card-hint">BẤM VÀO THẺ ĐỂ XEM TỪ GỐC</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="quiz-tab" class="tab-render-view">
-                <div class="quiz-question" id="quiz-q">Đang tạo câu hỏi trắc nghiệm...</div>
-                <div class="quiz-options" id="quiz-opts"></div>
-            </div>
-
-            <div id="typing-tab" class="tab-render-view">
-                <div style="text-align: center;">
-                    <button class="toggle-mode" onclick="toggleTypingDirection()" id="typing-dir-btn">Chế độ: Tiếng Việt ➔ Tiếng Hàn</button>
+                <!-- 3. TRẮC NGHIỆM -->
+                <div id="quiz-tab" class="tab-render-view">
+                    <div class="quiz-question" id="quiz-q">Đang tạo câu hỏi trắc nghiệm...</div>
+                    <div class="quiz-options" id="quiz-opts"></div>
                 </div>
-                <div class="typing-box">
-                    <div class="typing-prompt" id="type-prompt-label">Gõ từ vựng tương ứng:</div>
-                    <div class="typing-word" id="type-word">...</div>
-                    <input type="text" class="input-field" id="type-input" placeholder="Nhập câu trả lời tại đây..." autocomplete="off" onkeydown="checkTypingEnter(event)">
-                </div>
-            </div>
 
-            <div id="listen-tab" class="tab-render-view">
-                <div class="listen-frame">
-                    <button class="listen-circle-btn" onclick="speakPremiumGeneric('listen')"><span>🔊</span>듣기 (Nghe)</button>
-                    <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡 Gợi ý</button>
-                    <div class="text-hint-display" id="listen-hint-text"></div>
+                <!-- 4. GÕ TỪ -->
+                <div id="typing-tab" class="tab-render-view">
+                    <div style="text-align: center;">
+                        <button class="toggle-mode" onclick="toggleTypingDirection()" id="typing-dir-btn">Chế độ: Tiếng Việt ➔ Tiếng Hàn</button>
+                    </div>
+                    <div class="typing-container-box">
+                        <div class="typing-prompt" id="type-prompt-label">Hãy gõ cụm từ Tiếng Hàn tương ứng:</div>
+                        <div class="typing-word" id="type-word">...</div>
+                        <input type="text" class="input-field" id="type-input" placeholder="Nhập câu trả lời tại đây..." autocomplete="off" onkeydown="checkTypingEnter(event)">
+                    </div>
                 </div>
-                <div class="fill-sentence">Nghĩa tiếng Việt: <span id="listen-vi-meaning" style="color: #4a5568;">...</span></div>
-                <div class="word-pool" id="listen-word-pool"></div>
-            </div>
 
-            <div id="guess-tab" class="tab-render-view">
-                <div class="listen-frame">
-                    <button class="listen-circle-btn" onclick="speakPremiumGeneric('guess')"><span>🔊</span>듣기 (Nghe)</button>
-                    <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡 Gợi ý</button>
-                    <div class="text-hint-display" id="guess-hint-text"></div>
+                <!-- 5. ĐIỀN TỪ -->
+                <div id="listen-tab" class="tab-render-view">
+                    <div class="listen-box">
+                        <button class="listen-circle-btn" onclick="speakPremiumGeneric('listen')"><span>🔊</span>듣기</button>
+                        <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡</button>
+                        <div class="text-hint-display" id="listen-hint-text"></div>
+                    </div>
+                    <div class="fill-sentence">Nội dung nghe được: <span id="listen-vi-meaning" style="color: #4a5568;">...</span></div>
+                    <div class="word-pool" id="listen-word-pool"></div>
                 </div>
-                <div class="quiz-question">Từ bạn vừa nghe mang ý nghĩa nào sau đây?</div>
-                <div class="quiz-options" id="guess-opts"></div>
-            </div>
 
-            <div id="visual-tab" class="tab-render-view">
-                <div class="scene-image-frame">
-                    <img id="visual-native-img" src="" alt="Hình ảnh minh họa">
+                <!-- 6. ĐOÁN NGHĨA -->
+                <div id="guess-tab" class="tab-render-view">
+                    <div class="listen-box">
+                        <button class="listen-circle-btn" onclick="speakPremiumGeneric('guess')"><span>🔊</span>듣기</button>
+                        <button class="hint-btn-bottom-right" onclick="toggleListenHint()">💡</button>
+                        <div class="text-hint-display" id="guess-hint-text"></div>
+                    </div>
+                    <div class="quiz-question">Cụm từ bạn nghe được mang nghĩa là gì?</div>
+                    <div class="quiz-options" id="guess-opts"></div>
                 </div>
-                <div class="quiz-question">Nhìn ngữ cảnh tình huống ảnh trên và chọn đáp án đúng:</div>
-                <div class="quiz-options" id="visual-opts"></div>
-            </div>
 
-            <div class="feedback-reserved-space">
-                <div class="feedback" id="global-feedback"></div>
-            </div>
-
-            <div class="bottom-controls-bar" id="footer-controls" style="visibility: hidden;">
-                <div class="controls-left">
-                    <span class="counter" id="global-counter">0 / 0</span>
-                    <button class="btn" id="ctrl-prev-btn" onclick="handlePrevAction()">Trước đó</button>
-                    <button class="btn" id="ctrl-mix-btn" onclick="handleMixAction()">🔀 Trộn bài</button>
+                <!-- 7. NHÌN HÌNH -->
+                <div id="visual-tab" class="tab-render-view">
+                    <div class="scene-image-frame">
+                        <img id="visual-native-img" src="" alt="Hình ảnh minh họa">
+                    </div>
+                    <div class="quiz-question">Nhìn tình huống ảnh trên và lựa chọn đáp án đúng:</div>
+                    <div class="quiz-options" id="visual-opts"></div>
                 </div>
-                <div class="controls-right">
-                    <button class="btn btn-primary" id="ctrl-next-btn" onclick="handleNextAction()">Tiếp theo</button>
+
+                <div class="feedback-reserved-space">
+                    <div class="feedback" id="global-feedback"></div>
+                </div>
+
+                <div class="bottom-controls-bar" id="footer-controls" style="visibility: hidden;">
+                    <div class="controls-left">
+                        <span class="counter" id="global-counter">0 / 0</span>
+                        <button class="btn" id="ctrl-prev-btn" onclick="handlePrevAction()">Trước đó</button>
+                        <button class="btn" id="ctrl-mix-btn" onclick="handleMixAction()">🔀 Trộn bài</button>
+                    </div>
+                    <div class="controls-right">
+                        <button class="btn btn-primary" id="ctrl-next-btn" onclick="handleNextAction()">Tiếp theo</button>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- PHÂN HỆ 2: NGỮ PHÁP (MÀN HÌNH CHỜ SẴN) -->
+        <div id="mode-grammar-section" style="display: none; width:100%; height:100%;">
+            <div class="work-workspace-container" style="justify-content: center; text-align: center;">
+                <h2>📚 Tính năng Ngữ pháp</h2>
+                <p style="color: var(--sub-text); margin-top: 10px;">Hệ thống bài tập cấu trúc cấu cú pháp đang được thiết lập. Hãy quay lại sau nha học viên!</p>
+            </div>
+        </div>
+
+        <!-- PHÂN HỆ 3: NHẮC LẠI TỪ VỰNG (BẢNG GOM TỪ SAI THEO YÊU CẦU - HÌNH 6) -->
+        <div id="mode-review-section" style="display: none; width:100%; height:100%;">
+            <div class="work-workspace-container" style="justify-content: flex-start;">
+                <div class="workspace-header">
+                    <h1>Sổ Tay Nhắc Lại Từ Vựng 📝</h1>
+                    <p>Danh sách lưu trữ tự động những từ vựng bạn đã làm chưa đúng để rèn luyện phản xạ.</p>
+                </div>
+                
+                <div class="review-table-container">
+                    <table class="review-table">
+                        <thead>
+                            <tr>
+                                <th>Tiếng Hàn <button class="action-eye-btn" onclick="toggleGlobalColumn('ko')"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></button></th>
+                                <th>Tiếng Việt <button class="action-eye-btn" onclick="toggleGlobalColumn('vi')"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></button></th>
+                                <th>Ví dụ</th>
+                                <th>Nghĩa của ví dụ</th>
+                                <th>Ngày chưa thuộc</th>
+                                <th>Bạn đã nhớ chưa?</th>
+                            </tr>
+                        </thead>
+                        <tbody id="review-table-body">
+                            <!-- Render danh sách động qua javascript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </main>
 
+    <!-- CỘT 3: WIDGET PHẢI CĂN BIÊN SÁT LỀ (HÌNH 6) -->
     <aside class="widget-right-profile">
         <div class="profile-card-box">
             <div class="avatar-circle-wrapper">
@@ -465,6 +451,7 @@
     </aside>
 </div>
 
+<!-- POPUP MODAL NỘI BỘ -->
 <div class="bounce-popup-overlay" id="custom-bounce-popup">
     <div class="bounce-popup-box">
         <div class="popup-icon-animate">🎉</div>
@@ -475,7 +462,6 @@
 </div>
 
 <script>
-    // 🌟 ĐIỀN ĐƯỜNG LINK WEB APP URL CỦA PEN VÀO ĐÂY NHA:
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoiuvhY5MANz416-ST3q4CdVl9_oajWD-yUrmi-gGxdaFW2s_Rx_U7abytzY5VuL5v/exec";
 
     let unitsConfig = []; 
@@ -484,6 +470,10 @@
     let vocabData = []; 
     let currentUnit = null;
     let currentTab = "lecture";
+    
+    // Mảng lưu trữ từ vựng làm sai
+    let wrongWordsList = JSON.parse(localStorage.getItem('wrongWords_QuyenClass')) || [];
+    let blurColumns = { ko: false, vi: false };
 
     let tabState = {
         lecture: { indices: [0], current: 0 },
@@ -500,12 +490,20 @@
         document.getElementById('popup-message').innerText = text;
         document.getElementById('custom-bounce-popup').classList.add('active');
     }
-    
-    function closeCustomBouncePopup() {
-        document.getElementById('custom-bounce-popup').classList.remove('active');
+    function closeCustomBouncePopup() { document.getElementById('custom-bounce-popup').classList.remove('active'); }
+
+    // ĐIỀU HƯỚNG PHÂN HỆ MENU TRÁI (HÌNH 6)
+    function showAppMode(modeName) {
+        document.querySelectorAll('.menu-item').forEach(li => li.classList.remove('active'));
+        document.getElementById('menu-' + modeName).classList.add('active');
+        
+        document.getElementById('mode-vocab-section').style.display = (modeName === 'vocab') ? 'flex' : 'none';
+        document.getElementById('mode-grammar-section').style.display = (modeName === 'grammar') ? 'block' : 'none';
+        document.getElementById('mode-review-section').style.display = (modeName === 'review') ? 'block' : 'none';
+        
+        if (modeName === 'review') renderReviewTable();
     }
 
-    // --- CƠ CHẾ ĐĂNG NHẬP ĐỒNG BỘ HÓA ---
     async function executeStudentLogin() {
         const user = document.getElementById('login-username').value.trim();
         const pass = document.getElementById('login-password').value.trim();
@@ -516,7 +514,6 @@
         document.getElementById('login-panel-screen').style.display = 'none';
         document.getElementById('main-app-layout').style.display = 'grid';
         document.getElementById('loading-area').style.display = 'block';
-        document.getElementById('loading-text').innerText = "Đang xác thực thông tin học viên...";
         
         try {
             let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(user + "||" + pass)}`);
@@ -530,16 +527,13 @@
                 localStorage.setItem('studentSession_QuyenClass', user);
                 await parseAndInitApp(data.allowedUnits);
             } else {
-                showModalError("Tài khoản hoặc mật khẩu chưa chuẩn xác!");
+                alert("Tài khoản hoặc mật khẩu chưa chuẩn xác!");
+                window.location.reload();
             }
         } catch(e) {
-            showModalError("Lỗi kết nối đồng bộ máy chủ!");
+            alert("Lỗi kết nối máy chủ đồng bộ!");
+            window.location.reload();
         }
-    }
-
-    function showModalError(msg) {
-        alert(msg);
-        executeStudentLogout();
     }
 
     function executeStudentLogout() {
@@ -557,17 +551,11 @@
         document.getElementById('student-display-name').innerText = currentUser.toUpperCase();
         document.getElementById('student-avatar-letter').innerText = currentUser.charAt(0).toUpperCase();
         
-        document.getElementById('login-panel-screen').style.display = 'none';
-        document.getElementById('main-app-layout').style.display = 'grid';
-        document.getElementById('loading-area').style.display = 'block';
-        document.getElementById('loading-text').innerText = "Đang đồng bộ giáo trình lớp học...";
-        
         try {
             let res = await fetch(`${SCRIPT_URL}?action=getUnits`);
             let data = await res.json();
             if(data.success) {
                 unitsConfig = data.units;
-                
                 let oldHistory = JSON.parse(localStorage.getItem('historyUnits_QuyenClass')) || [];
                 let newUnitsFound = [];
                 
@@ -578,18 +566,15 @@
                 renderUnitGrid(newUnitsFound);
                 localStorage.setItem('historyUnits_QuyenClass', JSON.stringify(allowedUnitsList));
                 
-                // Đồng bộ nạp sẵn bộ nhớ đệm 15 Unit
                 for (let unit of allowedUnitsList) {
                     try {
                         let vRes = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unit}&pass=PRE_AUTHED`);
                         let vData = await vRes.json();
                         if(vData.success) allVocabCache[unit] = vData.vocab;
-                    } catch(err) { console.log(err); }
+                    } catch(err) {}
                 }
             }
-        } catch(e) {
-            console.log(e);
-        }
+        } catch(e) {}
         document.getElementById('loading-area').style.display = 'none';
     }
 
@@ -603,7 +588,6 @@
             
             btn.className = `unit-btn ${isUnlocked ? 'unlocked' : 'locked'}`;
             if(currentUnit == cfg.unit) btn.classList.add('active');
-            
             btn.innerHTML = `${isUnlocked ? '' : '🔒 '}Unit ${cfg.unit}`;
             
             if(isUnlocked && isBrandNew) {
@@ -619,11 +603,7 @@
     }
 
     function handleUnitClick(unitNum, isUnlocked, isBrandNew) {
-        if(!isUnlocked) {
-            alert("Bài học này chưa được mở khóa cho tài khoản của bạn.");
-            return;
-        }
-        
+        if(!isUnlocked) { alert("Bài học này chưa được mở khóa cho tài khoản của bạn."); return; }
         if(isBrandNew) {
             showCustomBouncePopup(
                 `Unit ${unitNum} Đã Sẵn Sàng! 🎉`, 
@@ -631,14 +611,12 @@
             );
             renderUnitGrid([]); 
         }
-        
         selectUnitLocal(unitNum);
     }
 
     async function selectUnitLocal(unitNum) {
         currentUnit = unitNum;
         renderUnitGrid([]); 
-        
         if(allVocabCache[unitNum]) {
             vocabData = allVocabCache[unitNum];
             initTabIndices();
@@ -654,9 +632,7 @@
                     initTabIndices();
                     activateMainUI();
                 }
-            } catch(e) {
-                alert("Không thể kết nối tải dữ liệu từ vựng!");
-            }
+            } catch(e) { alert("Không thể kết nối dữ liệu!"); }
             document.getElementById('loading-area').style.display = 'none';
         }
     }
@@ -671,7 +647,6 @@
         let fullIndices = Array.from({length: vocabData.length}, (_, i) => i);
         tabState.flashcard.indices = [...fullIndices];
         tabState.flashcard.current = 0;
-
         ["quiz", "typing", "listen", "guess", "visual"].forEach(t => {
             tabState[t].indices = shuffleArray(fullIndices);
             tabState[t].current = 0;
@@ -687,7 +662,6 @@
         return arr;
     }
 
-    // 🌟 SỬA LỖI ĐIỀU HƯỚNG: TỰ ĐỘNG GỌI HÀM VẼ GIAO DIỆN THEO ĐÚNG TAB ĐƯỢC CHỌN (KHÔNG BỊ ĐƠ HÌNH)
     function switchTab(tabName) {
         currentTab = tabName;
         document.querySelectorAll('.tab-click-btn').forEach(btn => btn.classList.remove('active'));
@@ -710,29 +684,101 @@
         else if (tabName === 'visual') generateVisualQuestion();
     }
 
-    // HỆ THỐNG PHÁT ÂM PREMIUM
+    // --- SỬA LỖI AUDIO: GỌI CHUẨN ĐỊNH DANH API RESPONSIVEVOICE ---
     function playMalePremiumVoice(text) {
-        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
-        if(clean.includes('/')) clean = clean.split('/')[0];
-        responsiveVoice.speak(clean, "Korean Male", {pitch: 1, rate: 0.85, volume: 1});
+        if(typeof responsiveVoice !== 'undefined') {
+            let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
+            if(clean.includes('/')) clean = clean.split('/')[0];
+            responsiveVoice.speak(clean, "Korean Male", {pitch: 1, rate: 0.82, volume: 1});
+        }
     }
+    
     function playPremium(text) {
-        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
-        if(clean.includes('/')) clean = clean.split('/')[0];
-        responsiveVoice.speak(clean, "Korean Female", {pitch: 1, rate: 0.85, volume: 1});
+        if(typeof responsiveVoice !== 'undefined') {
+            let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
+            if(clean.includes('/')) clean = clean.split('/')[0];
+            responsiveVoice.speak(clean, "Korean Female", {pitch: 1, rate: 0.82, volume: 1});
+        }
     }
 
-    function speakMalePremium(e) { e.stopPropagation(); playMalePremiumVoice(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
-    function speakPremium(e) { e.stopPropagation(); playPremium(vocabData[tabState.flashcard.indices[tabState.flashcard.current]].ko); }
-    function speakPremiumGeneric(t) { playPremium(vocabData[tabState[t].indices[tabState[t].current]].ko); }
+    function speakMalePremium(e) { e.stopPropagation(); let idx = tabState[currentTab].indices[tabState[currentTab].current]; playMalePremiumVoice(vocabData[idx].ko); }
+    function speakPremium(e) { e.stopPropagation(); let idx = tabState[currentTab].indices[tabState[currentTab].current]; playPremium(vocabData[idx].ko); }
+    function speakPremiumGeneric(t) { let idx = tabState[t].indices[tabState[t].current]; playPremium(vocabData[idx].ko); }
 
-    // --- RENDER CHI TIẾT CÁC TAB (SỬA TRIỆT ĐỂ LỖI UI MẤT NÚT) ---
+    // --- GHI NHẬN TỪ VỰNG LÀM SAI VÀO SỔ TAY NHẮC LẠI ---
+    function recordWrongWord() {
+        let idx = tabState[currentTab].indices[tabState[currentTab].current];
+        let word = vocabData[idx];
+        
+        if (!wrongWordsList.some(item => item.ko === word.ko)) {
+            let today = new Date().toLocaleDateString('vi-VN');
+            wrongWordsList.push({
+                ko: word.ko,
+                vi: word.vi,
+                ex: word.ex || "...",
+                exVi: word.exVi || "...",
+                date: today,
+                remembered: false
+            });
+            localStorage.setItem('wrongWords_QuyenClass', JSON.stringify(wrongWordsList));
+        }
+    }
+
+    // --- RENDER MÀN HÌNH BẢNG SỔ TAY NHẮC LẠI TỪ VỰNG ---
+    function renderReviewTable() {
+        const body = document.getElementById('review-table-body');
+        body.innerHTML = "";
+        
+        if(wrongWordsList.length === 0) {
+            body.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--sub-text);">Sổ tay trống. Tuyệt quá, chưa có từ vựng nào làm sai hết nha! 🎉</td></tr>`;
+            return;
+        }
+        
+        wrongWordsList.forEach((item, index) => {
+            const tr = document.createElement('tr');
+            
+            let koCellClass = blurColumns.ko ? "cell-toggle-blur" : "";
+            let viCellClass = blurColumns.vi ? "cell-toggle-blur" : "";
+            
+            tr.innerHTML = `
+                <td><span class="${koCellClass}" id="cell-ko-${index}">${item.ko}</span></td>
+                <td><span class="${viCellClass}" id="cell-vi-${index}">${item.vi}</span></td>
+                <td><span style="color:var(--point-color); font-weight:700;">${item.ex}</span></td>
+                <td><span style="color:var(--sub-text); font-style:italic;">${item.exVi}</span></td>
+                <td><span class="counter" style="box-shadow:none;">${item.date}</span></td>
+                <td>
+                    <input type="checkbox" ${item.remembered ? 'checked' : ''} onchange="toggleWordRemembered(${index}, this.checked)">
+                </td>
+            `;
+            body.appendChild(tr);
+        });
+    }
+
+    function toggleGlobalColumn(type) {
+        blurColumns[mode] = !blurColumns[mode];
+        renderReviewTable();
+    }
+    
+    function toggleWordRemembered(index, isChecked) {
+        wrongWordsList[index].remembered = isChecked;
+        if(isChecked) {
+            // Nếu học trò tích chọn đã nhớ, 2 giây sau tự xóa khỏi bảng sổ tay
+            setTimeout(() => {
+                wrongWordsList.splice(index, 1);
+                localStorage.setItem('wrongWords_QuyenClass', JSON.stringify(wrongWordsList));
+                renderReviewTable();
+            }, 1000);
+        } else {
+            localStorage.setItem('wrongWords_QuyenClass', JSON.stringify(wrongWordsList));
+        }
+    }
+
+    // RENDER HỆ THỐNG 7 TAB THEO CHUẨN NGUYÊN TÁC
     function renderLectureTab() {
         clearFeedback();
         let config = unitsConfig.find(c => c.unit == currentUnit);
         const iframe = document.getElementById('lecture-iframe');
         const emptyMsg = document.getElementById('lecture-empty-msg');
-        
         document.getElementById('global-counter').innerText = "1 / 1";
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
         document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
@@ -757,8 +803,7 @@
     }
     function toggleFlip() { document.getElementById('fcard').classList.toggle('flipped'); }
     function handleFlashcardModeChange(toggleElement) {
-        let state = tabState.flashcard;
-        state.isShuffleMode = toggleElement.checked;
+        let state = tabState.flashcard; state.isShuffleMode = toggleElement.checked;
         let toggleText = document.getElementById('fc-toggle-text');
         let fullIndices = Array.from({length: vocabData.length}, (_, i) => i);
         if (state.isShuffleMode) {
@@ -808,14 +853,18 @@
             if (btn.innerText === correctOpt) btn.classList.add('correct');
             else if (btn === selectedBtn) btn.classList.add('wrong');
         });
-        if(selectedOpt === correctOpt) setFeedback("🎉 Chính xác! Bạn nhớ bài tốt lắm.", "success");
-        else setFeedback("😢 Chưa chính xác rồi nè, cùng cố gắng ở câu tiếp theo nha.", "error");
+        if(selectedOpt === correctOpt) {
+            setFeedback("🎉 Chính xác! Học viên nhớ bài rất giỏi.", "success");
+        } else {
+            setFeedback("😢 Chưa chuẩn xác rồi, câu này đã được lưu vào Sổ tay nhắc lại nhé.", "error");
+            recordWrongWord();
+        }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
     function toggleTypingDirection() {
         tabState.typing.direction = tabState.typing.direction === 'vi-to-ko' ? 'ko-to-vi' : 'vi-to-ko';
-        document.getElementById('typing-dir-btn').innerText = tabState.typing.direction === 'vi-to-ko' ? 'Tiếng Việt ➔ Tiếng Hàn' : 'Tiếng Hàn ➔ Tiếng Việt';
+        document.getElementById('typing-dir-btn').innerText = tabState.typing.direction === 'vi-to-ko' ? 'Chế độ: Tiếng Việt ➔ Tiếng Hàn' : 'Chế độ: Tiếng Hàn ➔ Tiếng Việt';
         renderTypingQuestion();
     }
     function renderTypingQuestion() {
@@ -828,10 +877,10 @@
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
         
         if (state.direction === 'vi-to-ko') {
-            document.getElementById('type-prompt-label').innerText = "Gõ cụm từ Tiếng Hàn tương ứng:";
+            document.getElementById('type-prompt-label').innerText = "Hãy gõ cụm từ Tiếng Hàn tương ứng:";
             document.getElementById('type-word').innerText = item.vi;
         } else {
-            document.getElementById('type-prompt-label').innerText = "Gõ nghĩa Tiếng Việt tương ứng:";
+            document.getElementById('type-prompt-label').innerText = "Hãy gõ nghĩa Tiếng Việt tương ứng:";
             document.getElementById('type-word').innerText = item.ko;
         }
         input.focus();
@@ -848,11 +897,12 @@
         if (cleanString(targetAns) === cleanString(userInput)) isCorrect = true;
 
         if (isCorrect) {
-            setFeedback("🎉 Xuất sắc! Bạn đã gõ đúng hoàn toàn câu trả lời.", "success");
+            setFeedback("🎉 Xuất sắc! Gõ chính xác rồi.", "success");
             document.getElementById('type-input').style.borderColor = "var(--success-color)";
         } else {
-            setFeedback(`😢 Chưa đúng rồi. Đáp án chuẩn xác là: "${targetAns}"`, "error");
+            setFeedback(`😢 Chưa đúng rồi, cụm từ chuẩn là: "${targetAns}". Từ này đã được lưu vào Sổ tay nhé.`, "error");
             document.getElementById('type-input').style.borderColor = "var(--error-color)";
+            recordWrongWord();
         }
     }
 
@@ -865,7 +915,6 @@
         let actualIndex = state.indices[state.current];
         const currentItem = vocabData[actualIndex];
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
-        
         document.getElementById('listen-hint-text').innerText = currentItem.vi;
         document.getElementById('listen-vi-meaning').innerText = "...";
         
@@ -882,20 +931,17 @@
             poolContainer.appendChild(btn);
         });
     }
-    function toggleListenHint() {
-        const hintBox = document.getElementById(currentTab + '-hint-text');
-        hintBox.style.display = hintBox.style.display === 'none' ? 'block' : 'none';
-    }
     function handleListenAnswer(btn, selectedChoice, correctChoice) {
         let state = tabState.listen;
         if (state.answered) return; state.answered = true;
         document.getElementById('listen-vi-meaning').innerText = vocabData[state.indices[state.current]].vi;
         
         if (selectedChoice === correctChoice) {
-            btn.classList.add('selected-correct'); setFeedback("🎉 Phản xạ nghe tuyệt vời! Bạn chọn đúng rồi.", "success");
+            btn.classList.add('selected-correct'); setFeedback("🎉 Tai nghe rất chuẩn! Chọn đúng rồi.", "success");
         } else {
-            btn.classList.add('selected-wrong'); setFeedback("😢 Chưa chính xác, hãy luyện nghe lại từ này nha.", "error");
+            btn.classList.add('selected-wrong'); setFeedback("😢 Chưa đúng rồi, luyện nghe lại từ này vài lần nha.", "error");
             document.querySelectorAll('#listen-word-pool .pool-btn').forEach(b => { if(b.innerText === correctChoice) b.classList.add('selected-correct'); });
+            recordWrongWord();
         }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
@@ -931,8 +977,8 @@
             if (btn.innerText === correctOpt) btn.classList.add('correct');
             else if (btn === selectedBtn) btn.classList.add('wrong');
         });
-        if (selectedOpt === correctOpt) setFeedback("🎉 Xuất sắc! Bạn đã chọn đúng ngữ nghĩa.", "success");
-        else setFeedback("😢 Sai mất rồi, cùng cố gắng tập trung ở câu sau nhé!", "error");
+        if (selectedOpt === correctOpt) setFeedback("🎉 Xuất sắc! Đoán nghĩa chính xác.", "success");
+        else { setFeedback("😢 Chưa chuẩn xác rồi, câu này sẽ được lưu để nhắc lại.", "error"); recordWrongWord(); }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
@@ -940,7 +986,6 @@
         clearFeedback();
         let state = tabState.visual; state.answered = false;
         document.getElementById('ctrl-next-btn').style.display = 'none';
-        
         let actualIndex = state.indices[state.current];
         const currentItem = vocabData[actualIndex];
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
@@ -972,11 +1017,8 @@
             if (btn.innerText === correctOpt) btn.classList.add('correct');
             else if (btn === selectedBtn) btn.classList.add('wrong');
         });
-        if (selectedOpt === correctOpt) {
-            setFeedback("🎉 Giỏi quá! Đáp án hoàn toàn chính xác với ngữ cảnh hình ảnh.", "success"); playPremium(correctOpt);
-        } else {
-            setFeedback(`😢 Chưa đúng rồi. Câu nói chuẩn xác phải là: "${correctOpt}"`, "error");
-        }
+        if (selectedOpt === correctOpt) { setFeedback("🎉 Rất tốt! Bạn chọn đúng mẫu câu rồi.", "success"); playPremium(correctOpt); }
+        else { setFeedback(`😢 Chưa chính xác, câu nói chuẩn là: "${correctOpt}"`, "error"); recordWrongWord(); }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
@@ -992,16 +1034,11 @@
         switchTab(currentTab);
     }
     function handleMixAction() {
-        if (currentTab === 'flashcard') {
-            const toggleElement = document.getElementById('fc-shuffle-toggle'); toggleElement.checked = true; handleFlashcardModeChange(toggleElement);
-        } else {
-            let state = tabState[currentTab]; state.indices = shuffleArray(state.indices); state.current = 0; switchTab(currentTab);
-        }
+        let state = tabState[currentTab]; state.indices = shuffleArray(state.indices); state.current = 0; switchTab(currentTab);
     }
     function clearFeedback() { const fb = document.getElementById('global-feedback'); fb.style.display = 'none'; fb.className = 'feedback'; }
     function setFeedback(msg, type) { const fb = document.getElementById('global-feedback'); fb.innerText = msg; fb.className = "feedback " + type; fb.style.display = 'block'; }
 
-    // KHỞI CHẠY ĐỒNG BỘ TUẦN TỰ
     window.onload = async function() {
         const savedUser = localStorage.getItem('saved_user_QuyenClass');
         const savedPass = localStorage.getItem('saved_pass_QuyenClass');
@@ -1010,7 +1047,6 @@
         if (sessionUser && savedUser && savedPass) {
             document.getElementById('login-panel-screen').style.display = 'none';
             document.getElementById('main-app-layout').style.display = 'grid';
-            document.getElementById('loading-area').style.display = 'block';
             try {
                 let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
                 let data = await res.json();
@@ -1023,8 +1059,5 @@
         }
     };
 </script>
-
-<script src="https://code.responsivevoice.org/voice.js?key=7w64YI2V"></script>
-
 </body>
 </html>
