@@ -531,25 +531,22 @@
     }
 
     // --- HỆ THỐNG PHÁT ÂM AUDIO CHUẨN XỊN ---
-    function triggerKoreanVoice(text, isMale) {
+function triggerKoreanVoice(text, isMale) {
     if (typeof text === 'undefined' || !text) return;
-    
-    // Làm sạch cụm từ Tiếng Hàn chuẩn phong cách của Pen
-    let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
-    if(clean.includes('/')) clean = clean.split('/')[0];
-    
-    // 🌟 ĐÂY RỒI: Tên chuẩn hệ thống giọng AI Premium của ResponsiveVoice
-    // Giọng Nam chuẩn AI là "Korean Male" và Nữ là "Korean Female" khi đi với engine=g3
-    let voiceName = isMale ? "Korean Male" : "Korean Female";
-    
-    // Gọi API stream trực tiếp từ nguồn Premium giống y hệt dự án cũ của Pen
-    let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + 
-              encodeURIComponent(clean) + 
-              "&lang=ko&engine=g3&name=" + voiceName + 
-              "&pitch=0.5&rate=0.45&volume=1";
-              
-    let audio = new Audio(url);
-    audio.play().catch(e => console.log("Lỗi phát audio:", e));
+    if (typeof responsiveVoice !== 'undefined') {
+        // Tắt âm thanh đang phát dở trước đó để không bị chồng tiếng
+        responsiveVoice.cancel();
+        
+        // Làm sạch cụm từ Tiếng Hàn chuẩn phong cách của Pen
+        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
+        if(clean.includes('/')) clean = clean.split('/')[0];
+        
+        // Định vị chính xác giọng đọc từ thư viện
+        let voiceName = isMale ? "Korean Male" : "Korean Female";
+        
+        // Phát âm thanh với tốc độ 0.82 (vừa vặn cho học viên nghe)
+        responsiveVoice.speak(clean, voiceName, {pitch: 1, rate: 0.82, volume: 1});
+    }
 }
 async function executeStudentLogin() {
         const user = document.getElementById('login-username').value.trim();
@@ -1035,20 +1032,47 @@ function generateGuessQuestion() {
         }
         return array;
     }
-    window.onload = async function() {
-        const savedUser = localStorage.getItem('saved_user_QuyenClass'); 
-        const savedPass = localStorage.getItem('saved_pass_QuyenClass');
-        const sessionUser = localStorage.getItem('studentSession_QuyenClass');
-        if (sessionUser && savedUser && savedPass) {
-            document.getElementById('login-panel-screen').style.display = 'none'; 
-            document.getElementById('main-app-layout').style.display = 'grid';
-            try {
-                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
-                let data = await res.json();
-                if(data.success) { await parseAndInitApp(data.allowedUnits); } else { executeStudentLogout(); }
-            } catch(e) { executeStudentLogout(); }
-        } else { document.getElementById('login-panel-screen').style.display = 'flex'; document.getElementById('main-app-layout').style.display = 'none'; }
-    };
+window.onload = async function() {
+    const savedUser = localStorage.getItem('saved_user_QuyenClass'); 
+    const savedPass = localStorage.getItem('saved_pass_QuyenClass');
+    const sessionUser = localStorage.getItem('studentSession_QuyenClass');
+    
+    // Bước 1: Nếu có tài khoản cũ, cho hiển thị giao diện chính và màn hình loading ngay lập tức!
+    if (sessionUser && savedUser && savedPass) {
+        document.getElementById('login-panel-screen').style.display = 'none'; 
+        document.getElementById('main-app-layout').style.display = 'grid';
+        
+        // Bật vòng xoay loading lên để học viên biết hệ thống đang tải bài học
+        const loadingArea = document.getElementById('loading-area');
+        if(loadingArea) {
+            loadingArea.style.display = 'block';
+            document.getElementById('loading-text').innerText = "Đang đồng bộ dữ liệu lớp học...";
+        }
+        
+        try {
+            // Bước 2: Gọi lệnh fetch ngầm để kiểm tra phân quyền từ Google Sheet
+            let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
+            let data = await res.json();
+            if(data.success) { 
+                await parseAndInitApp(data.allowedUnits); 
+            } else { 
+                executeStudentLogout(); 
+            }
+        } catch(e) { 
+            // Nếu lỗi mạng, cố gắng lấy dữ liệu cũ đã lưu để học viên không bị gián đoạn bài học
+            let oldHistory = localStorage.getItem('historyUnits_QuyenClass');
+            if(oldHistory) {
+                await parseAndInitApp(oldHistory.replace(/[\[\]\"]/g, ''));
+            } else {
+                executeStudentLogout(); 
+            }
+        }
+    } else { 
+        // Nếu chưa đăng nhập thì hiện màn hình đăng nhập thẳng luôn
+        document.getElementById('login-panel-screen').style.display = 'flex'; 
+        document.getElementById('main-app-layout').style.display = 'none'; 
+    }
+};
 </script>
 </body>
 </html>
