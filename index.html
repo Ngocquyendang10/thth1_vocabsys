@@ -523,23 +523,31 @@
                             <span>Vui lòng chọn một cấu trúc ngữ pháp ở cột bên trái để xem chi tiết bài học.</span>
                         </div>
                         
-                        <div id="grammar-real-content" style="display: none;">
-                            <h2 id="g-detail-title" style="color: #614CFF; font-weight: 800; font-size: 24px; margin-bottom: 8px; font-family: 'Chiron GoRound TC', sans-serif;"></h2>
-                            
-                            <div class="grammar-section-title">1. Khái niệm / Ý nghĩa</div>
-                            <div id="g-detail-concept" style="font-size: 14px; color: var(--text-color); font-weight: 500; line-height: 1.5; padding-left: 8px;"></div>
-                            
-                            <div class="grammar-section-title">2. Cấu trúc kết hợp</div>
-                            <div id="g-detail-structure" style="padding: 0 4px;"></div>
-                            
-                            <div class="grammar-section-title">3. Câu ví dụ mẫu sinh động</div>
-                            <div id="g-detail-examples" style="display: flex; flex-direction: column; gap: 8px;"></div>
-                            
-                            <div id="g-comparison-section" style="display: none;">
-                                <div class="grammar-section-title">4. Góc phân biệt & So sánh</div>
-                                <div id="g-detail-comparison" style="font-size: 13px; color: #4a5568; background: #fff5f5; padding: 12px; border-radius: var(--radius-sm); border-left: 3px solid var(--error-color); line-height: 1.5;"></div>
-                            </div>
-                        </div>
+<!-- Khung chứa dữ liệu thật (Cập nhật Lưu ý & Bảng So Sánh) -->
+                <div id="grammar-real-content" style="display: none;">
+                    <h2 id="g-detail-title" style="color: #614CFF; font-weight: 800; font-size: 24px; margin-bottom: 8px; font-family: 'Chiron GoRound TC', sans-serif;"></h2>
+                    
+                    <div class="grammar-section-title">1. Khái niệm / Ý nghĩa</div>
+                    <div id="g-detail-concept" style="font-size: 14px; color: var(--text-color); font-weight: 500; line-height: 1.5; padding-left: 8px;"></div>
+                    
+                    <div class="grammar-section-title">2. Cấu trúc kết hợp</div>
+                    <div id="g-detail-structure" style="padding: 0 4px;"></div>
+                    
+                    <div class="grammar-section-title">3. Câu ví dụ mẫu sinh động</div>
+                    <div id="g-detail-examples" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                    
+                    <!-- KHỐI LƯU Ý MỚI -->
+                    <div id="g-notes-section" style="display: none;">
+                        <div class="grammar-section-title">4. Những lưu ý quan trọng</div>
+                        <div id="g-detail-notes" style="font-size: 13px; color: #2d3748; background: #fffaf0; padding: 14px; border-radius: var(--radius-sm); border-left: 3px solid #dd6b20; line-height: 1.6; padding-left: 12px;"></div>
+                    </div>
+                    
+                    <!-- KHỐI BẢNG SO SÁNH NÂNG CẤP -->
+                    <div id="g-comparison-section" style="display: none;">
+                        <div class="grammar-section-title">5. Góc phân biệt & So sánh mở rộng</div>
+                        <div id="g-detail-comparison" style="padding: 0 4px;"></div>
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>
@@ -611,7 +619,7 @@
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxXpXSQm8doNAJrFfz6XlMCEJDTvzwk-gg1tXD6fBXbXw6xniLt6Z2AmXU__rCGnws/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2tUfMpGnL-n5aLAAI-L2Ga2mj-houcJcw0o6ssSTk3iT0s7TaO8PSeXmJCkk7V0C2/exec";
 
     let unitsConfig = []; 
     let allowedUnitsList = []; 
@@ -1239,7 +1247,6 @@ function showGrammarDetail(index) {
     const g = grammarDataCache[index];
     if(!g) return;
     
-    // Ẩn tin nhắn trống, hiện khung nội dung thật lên
     document.getElementById('grammar-empty-msg').style.display = "none";
     document.getElementById('grammar-real-content').style.display = "block";
     
@@ -1248,23 +1255,17 @@ function showGrammarDetail(index) {
     let conceptHtml = g.Concept.split('|').map(c => `<p style="margin-bottom:6px;">🔹 ${c.trim()}</p>`).join('');
     document.getElementById('g-detail-concept').innerHTML = conceptHtml;
     
-    // 2. 🌟 XỬ LÝ DỰNG NHIỀU BẢNG CẤU TRÚC THÔNG MINH (Xóa sổ [object Object])
+    // 2. Dựng bảng Cấu trúc kết hợp
     const structDiv = document.getElementById('g-detail-structure');
     structDiv.innerHTML = "";
-    
     try {
         let parsedStruct = JSON.parse(g.StructureJSON);
-        
-        // Trường hợp A: Dữ liệu là một mảng gồm nhiều bảng riêng biệt [{}, {}, ...] đúng như Pen muốn
         if (Array.isArray(parsedStruct)) {
-            parsedStruct.forEach((structObj, idx) => {
-                // Tạo một container nhỏ bọc từng bảng để tạo khoảng cách dập nổi đẹp mắt
+            parsedStruct.forEach(structObj => {
                 let subContainer = document.createElement('div');
-                subContainer.style.marginBottom = "18px";
-                
+                subContainer.style.marginBottom = "14px";
                 let table = document.createElement('table');
                 table.className = "table-neu-structure";
-                
                 let headerRow = "<tr>", dataRow = "<tr>";
                 for (let key in structObj) {
                     headerRow += `<th>${key}</th>`;
@@ -1272,16 +1273,12 @@ function showGrammarDetail(index) {
                 }
                 headerRow += "</tr>"; dataRow += "</tr>";
                 table.innerHTML = headerRow + dataRow;
-                
                 subContainer.appendChild(table);
                 structDiv.appendChild(subContainer);
             });
-        } 
-        // Trường hợp B: Dữ liệu chỉ là 1 đối tượng đơn lẻ gồm 1 bảng duy nhất {} như cũ
-        else {
+        } else {
             let table = document.createElement('table');
             table.className = "table-neu-structure";
-            
             let headerRow = "<tr>", dataRow = "<tr>";
             for (let key in parsedStruct) {
                 headerRow += `<th>${key}</th>`;
@@ -1292,7 +1289,6 @@ function showGrammarDetail(index) {
             structDiv.appendChild(table);
         }
     } catch(e) {
-        // Dự phòng nếu Pen gõ chữ văn bản thuần túy không phải JSON thì hiện chữ thường sạch sẽ
         structDiv.innerHTML = `<p style="font-size:13px; font-weight:600; color:var(--text-color); padding-left:8px;">${g.StructureJSON}</p>`;
     }
     
@@ -1305,7 +1301,6 @@ function showGrammarDetail(index) {
             const row = document.createElement('div');
             row.className = "grammar-row-wrapper";
             let badgeHtml = ex.meaning ? `<span class="meaning-badge">${ex.meaning}</span>` : '';
-            
             row.innerHTML = `
                 ${badgeHtml}
                 <div class="grammar-ex-row">
@@ -1322,11 +1317,49 @@ function showGrammarDetail(index) {
         exDiv.innerHTML = `<p style="font-size:13px; color:var(--sub-text); padding-left:8px;">Chưa có câu ví dụ mẫu.</p>`;
     }
     
-    // 4. Khối so sánh cấu trúc ngữ pháp
+    // 4. 🌟 RENDER PHẦN LƯU Ý MỚI (Hỗ trợ thẻ gạch chân <u> )
+    const notesSection = document.getElementById('g-notes-section');
+    const notesDiv = document.getElementById('g-detail-notes');
+    if (g.Notes && g.Notes.trim() !== "") {
+        notesSection.style.display = "block";
+        // Cắt theo dấu gạch đứng để xuống hàng liệt kê đầu dòng
+        notesDiv.innerHTML = g.Notes.split('|').map(n => `<p style="margin-bottom:6px;">🔸 ${n.trim()}</p>`).join('');
+    } else {
+        notesSection.style.display = "none";
+    }
+    
+    // 5. 🌟 RENDER BẢNG SO SÁNH ĐA TIÊU CHÍ (Tự động bốc key làm tiêu đề cột)
     const compSection = document.getElementById('g-comparison-section');
-    if (g.Comparison && g.Comparison.trim() !== "") {
-        compSection.style.display = "block";
-        document.getElementById('g-detail-comparison').innerHTML = g.Comparison.replace(/\|/g, '<br>🔹 ').replace(/\n/g, '<br>');
+    const compDiv = document.getElementById('g-detail-comparison');
+    compDiv.innerHTML = "";
+    
+    if (g.ComparisonJSON && g.ComparisonJSON.trim() !== "") {
+        try {
+            let compArray = JSON.parse(g.ComparisonJSON);
+            if (Array.isArray(compArray) && compArray.length > 0) {
+                compSection.style.display = "block";
+                let table = document.createElement('table');
+                table.className = "table-neu-structure";
+                
+                // Trích xuất tự động tất cả các tiêu đề cột từ object đầu tiên
+                let columns = Object.keys(compArray[0]);
+                
+                // Tạo hàng tiêu đề (Header Row)
+                let headerHtml = "<tr>" + columns.map(col => `<th>${col}</th>`).join('') + "</tr>";
+                
+                // Tạo các hàng dữ liệu (Data Rows)
+                let rowsHtml = compArray.map(rowData => {
+                    return "<tr>" + columns.map(col => `<td>${rowData[col] || ""}</td>`).join('') + "</tr>";
+                }).join('');
+                
+                table.innerHTML = headerHtml + rowsHtml;
+                compDiv.appendChild(table);
+            } else { compSection.style.display = "none"; }
+        } catch(e) {
+            // Dự phòng nếu gõ chữ thường thì hiện khung đỏ cảnh báo dập chìm nhẹ
+            compSection.style.display = "block";
+            compDiv.innerHTML = `<div style="font-size:13px; color:#742a2a; background:#fff5f5; padding:12px; border-radius:var(--radius-sm); border-left:3px solid var(--error-color);">${g.ComparisonJSON}</div>`;
+        }
     } else {
         compSection.style.display = "none";
     }
