@@ -1260,17 +1260,22 @@ function showGrammarDetail(index) {
     const structDiv = document.getElementById('g-detail-structure');
     structDiv.innerHTML = "";
     
-    // Hàm phụ dùng để render và trang trí nội dung bên trong ô <td> của bảng
+   
+// Hàm phụ nâng cấp: Gom toàn bộ các dòng ví dụ phía sau lại để không bị sót
     function renderCustomTdContent(rawText) {
         if (rawText.includes('\n')) {
             let lines = rawText.split('\n');
-            // Dòng 1 (Cấu trúc chính): In đậm, tăng size, màu Point xanh tím của Pen
-            let mainForm = `<div style="font-size: 18px; font-weight: 800; color: #614CFF; margin-bottom: 4px;">${lines[0].trim()}</div>`;
-            // Dòng 2 (Ví dụ minh họa): Màu xám sub-text, font vừa phải dễ nhìn
-            let subForm = `<div style="font-size: 12px; color: var(--sub-text); font-weight: 500;">${lines[1].trim()}</div>`;
+            
+            // Dòng đầu tiên (Cấu trúc chính): Phóng to, in đậm, màu Point xanh tím
+            let mainForm = `<div style="font-size: 18px; font-weight: 800; color: #614CFF; margin-bottom: 6px;">${lines[0].trim()}</div>`;
+            
+            // Lấy tất cả các dòng còn lại (dòng 2, dòng 3, dòng 4...) gom chung vào khối ví dụ màu xám sub-text
+            let remainingLines = lines.slice(1).map(line => `<div style="margin-bottom: 2px;">${line.trim()}</div>`).join('');
+            let subForm = `<div style="font-size: 12px; color: var(--sub-text); font-weight: 500; line-height: 1.4;">${remainingLines}</div>`;
+            
             return mainForm + subForm;
         }
-        // Dự phòng nếu không có dấu xuống dòng thì hiện chữ to in đậm mặc định
+        // Dự phòng nếu không có dấu xuống dòng
         return `<div style="font-size: 16px; font-weight: 700; color: #614CFF;">${rawText}</div>`;
     }
 
