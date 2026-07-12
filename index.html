@@ -402,46 +402,56 @@
                 </div>
 
                 <!-- 1. BÀI GIẢNG -->
-<div id="lecture-tab" class="tab-render-view active">
-    
-    <!-- 🌟 KHU VỰC HƯỚNG DẪN DẠNG DANH SÁCH THEO Ý PEN -->
-    <div class="lecture-guide-box" id="lecture-guide-area" style="margin-bottom: 14px; padding: 16px 20px; background: #ffffff; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); display: none; flex-direction: column; gap: 12px;">
-        
-        <!-- Tiêu đề -->
-        <div style="display: flex; align-items: center; gap: 8px;">
-            <div style="display: flex; align-items: center; justify-content: center; background: var(--point-light); width: 28px; height: 28px; border-radius: 8px;">
-                <span style="font-size: 14px;">💡</span>
-            </div>
-            <h5 style="font-size: 14px; font-weight: 800; color: #1a202c;">Lưu ý khi xem bài giảng</h5>
-        </div>
+                <div id="lecture-tab" class="tab-render-view active">
+                    
+                    <!-- 🌟 KHU VỰC NÚT BẤM & KHỐI NỘI DUNG SỔ XUỐNG THÔNG MINH -->
+                    <div id="lecture-guide-wrapper" style="display: none; margin-bottom: 14px; width: 100%;">
+                        
+                        <!-- Chiếc nút dập nổi bấm để Đóng/Mở -->
+                        <button onclick="toggleLectureGuide()" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 12px 18px; background: #ffffff; border: 1px solid rgba(255,255,255,0.8); border-radius: var(--radius-md); box-shadow: var(--neu-convex); cursor: pointer; outline: none; transition: all 0.2s ease;" onmouseover="this.style.color='#614CFF'" onmouseout="this.style.color='var(--text-color)'">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 14px;">💡</span>
+                                <span style="font-size: 13px; font-weight: 800; font-family: inherit;">Lưu ý khi xem bài giảng</span>
+                            </div>
+                            <!-- Icon mũi tên trạng thái -->
+                            <span id="guide-arrow" style="font-size: 11px; color: var(--sub-text); transition: transform 0.3s ease;">▼</span>
+                        </button>
 
-        <!-- Các gạch đầu dòng hướng dẫn -->
-        <div style="display: flex; flex-direction: column; gap: 8px; padding-left: 6px;">
-            
-            <!-- Dòng 1: Hướng dẫn Canva -->
-            <div style="display: flex; align-items: baseline; gap: 8px;">
-                <span style="color: #614CFF; font-size: 10px;">🔸</span>
-                <span style="font-size: 13px; color: var(--sub-text); font-weight: 500; line-height: 1.5;">
-                    Đối với dạng slide (Canva), bạn có thể tương tác các nút <b style="color: #614CFF; font-weight: 700;">tới/lui</b> trong khung hình và mở chế độ <b style="color: #614CFF; font-weight: 700;">"Toàn màn hình"</b>.
-                </span>
-            </div>
-            
-            <!-- Dòng 2: Hướng dẫn Figma / Hình tương tác -->
-            <div style="display: flex; align-items: baseline; gap: 8px;">
-                <span style="color: #614CFF; font-size: 10px;">🔸</span>
-                <span style="font-size: 13px; color: var(--sub-text); font-weight: 500; line-height: 1.5;">
-                    Đối với dạng hình tương tác, bạn có thể <b style="color: #614CFF; font-weight: 700;">di chuyển tới/lui</b> giữa các hình, <b style="color: #614CFF; font-weight: 700;">tắt/mở các nút hình vuông</b> trong hình để ôn tập và mở <b style="color: #614CFF; font-weight: 700;">toàn màn hình</b>.
-                </span>
-            </div>
+                        <!-- Khung nội dung danh sách hướng dẫn (Ban đầu ẩn ngầm) -->
+                        <div id="lecture-guide-content" style="display: none; flex-direction: column; gap: 8px; margin-top: 10px; padding: 14px 18px; background: #ffffff; border-radius: var(--radius-md); box-shadow: var(--neu-concave); border: 1px solid rgba(255,255,255,0.5); text-align: left; animation: slideDownGuide 0.25s ease-out;">
+                            
+                            <!-- Dòng 1: Hướng dẫn Canva -->
+                            <div style="display: flex; align-items: baseline; gap: 8px;">
+                                <span style="color: #614CFF; font-size: 10px;">🔸</span>
+                                <span style="font-size: 13px; color: var(--sub-text); font-weight: 500; line-height: 1.5;">
+                                    Đối với dạng slide (Canva), bạn có thể tương tác các nút <b style="color: #614CFF; font-weight: 700;">tới/lui</b> trong khung hình và mở chế độ <b style="color: #614CFF; font-weight: 700;">"Toàn màn hình"</b>.
+                                </span>
+                            </div>
+                            
+                            <!-- Dòng 2: Hướng dẫn Figma -->
+                            <div style="display: flex; align-items: baseline; gap: 8px;">
+                                <span style="color: #614CFF; font-size: 10px;">🔸</span>
+                                <span style="font-size: 13px; color: var(--sub-text); font-weight: 500; line-height: 1.5;">
+                                    Đối với dạng hình tương tác, bạn có thể <b style="color: #614CFF; font-weight: 700;">di chuyển tới/lui</b> giữa các hình, <b style="color: #614CFF; font-weight: 700;">tắt/mở các nút hình vuông</b> trong hình để ôn tập và mở <b style="color: #614CFF; font-weight: 700;">toàn màn hình</b>.
+                                </span>
+                            </div>
 
-        </div>
-    </div>
+                        </div>
+                    </div>
 
-    <div class="embed-wrapper">
-        <div class="no-embed-msg" id="lecture-empty-msg">Không có slide bài giảng cho Unit này.</div>
-        <iframe id="lecture-iframe" class="lecture-iframe-box" src="" allowfullscreen></iframe>
-    </div>
-</div>
+                    <div class="embed-wrapper">
+                        <div class="no-embed-msg" id="lecture-empty-msg">Không có slide bài giảng cho Unit này.</div>
+                        <iframe id="lecture-iframe" class="lecture-iframe-box" src="" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Thêm hiệu ứng hiệu năng trượt xuống mượt mà ngầm trong CSS -->
+                <style>
+                    @keyframes slideDownGuide {
+                        from { opacity: 0; transform: translateY(-6px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                </style>
 
                 <!-- 2. FLASHCARD -->
                 <div id="flashcard-tab" class="tab-render-view">
@@ -960,7 +970,7 @@ function activateMainUI() {
             let config = unitsConfig.find(c => c.unit == currentUnit);
             const iframe = document.getElementById('lecture-iframe');
             const emptyMsg = document.getElementById('lecture-empty-msg');
-            const guideArea = document.getElementById('lecture-guide-area');
+            const guideWrapper = document.getElementById('lecture-guide-wrapper'); // Quản lý hộp bọc ngoài nút
             
             document.getElementById('global-counter').innerText = "1 / 1";
             document.getElementById('ctrl-next-btn').style.display = 'inline-block';
@@ -970,13 +980,12 @@ function activateMainUI() {
                 iframe.src = config.lectureLink; 
                 iframe.style.display = "block"; 
                 emptyMsg.style.display = "none"; 
-                // 🌟 SỬA TẠI ĐÂY: Hiện lên dạng flex để gióng hàng ngang mượt mà đúng chuẩn thiết kế
-                if(guideArea) guideArea.style.display = "flex"; 
+                if(guideWrapper) guideWrapper.style.display = "block"; // Hiện nút hướng dẫn khi có bài giảng
             } else { 
                 iframe.src = ""; 
                 iframe.style.display = "none"; 
                 emptyMsg.style.display = "block"; 
-                if(guideArea) guideArea.style.display = "none"; 
+                if(guideWrapper) guideWrapper.style.display = "none"; // Ẩn nút đi nếu bài giảng trống
             }
         }
 
@@ -1288,7 +1297,20 @@ function activateMainUI() {
             sidebarContainer.appendChild(item);
         });
     }
-
+// Hàm xử lý Accordion đóng mở danh sách lưu ý bài giảng
+function toggleLectureGuide() {
+    const content = document.getElementById('lecture-guide-content');
+    const arrow = document.getElementById('guide-arrow');
+    
+    if (content.style.display === "none" || content.style.display === "") {
+        content.style.display = "flex";
+        if(arrow) arrow.style.transform = "rotate(180deg)"; // Xoay ngược mũi tên lên khi mở
+    } else {
+        content.style.display = "none";
+        if(arrow) arrow.style.transform = "rotate(0deg)"; // Trả mũi tên về ban đầu khi đóng
+    }
+}
+    
 function showGrammarDetail(index) {
     const g = grammarDataCache[index];
     if(!g) return;
