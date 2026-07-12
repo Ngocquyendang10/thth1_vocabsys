@@ -387,12 +387,13 @@
 
                     <div class="workspace-tabs" id="main-tabs-nav" style="display: none;">
                         <button id="btn-lecture" class="tab-click-btn active" onclick="switchTab('lecture')">1. Bài giảng</button>
+                        <button id="btn-vocabTable" class="tab-click-btn" onclick="switchTab('vocabTable')">2. Bảng từ vựng 📋</button>
                         <button id="btn-flashcard" class="tab-click-btn" onclick="switchTab('flashcard')">2. Flashcard</button>
                         <button id="btn-quiz" class="tab-click-btn" onclick="switchTab('quiz')">3. Trắc nghiệm</button>
                         <button id="btn-typing" class="tab-click-btn" onclick="switchTab('typing')">4. Viết từ</button>
-                        <button id="btn-listen" class="tab-click-btn" onclick="switchTab('listen')">5. Nghe và chọn từ</button>
-                        <button id="btn-guess" class="tab-click-btn" onclick="switchTab('guess')">6. Nghe và đoán nghĩa</button>
-                        <button id="btn-visual" class="tab-click-btn" onclick="switchTab('visual')">7. Nhìn hình và chọn từ</button>
+                        <button id="btn-listen" class="tab-click-btn" onclick="switchTab('listen')">5. Nghe & chọn từ</button>
+                        <button id="btn-guess" class="tab-click-btn" onclick="switchTab('guess')">6. Nghe & tìm nghĩa</button>
+                        <button id="btn-visual" class="tab-click-btn" onclick="switchTab('visual')">7. Nhìn hình chọn từ</button>
                     </div>
                 </div>
 
@@ -453,7 +454,49 @@
                     }
                 </style>
 
-                <!-- 2. FLASHCARD -->
+                <!-- 2. BÀI HỌC: BẢNG TRA CỨU TỪ VỰNG NHANH -->
+<div id="vocabTable-tab" class="tab-render-view">
+    
+    <!-- Thanh điều khiển Bộ lọc & Tìm kiếm (Filter Bar) -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; padding: 12px 16px; background: #ffffff; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8);">
+        
+        <!-- Các nút Toggle chuyển đổi trạng thái hiển thị -->
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <button id="tgl-ko-btn" class="audio-inline-btn" style="box-shadow: var(--neu-convex); width: auto; padding: 0 14px;" onclick="toggleVocabColumn('ko')">👁️ Tiếng Hàn: Hiện</button>
+            <button id="tgl-vi-btn" class="audio-inline-btn" style="box-shadow: var(--neu-convex); width: auto; padding: 0 14px;" onclick="toggleVocabColumn('vi')">👁️ Tiếng Việt: Hiện</button>
+            <button id="tgl-ex-btn" class="audio-inline-btn" style="box-shadow: var(--neu-convex); width: auto; padding: 0 14px;" onclick="toggleVocabColumn('ex')">📝 Ví dụ: Hiện</button>
+            <button id="tgl-star-btn" class="audio-inline-btn" style="box-shadow: var(--neu-convex); width: auto; padding: 0 14px; color: #dd6b20;" onclick="toggleStarFilter()">
+                <svg style="width:14px; height:14px; fill:currentColor; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <span>Xem từ khó (Tất cả)</span>
+            </button>
+        </div>
+
+        <!-- Ô Tìm kiếm nhanh Live Search dập chìm -->
+        <div style="position: relative; width: 100%; max-width: 260px;">
+            <input type="text" id="vocab-live-search" placeholder="Tìm từ vựng nhanh... 🔍" oninput="execVocabLiveSearch()" style="width: 100%; padding: 8px 12px; font-size: 13px; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 20px; outline: none; background: var(--card-color); box-shadow: var(--neu-concave); font-family: inherit;">
+        </div>
+    </div>
+
+    <!-- Bảng hiển thị danh sách từ vựng -->
+    <div class="review-table-container" style="margin-top: 0; padding: 14px; box-shadow: var(--neu-convex);">
+        <table class="review-table" style="width: 100%; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th style="width: 60px; text-align: center;">⭐</th>
+                    <th style="width: 25%;">Tiếng Hàn</th>
+                    <th style="width: 25%;">Tiếng Việt</th>
+                    <th id="th-vocab-ex" style="width: 30%;">Ví dụ minh họa</th>
+                    <th style="width: 170px;">Ghi chú của bạn</th>
+                </tr>
+            </thead>
+            <tbody id="vocab-table-index-body">
+                <!-- Data đổ từ JavaScript tự động điền vào đây -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+                <!-- 3. FLASHCARD -->
                 <div id="flashcard-tab" class="tab-render-view">
                     <div class="fc-mode-container">
                         <span class="fc-mode-label" id="fc-toggle-text">Chế độ: Theo thứ tự</span>
@@ -482,13 +525,13 @@
                     </div>
                 </div>
 
-                <!-- 3. TRẮC NGHIỆM -->
+                <!-- 4. TRẮC NGHIỆM -->
                 <div id="quiz-tab" class="tab-render-view">
                     <div class="quiz-question" id="quiz-q">Đang tạo câu hỏi trắc nghiệm...</div>
                     <div class="quiz-options" id="quiz-opts"></div>
                 </div>
 
-                <!-- 4. GÕ TỪ -->
+                <!-- 5. GÕ TỪ -->
                 <div id="typing-tab" class="tab-render-view">
                     <div style="text-align: center;">
                         <button class="toggle-mode" onclick="toggleTypingDirection()" id="typing-dir-btn">Chế độ: Tiếng Việt ➔ Tiếng Hàn</button>
@@ -500,7 +543,7 @@
                     </div>
                 </div>
 
-                <!-- 5. ĐIỀN TỪ -->
+                <!-- 6. ĐIỀN TỪ -->
                 <div id="listen-tab" class="tab-render-view">
                     <div class="listen-box">
                         <button class="listen-circle-btn" id="btn-listen-play" onclick="triggerKoreanVoice(vocabData[tabState.listen.indices[tabState.listen.current]].ko, false); event.stopPropagation();"><span>🔊</span>듣기</button>
@@ -511,7 +554,7 @@
                     <div class="word-pool" id="listen-word-pool"></div>
                 </div>
 
-                <!-- 6. ĐOÁN NGHĨA -->
+                <!-- 7. ĐOÁN NGHĨA -->
                 <div id="guess-tab" class="tab-render-view">
                     <div class="listen-box">
                         <button class="listen-circle-btn" id="btn-guess-play" onclick="triggerKoreanVoice(vocabData[tabState.guess.indices[tabState.guess.current]].ko, false); event.stopPropagation();"><span>🔊</span>듣기</button>
@@ -522,7 +565,7 @@
                     <div class="quiz-options" id="guess-opts"></div>
                 </div>
 
-                <!-- 7. NHÌN HÌNH -->
+                <!-- 8. NHÌN HÌNH -->
                 <div id="visual-tab" class="tab-render-view">
                     <div class="scene-image-frame">
                         <img id="visual-native-img" src="" alt="Hình ảnh minh họa">
@@ -677,6 +720,7 @@
 
     let tabState = {
         lecture: { indices: [0], current: 0 },
+        vocabTable: { indices: [0], current: 0, showKo: true, showVi: true, showEx: true, filterStarred: false },
         flashcard: { indices: [], current: 0, isShuffleMode: false },
         quiz: { indices: [], current: 0, answered: false },
         typing: { indices: [], current: 0, direction: "vi-to-ko" },
@@ -912,6 +956,7 @@ function activateMainUI() {
         if (vocabData.length === 0 && tabName !== 'lecture') return;
 
         if (tabName === 'lecture') renderLectureTab();
+        else if (tabName === 'vocabTable') renderVocabTableIndex();    
         else if (tabName === 'flashcard') renderFlashcard();
         else if (tabName === 'quiz') generateQuizQuestion();
         else if (tabName === 'typing') renderTypingQuestion();
@@ -1521,6 +1566,142 @@ function showGrammarDetail(index) {
         }
     } else {
         compSection.style.display = "none";
+    }
+}
+    // --- PHÂN HỆ XỬ LÝ BẢNG TỪ VỰNG TRA CỨU NHANH (VOCAB INDEX) ---
+
+// Hàm xử lý Ẩn/Hiện cột bằng hiệu ứng Blur
+function toggleVocabColumn(type) {
+    let state = tabState.vocabTable;
+    if (type === 'ko') {
+        state.showKo = !state.showKo;
+        document.getElementById('tgl-ko-btn').innerText = `👁️ Tiếng Hàn: ${state.showKo ? 'Hiện' : 'Ẩn'}`;
+    } else if (type === 'vi') {
+        state.showVi = !state.showVi;
+        document.getElementById('tgl-vi-btn').innerText = `👁️ Tiếng Việt: ${state.showVi ? 'Hiện' : 'Ẩn'}`;
+    } else if (type === 'ex') {
+        state.showEx = !state.showEx;
+        document.getElementById('tgl-ex-btn').innerText = `👁️ Ví dụ: ${state.showEx ? 'Hiện' : 'Ẩn'}`;
+        document.getElementById('th-vocab-ex').style.display = state.showEx ? '' : 'none';
+    }
+    renderVocabTableIndex();
+}
+
+// Hàm lọc hiển thị từ được Bookmark dấu sao
+function toggleStarFilter() {
+    let state = tabState.vocabTable;
+    state.filterStarred = !state.filterStarred;
+    document.getElementById('tgl-star-btn').style.background = state.filterStarred ? '#feebc8' : 'var(--card-color)';
+    document.getElementById('tgl-star-btn').querySelector('span').innerText = state.filterStarred ? 'Xem từ khó (Đang lọc)' : 'Xem từ khó (Tất cả)';
+    renderVocabTableIndex();
+}
+
+// Hàm toggle Bookmark ngôi sao lưu trữ ngầm vào localStorage theo mã học sinh
+function toggleVocabStar(koWord, element) {
+    let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
+    let starList = JSON.parse(localStorage.getItem(`starred_${studentKey}_QuyenClass`)) || [];
+    
+    let index = starList.indexOf(koWord);
+    if (index > -1) {
+        starList.splice(index, 1);
+        element.style.color = '#cbd5e0'; // Màu xám chưa chọn
+    } else {
+        starList.push(koWord);
+        element.style.color = '#dd6b20'; // Màu cam ngôi sao sáng
+    }
+    localStorage.setItem(`starred_${studentKey}_QuyenClass`, JSON.stringify(starList));
+    
+    // Nếu đang bật chế độ lọc từ khó, vẽ lại bảng ngay lập tức để đồng bộ
+    if (tabState.vocabTable.filterStarred) renderVocabTableIndex();
+}
+
+// Hàm lưu ghi chú cá nhân tự động khi học sinh gõ chữ vào text box
+function saveVocabNote(koWord, noteText) {
+    let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
+    let notesObj = JSON.parse(localStorage.getItem(`notes_${studentKey}_QuyenClass`)) || {};
+    notesObj[koWord] = noteText;
+    localStorage.setItem(`notes_${studentKey}_QuyenClass`, JSON.stringify(notesObj));
+}
+
+// Hàm Tìm kiếm nhanh thời gian thực (Live Search)
+function execVocabLiveSearch() {
+    renderVocabTableIndex();
+}
+
+// HÀM CHÍNH: Vẽ bảng từ vựng tra cứu phản xạ
+function renderVocabTableIndex() {
+    const body = document.getElementById('vocab-table-index-body');
+    if (!body) return;
+    body.innerHTML = "";
+    clearFeedback();
+
+    if (!vocabData || vocabData.length === 0) {
+        body.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--sub-text);">Không có dữ liệu từ vựng của Unit này.</td></tr>`;
+        return;
+    }
+
+    document.getElementById('global-counter').innerText = `Từ 1 đến ${vocabData.length}`;
+    document.getElementById('ctrl-next-btn').style.display = 'none'; // Ẩn nút điều hướng footer ở tab này
+
+    let state = tabState.vocabTable;
+    let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
+    
+    // Nạp danh sách từ khó và ghi chú từ bộ nhớ cục bộ
+    let starList = JSON.parse(localStorage.getItem(`starred_${studentKey}_QuyenClass`)) || [];
+    let notesObj = JSON.parse(localStorage.getItem(`notes_${studentKey}_QuyenClass`)) || {};
+    let searchKey = document.getElementById('vocab-live-search').value.trim().toLowerCase();
+
+    vocabData.forEach(item => {
+        let isStarred = starList.includes(item.ko);
+        let currentNote = notesObj[item.ko] || "";
+
+        // 1. Bộ lọc "Xem từ khó"
+        if (state.filterStarred && !isStarred) return;
+
+        // 2. Bộ lọc tìm kiếm nhanh "Live Search"
+        if (searchKey !== "") {
+            let matchKo = item.ko.toLowerCase().includes(searchKey);
+            let matchVi = item.vi.toLowerCase().includes(searchKey);
+            if (!matchKo && !matchVi) return;
+        }
+
+        const tr = document.createElement('tr');
+
+        // Định dạng cột theo trạng thái ẩn/hiện Blur
+        let koDisplay = state.showKo ? `<span>${item.ko}</span>` : `<span class="cell-toggle-blur" onclick="this.classList.toggle('cell-toggle-blur')">${item.ko}</span>`;
+        let viDisplay = state.showVi ? `<span>${item.vi}</span>` : `<span class="cell-toggle-blur" onclick="this.classList.toggle('cell-toggle-blur')">${item.vi}</span>`;
+        
+        let starColor = isStarred ? '#dd6b20' : '#cbd5e0';
+
+        // Xây dựng hàng dữ liệu
+        tr.innerHTML = `
+            <td style="text-align:center; vertical-align:middle;">
+                <span style="font-size:18px; cursor:pointer; color:${starColor}; transition:transform 0.2s;" onclick="toggleVocabStar('${item.ko}', this)" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">★</span>
+            </td>
+            <td style="vertical-align:middle; font-weight:800; font-size:15px;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                    ${koDisplay}
+                    <button class="action-eye-btn" style="margin-left:auto;" onclick="triggerKoreanVoice('${item.ko.replace(/'/g, "\\'")}', false); event.stopPropagation();">
+                        <svg style="width:14px; height:14px;" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    </button>
+                </div>
+            </td>
+            <td style="vertical-align:middle; font-weight:600; color:#4a5568;">${viDisplay}</td>
+            <td class="col-vocab-ex-cell" style="vertical-align:middle; display:${state.showEx ? '' : 'none'};">
+                <div style="display:flex; flex-direction:column; gap:2px;">
+                    <span style="color:var(--point-color); font-weight:700; font-size:13px;">${item.ex || '...'}</span>
+                    <span style="color:var(--sub-text); font-style:italic; font-size:11px;">${item.exVi || '...'}</span>
+                </div>
+            </td>
+            <td style="text-align:center; vertical-align:middle; padding:8px 6px;">
+                <input type="text" value="${currentNote}" placeholder="Ghi chú nhanh..." onchange="saveVocabNote('${item.ko}', this.value)" style="width:100%; padding:6px 10px; font-size:11px; font-weight:600; border:1px solid rgba(226,232,240,0.6); border-radius:14px; outline:none; background:var(--bg-color); box-shadow:var(--neu-concave); font-family:inherit;">
+            </td>
+        `;
+        body.appendChild(tr);
+    });
+
+    if (body.innerHTML === "") {
+        body.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--sub-text);">Không tìm thấy từ vựng nào phù hợp với bộ lọc hiện tại. 🔍</td></tr>`;
     }
 }
 </script>
