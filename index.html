@@ -367,16 +367,17 @@
         </div>
     </aside>
 
-    <!-- CỘT 2: KHU VỰC TRUNG TÂM -->
+<!-- CỘT 2: KHU VỰC TRUNG TÂM -->
     <main class="main-center-content" id="center-workspace-area">
+        
+        <!-- 🌟 KHU VỰC BẢNG UNIT DÙNG CHUNG (ĐÃ BỐC RA TRÊN CÙNG) -->
+        <div class="unit-panel-box">
+            <h4>Bảng phân quyền giáo trình (Units)</h4>
+            <div class="unit-grid-layout" id="unit-buttons-container"></div>
+        </div>
         
         <!-- TỪ VỰNG PHÂN HỆ -->
         <div id="mode-vocab-section" style="display: flex; flex-direction: column; gap: 12px; width:100%; height:100%;">
-            <div class="unit-panel-box">
-                <h4>Bảng phân quyền giáo trình (Units)</h4>
-                <div class="unit-grid-layout" id="unit-buttons-container"></div>
-            </div>
-
             <div class="work-workspace-container">
                 <div class="top-meta-area">
                     <div class="workspace-header">
@@ -503,7 +504,7 @@
             </div>
         </div>
 
-        <!-- NGỮ PHÁP PHÂN HỆ MỚI (LAYOUT HAI CỘT THÔNG MINH) -->
+        <!-- NGỮ PHÁP PHÂN HỆ MỚI -->
         <div id="mode-grammar-section" style="display: none; width:100%; height:100%;">
             <div class="work-workspace-container" style="justify-content: flex-start;">
                 <div class="workspace-header">
@@ -793,15 +794,20 @@
         selectUnitLocal(unitNum);
     }
 
-    async function selectUnitLocal(unitNum) {
+async function selectUnitLocal(unitNum) {
         currentUnit = unitNum;
         renderUnitGrid([]); 
+        
+        // Nếu đã có dữ liệu trong cache rồi, bung lụa ra liền
         if(allVocabCache[unitNum]) {
             vocabData = allVocabCache[unitNum];
             initTabIndices();
             activateMainUI();
         } else {
+            // Nếu chưa có, bật hiệu ứng xoay xoay loading lên
+            const isGrammarMode = document.getElementById('mode-grammar-section').style.display === 'block';
             document.getElementById('loading-area').style.display = 'block';
+            
             try {
                 let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unitNum}&pass=PRE_AUTHED`);
                 let data = await res.json();
@@ -817,10 +823,17 @@
         }
     }
 
-    function activateMainUI() {
+function activateMainUI() {
         document.getElementById('main-tabs-nav').style.display = 'flex';
         document.getElementById('footer-controls').style.visibility = 'visible';
-        switchTab('lecture');
+        
+        // 🌟 NÂNG CẤP ĐỈNH CAO: Nếu đang ở chế độ Ngữ pháp thì render ngữ pháp, nếu ở Từ vựng thì tự động về tab bài giảng
+        const isGrammarMode = document.getElementById('mode-grammar-section').style.display === 'block';
+        if (isGrammarMode) {
+            renderGrammarMode();
+        } else {
+            switchTab('lecture');
+        }
     }
 
     function initTabIndices() {
