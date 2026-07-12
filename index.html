@@ -387,36 +387,99 @@
         display: block !important;
     }
 }
-     /* --- UI NGỮ PHÁP PHÂN CẤP NEUMORPHISM --- */
-.grammar-wrapper { display: flex; flex-direction: column; gap: 16px; width: 100%; text-align: left; }
-.grammar-list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 10px; }
-.grammar-item-card { padding: 16px; background: var(--card-color); border-radius: var(--radius-md); box-shadow: var(--neu-convex); cursor: pointer; text-align: center; font-weight: 700; color: var(--point-color); transition: 0.2s; border: 1px solid rgba(255,255,255,0.5); }
-.grammar-item-card:hover { transform: translateY(-2px); background: var(--point-light); }
+/* --- LAYOUT HAI CỘT NGỮ PHÁP XỊN SÒ --- */
+.grammar-two-column-layout {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin-top: 16px;
+    align-items: flex-start;
+}
 
-.grammar-detail-box { display: none; background: #ffffff; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--neu-concave); border: 1px solid rgba(255,255,255,0.8); margin-top: 16px; animation: fadeIn 0.3s ease; }
-.grammar-section-title { font-size: 13px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; margin: 16px 0 8px 0; letter-spacing: 0.5px; border-left: 3px solid var(--point-color); padding-left: 8px; }
+/* Cột trái: Danh sách bài học (Dập chìm làm nền chứa các nút dập nổi) */
+.grammar-sidebar-list {
+    width: 280px;
+    min-width: 280px;
+    background: var(--bg-color);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: var(--neu-concave);
+    max-height: 70vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
 
-/* Bảng cấu trúc dập nổi mượt mà */
-.table-neu-structure { width: 100%; border-collapse: collapse; margin: 8px 0; border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--neu-convex); }
-.table-neu-structure th { background: var(--bg-color); padding: 12px; font-weight: 800; font-size: 12px; text-align: center; color: var(--text-color); border-bottom: 2px solid #edf2f7; }
-.table-neu-structure td { padding: 12px; font-size: 13px; text-align: center; background: #ffffff; color: var(--text-color); border-bottom: 1px solid #edf2f7; font-weight: 500; }
+/* Nút tên ngữ pháp (Dập nổi mềm mại, bo góc) */
+.grammar-sidebar-item {
+    padding: 14px 16px;
+    background: var(--card-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--neu-convex);
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--text-color);
+    font-size: 14px;
+    text-align: left;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
 
-/* Khối ví dụ kèm loa phát âm tiếng Hàn */
-.grammar-ex-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--bg-color); border-radius: var(--radius-sm); margin-bottom: 8px; box-shadow: var(--neu-convex); }
-.grammar-ex-text { display: flex; flex-direction: column; gap: 4px; }
-.grammar-ex-ko { font-size: 15px; font-weight: 700; color: #1a202c; }
-.grammar-ex-vi { font-size: 12px; color: var(--sub-text); font-style: italic; }
+.grammar-sidebar-item:hover {
+    transform: translateY(-2px);
+    color: #614CFF; /* Màu point của Pen */
+}
 
-.meaning-badge { display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: 700; background: var(--point-light); color: var(--point-color); border-radius: 12px; margin-bottom: 6px; }
-.btn-back-list { margin-bottom: 12px; padding: 8px 16px; font-size: 12px; }
+/* Trạng thái đang chọn (Active) - Dập chìm xuống tạo hiệu ứng nhấn rõ rệt */
+.grammar-sidebar-item.active {
+    background: var(--bg-color);
+    box-shadow: var(--neu-concave);
+    color: #614CFF;
+    border: 1px solid rgba(97, 76, 255, 0.2);
+    font-weight: 800;
+}
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+/* Cột phải: Khung chi tiết nội dung (Dập nổi lớn, bo góc mềm) */
+.grammar-main-content {
+    flex-grow: 1;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--neu-convex);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    min-height: 400px;
+    animation: grammarFadeIn 0.3s ease;
+}
 
-@media (max-width: 768px) {
-    .grammar-list-grid { grid-template-columns: 1fr !important; }
-    .grammar-ex-row { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .grammar-ex-row .audio-inline-btn { width: 100%; }
-}   
+/* Trạng thái trống khi chưa chọn ngữ pháp nào */
+.grammar-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--sub-text);
+    height: 350px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+@keyframes grammarFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 📱 TỐI ƯU RESPONSIVE: Trên điện thoại tự động xếp chồng lên nhau thành 1 cột dọc */
+@media (max-width: 992px) {
+    .grammar-two-column-layout {
+        flex-direction: column;
+    }
+    .grammar-sidebar-list {
+        width: 100%;
+        min-width: 100%;
+        max-height: 200px; /* Thu nhỏ cột trái trên mobile để dễ cuộn */
+    }
+}
     </style>
 </head>
 <body>
@@ -619,7 +682,7 @@
             </div>
         </div>
 
-<!-- NGỮ PHÁP PHÂN HỆ -->
+<!-- NGỮ PHÁP PHÂN HỆ MỚI (LAYOUT HAI CỘT THÔNG MINH) -->
 <div id="mode-grammar-section" style="display: none; width:100%; height:100%;">
     <div class="work-workspace-container" style="justify-content: flex-start;">
         <div class="workspace-header">
@@ -627,36 +690,43 @@
             <p id="grammar-subtitle">Vui lòng chọn Unit ở trên để tải danh sách bài học ngữ pháp tương ứng.</p>
         </div>
         
-        <div class="grammar-wrapper" id="grammar-main-wrapper" style="display: none;">
-            <!-- Danh sách các ngữ pháp của Unit hiện tại -->
-            <div id="grammar-list-view">
-                <div class="grammar-list-grid" id="grammar-cards-container"></div>
-            </div>
+        <!-- Khung Layout chính -->
+        <div class="grammar-two-column-layout" id="grammar-main-wrapper" style="display: none;">
             
-            <!-- Khung xem chi tiết ngữ pháp khi học viên click vào -->
-            <div class="grammar-detail-box" id="grammar-detail-view">
-                <button class="btn btn-primary btn-back-list" onclick="backToGrammarList()">⬅ Quay lại danh sách</button>
+            <!-- CỘT TRÁI: DANH SÁCH TÊN NGỮ PHÁP ĐÃ UNLOCK -->
+            <div class="grammar-sidebar-list" id="grammar-sidebar-container"></div>
+            
+            <!-- CỘT PHẢI: CHI TIẾT NGỮ PHÁP (Giữ nguyên các khối đổ data của Pen) -->
+            <div class="grammar-main-content" id="grammar-detail-view">
+                <!-- Nội dung trống mặc định khi chưa click chọn bài -->
+                <div class="grammar-empty-state" id="grammar-empty-msg">
+                    <span style="font-size: 32px; margin-bottom: 8px;">👉</span>
+                    <span>Vui lòng chọn một cấu trúc ngữ pháp ở cột bên trái để xem chi tiết bài học.</span>
+                </div>
                 
-                <h2 id="g-detail-title" style="color: var(--point-color); font-weight: 800; font-size: 22px; margin-bottom: 8px;">-아야 하다</h2>
-                
-                <div class="grammar-section-title">1. Khái niệm / Ý nghĩa</div>
-                <div id="g-detail-concept" style="font-size: 14px; color: var(--text-color); font-weight: 500; line-height: 1.5; padding-left: 8px;"></div>
-                
-                <div class="grammar-section-title">2. Cấu trúc kết hợp</div>
-                <div id="g-detail-structure" style="padding: 0 4px;"></div>
-                
-                <div class="grammar-section-title">3. Câu ví dụ mẫu sinh động</div>
-                <div id="g-detail-examples" style="display: flex; flex-direction: column; gap: 8px;"></div>
-                
-                <div id="g-comparison-section" style="display: none;">
-                    <div class="grammar-section-title">4. Góc phân biệt & So sánh</div>
-                    <div id="g-detail-comparison" style="font-size: 13px; color: #4a5568; background: #fff5f5; padding: 12px; border-radius: var(--radius-sm); border-left: 3px solid var(--error-color); line-height: 1.5;"></div>
+                <!-- Khung chứa dữ liệu thật (Ban đầu ẩn đi) -->
+                <div id="grammar-real-content" style="display: none;">
+                    <h2 id="g-detail-title" style="color: #614CFF; font-weight: 800; font-size: 24px; margin-bottom: 8px; font-family: 'Chiron GoRound TC', sans-serif;"></h2>
+                    
+                    <div class="grammar-section-title">1. Khái niệm / Ý nghĩa</div>
+                    <div id="g-detail-concept" style="font-size: 14px; color: var(--text-color); font-weight: 500; line-height: 1.5; padding-left: 8px;"></div>
+                    
+                    <div class="grammar-section-title">2. Cấu trúc kết hợp</div>
+                    <div id="g-detail-structure" style="padding: 0 4px;"></div>
+                    
+                    <div class="grammar-section-title">3. Câu ví dụ mẫu sinh động</div>
+                    <div id="g-detail-examples" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                    
+                    <div id="g-comparison-section" style="display: none;">
+                        <div class="grammar-section-title">4. Góc phân biệt & So sánh</div>
+                        <div id="g-detail-comparison" style="font-size: 13px; color: #4a5568; background: #fff5f5; padding: 12px; border-radius: var(--radius-sm); border-left: 3px solid var(--error-color); line-height: 1.5;"></div>
+                    </div>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>
-
         <!-- NHẮC LẠI TỪ VỰNG PHÂN HỆ (SỐ TAY TỪ SAI) -->
         <div id="mode-review-section" style="display: none; width:100%; height:100%;">
             <div class="work-workspace-container" style="justify-content: flex-start;">
@@ -762,7 +832,7 @@
         document.getElementById('mode-review-section').style.display = (modeName === 'review') ? 'block' : 'none';
         
         // 🌟 CHÈN THÊM DÒNG NÀY VÀO: Kích hoạt tải ngữ pháp khi click tab Ngữ pháp
-        if (modeName === 'grammar') renderGrammarMode();
+        if (modeName === 'grammar') ();
         if (modeName === 'review') renderReviewTable();
     }
 
@@ -1342,18 +1412,17 @@ window.onload = async function() {
 
     let grammarDataCache = []; // Bộ nhớ tạm chứa ngữ pháp của Unit hiện tại
 
-// Hàm kích hoạt hiển thị phân hệ ngữ pháp khi chuyển tab sidebar
-// Cập nhật lại trong hàm showAppMode của Pen để tự động kích hoạt render
+// Hàm render danh sách tên ngữ pháp vào cột bên trái
 function renderGrammarMode() {
-    const container = document.getElementById('grammar-cards-container');
+    const sidebarContainer = document.getElementById('grammar-sidebar-container');
     const mainWrapper = document.getElementById('grammar-main-wrapper');
     const subtitle = document.getElementById('grammar-subtitle');
     
-    container.innerHTML = "";
-    backToGrammarList();
+    // Ẩn nội dung chi tiết cũ đi, hiện thông báo chào mừng
+    document.getElementById('grammar-real-content').style.display = "none";
+    document.getElementById('grammar-empty-msg').style.display = "flex";
     
-    // Giả lập lấy dữ liệu ngữ pháp đổ về từ cache chung giống như từ vựng vocabData
-    // Sau này khi cấu hình Mã.gs, Pen chỉ cần gán data.grammar vào biến này
+    sidebarContainer.innerHTML = "";
     grammarDataCache = allVocabCache[currentUnit + "_grammar"] || []; 
     
     if (grammarDataCache.length === 0) {
@@ -1365,23 +1434,33 @@ function renderGrammarMode() {
     subtitle.innerText = `Hệ thống đã mở khóa thành công các cấu trúc ngữ pháp trọng tâm của Unit ${currentUnit}.`;
     mainWrapper.style.display = "flex";
     
+    // Tạo các nút tên ngữ pháp dập nổi ở cột trái
     grammarDataCache.forEach((g, index) => {
-        const card = document.createElement('div');
-        card.className = "grammar-item-card";
-        card.innerText = g.name || g.GrammarName;
-        card.onclick = () => showGrammarDetail(index);
-        container.appendChild(card);
+        const item = document.createElement('div');
+        item.className = "grammar-sidebar-item";
+        item.innerText = g.GrammarName;
+        
+        // Bắt sự kiện click: Đổi màu active và đổ dữ liệu sang cột phải
+        item.onclick = () => {
+            document.querySelectorAll('.grammar-sidebar-item').forEach(el => el.classList.remove('active'));
+            item.classList.add('active');
+            showGrammarDetail(index);
+        };
+        
+        sidebarContainer.appendChild(item);
     });
 }
 
+// Hàm đổ dữ liệu chi tiết sang cột bên phải khi học viên click
 function showGrammarDetail(index) {
     const g = grammarDataCache[index];
     if(!g) return;
     
-    document.getElementById('grammar-list-view').style.display = "none";
-    document.getElementById('grammar-detail-view').style.display = "block";
+    // Ẩn tin nhắn trống, hiện khung nội dung thật lên
+    document.getElementById('grammar-empty-msg').style.display = "none";
+    document.getElementById('grammar-real-content').style.display = "block";
     
-    // 1. Điền Tên và Khái niệm (Hỗ trợ phân nhóm bằng dấu gạch đứng '|')
+    // 1. Điền Tên và Khái niệm
     document.getElementById('g-detail-title').innerText = g.GrammarName;
     let conceptHtml = g.Concept.split('|').map(c => `<p style="margin-bottom:6px;">🔹 ${c.trim()}</p>`).join('');
     document.getElementById('g-detail-concept').innerHTML = conceptHtml;
@@ -1403,18 +1482,17 @@ function showGrammarDetail(index) {
         table.innerHTML = headerRow + dataRow;
         structDiv.appendChild(table);
     } catch(e) {
-        // Dự phòng nếu Pen gõ chữ thường không phải JSON thì hiện chữ thường sạch sẽ
         structDiv.innerHTML = `<p style="font-size:13px; font-weight:600; color:var(--text-color);">${g.StructureJSON}</p>`;
     }
     
-    // 3. Render câu ví dụ (Phân chia theo Nghĩa rõ ràng + Tích hợp loa phát âm của Pen)
+    // 3. Render câu ví dụ phân chia theo Nghĩa + Gắn loa phát âm
     const exDiv = document.getElementById('g-detail-examples');
     exDiv.innerHTML = "";
     try {
         let exArray = JSON.parse(g.ExamplesJSON);
         exArray.forEach(ex => {
             const row = document.createElement('div');
-            row.className = "grammar-row-wrapper"; // Container bọc
+            row.className = "grammar-row-wrapper";
             
             let badgeHtml = ex.meaning ? `<span class="meaning-badge">${ex.meaning}</span>` : '';
             
