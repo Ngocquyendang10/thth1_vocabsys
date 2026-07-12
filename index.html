@@ -947,12 +947,23 @@ function activateMainUI() {
         let config = unitsConfig.find(c => c.unit == currentUnit);
         const iframe = document.getElementById('lecture-iframe');
         const emptyMsg = document.getElementById('lecture-empty-msg');
+        const guideArea = document.getElementById('lecture-guide-area'); // Bốc khu vực hướng dẫn
+        
         document.getElementById('global-counter').innerText = "1 / 1";
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
         document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
 
-        if(config && config.lectureLink) { iframe.src = config.lectureLink; iframe.style.display = "block"; emptyMsg.style.display = "none"; } 
-        else { iframe.src = ""; iframe.style.display = "none"; emptyMsg.style.display = "block"; }
+        if(config && config.lectureLink) { 
+            iframe.src = config.lectureLink; 
+            iframe.style.display = "block"; 
+            emptyMsg.style.display = "none"; 
+            if(guideArea) guideArea.style.display = "flex"; // Hiện khung hướng dẫn khi có slide bài giảng
+        } else { 
+            iframe.src = ""; 
+            iframe.style.display = "none"; 
+            emptyMsg.style.display = "block"; 
+            if(guideArea) guideArea.style.display = "none"; // Ẩn đi khi không có bài giảng
+        }
     }
 
     function renderFlashcard() {
