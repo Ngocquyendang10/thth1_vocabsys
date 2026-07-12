@@ -1256,26 +1256,19 @@ function showGrammarDetail(index) {
     let conceptHtml = g.Concept.split('|').map(c => `<p style="margin-bottom:6px;">🔹 ${c.trim()}</p>`).join('');
     document.getElementById('g-detail-concept').innerHTML = conceptHtml;
     
-    // 2. 🌟 NÂNG CẤP: Dựng bảng Cấu trúc thông minh, phóng to và đổi màu Point cho cấu trúc chính
+// 2. 🌟 NÂNG CẤP: Dựng bảng Cấu trúc thông minh kèm Subheading phân tách nghĩa rõ ràng
     const structDiv = document.getElementById('g-detail-structure');
     structDiv.innerHTML = "";
     
-   
-// Hàm phụ nâng cấp: Gom toàn bộ các dòng ví dụ phía sau lại để không bị sót
+    // Hàm phụ trang trí nội dung bên trong ô <td> (Giữ nguyên tính năng hiển thị nhiều dòng ví dụ)
     function renderCustomTdContent(rawText) {
         if (rawText.includes('\n')) {
             let lines = rawText.split('\n');
-            
-            // Dòng đầu tiên (Cấu trúc chính): Phóng to, in đậm, màu Point xanh tím
-            let mainForm = `<div style="font-size: 18px; font-weight: 800; color: #614CFF; margin-bottom: 6px;">${lines[0].trim()}</div>`;
-            
-            // Lấy tất cả các dòng còn lại (dòng 2, dòng 3, dòng 4...) gom chung vào khối ví dụ màu xám sub-text
+            let mainForm = `<div style="font-size: 17px; font-weight: 800; color: #614CFF; margin-bottom: 6px;">${lines[0].trim()}</div>`;
             let remainingLines = lines.slice(1).map(line => `<div style="margin-bottom: 2px;">${line.trim()}</div>`).join('');
             let subForm = `<div style="font-size: 12px; color: var(--sub-text); font-weight: 500; line-height: 1.4;">${remainingLines}</div>`;
-            
             return mainForm + subForm;
         }
-        // Dự phòng nếu không có dấu xuống dòng
         return `<div style="font-size: 16px; font-weight: 700; color: #614CFF;">${rawText}</div>`;
     }
 
@@ -1283,30 +1276,54 @@ function showGrammarDetail(index) {
         let parsedStruct = JSON.parse(g.StructureJSON);
         
         if (Array.isArray(parsedStruct)) {
-            parsedStruct.forEach(structObj => {
+            parsedStruct.forEach((structObj, index) => {
                 let subContainer = document.createElement('div');
-                subContainer.style.marginBottom = "14px";
+                subContainer.style.marginBottom = "20px";
+                
+                // 🌟 BỘ LỌC TỰ ĐỘNG BỐC SUBHEADING RA NGOÀI BẢNG
+                if (structObj.hasOwnProperty("Subheading") || structObj.hasOwnProperty("subheading")) {
+                    let subHeadingText = structObj["Subheading"] || structObj["subheading"];
+                    
+                    let subHeadingEl = document.createElement('div');
+                    subHeadingEl.style.fontSize = "13px";
+                    subHeadingEl.style.fontWeight = "800";
+                    subHeadingEl.style.color = "#614CFF"; // Màu point xanh tím của Pen
+                    subHeadingEl.style.marginBottom = "8px";
+                    subHeadingEl.style.paddingLeft = "4px";
+                    subHeadingEl.style.display = "flex";
+                    subHeadingEl.style.alignItems = "center";
+                    subHeadingEl.style.gap = "6px";
+                    subHeadingEl.innerHTML = `<span>🏷️</span> <span>${index + 1}. ${subHeadingText}</span>`;
+                    
+                    subContainer.appendChild(subHeadingEl);
+                }
+                
                 let table = document.createElement('table');
                 table.className = "table-neu-structure";
                 
                 let headerRow = "<tr>", dataRow = "<tr>";
                 for (let key in structObj) {
+                    // Bỏ qua không vẽ cột "Subheading" vào trong bảng biểu
+                    if (key.toLowerCase() === "subheading") continue;
+                    
                     headerRow += `<th>${key}</th>`;
-                    // Áp dụng bộ lọc trang trí nội dung ô dữ liệu
                     let cleanText = String(structObj[key]).replace(/\\n/g, '\n');
                     dataRow += `<td>${renderCustomTdContent(cleanText)}</td>`;
                 }
                 headerRow += "</tr>"; dataRow += "</tr>";
                 table.innerHTML = headerRow + dataRow;
+                
                 subContainer.appendChild(table);
                 structDiv.appendChild(subContainer);
             });
         } else {
+            // Trường hợp nếu chỉ có 1 Object đơn lẻ (Không có mảng)
             let table = document.createElement('table');
             table.className = "table-neu-structure";
             
             let headerRow = "<tr>", dataRow = "<tr>";
             for (let key in parsedStruct) {
+                if (key.toLowerCase() === "subheading") continue;
                 headerRow += `<th>${key}</th>`;
                 let cleanText = String(parsedStruct[key]).replace(/\\n/g, '\n');
                 dataRow += `<td>${renderCustomTdContent(cleanText)}</td>`;
@@ -1316,7 +1333,7 @@ function showGrammarDetail(index) {
             structDiv.appendChild(table);
         }
     } catch(e) {
-        structDiv.innerHTML = `<p style="font-size:14px; font-weight:700; color:#614CFF; padding-left:8px;">${g.StructureJSON}</p>`;
+        structDiv.innerHTML = `<p style="font-size: 14px; font-weight: 700; color: #614CFF; padding-left: 8px;">${g.StructureJSON}</p>`;
     }
     
     // 3. Render câu ví dụ phân chia theo Nghĩa + Gắn loa phát âm
