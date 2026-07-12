@@ -1247,6 +1247,7 @@ function showGrammarDetail(index) {
     const g = grammarDataCache[index];
     if(!g) return;
     
+    // Ẩn tin nhắn trống, hiện khung nội dung thật lên
     document.getElementById('grammar-empty-msg').style.display = "none";
     document.getElementById('grammar-real-content').style.display = "block";
     
@@ -1255,21 +1256,40 @@ function showGrammarDetail(index) {
     let conceptHtml = g.Concept.split('|').map(c => `<p style="margin-bottom:6px;">🔹 ${c.trim()}</p>`).join('');
     document.getElementById('g-detail-concept').innerHTML = conceptHtml;
     
-    // 2. Dựng bảng Cấu trúc kết hợp
+    // 2. 🌟 NÂNG CẤP: Dựng bảng Cấu trúc thông minh, phóng to và đổi màu Point cho cấu trúc chính
     const structDiv = document.getElementById('g-detail-structure');
     structDiv.innerHTML = "";
+    
+    // Hàm phụ dùng để render và trang trí nội dung bên trong ô <td> của bảng
+    function renderCustomTdContent(rawText) {
+        if (rawText.includes('\n')) {
+            let lines = rawText.split('\n');
+            // Dòng 1 (Cấu trúc chính): In đậm, tăng size, màu Point xanh tím của Pen
+            let mainForm = `<div style="font-size: 18px; font-weight: 800; color: #614CFF; margin-bottom: 4px;">${lines[0].trim()}</div>`;
+            // Dòng 2 (Ví dụ minh họa): Màu xám sub-text, font vừa phải dễ nhìn
+            let subForm = `<div style="font-size: 12px; color: var(--sub-text); font-weight: 500;">${lines[1].trim()}</div>`;
+            return mainForm + subForm;
+        }
+        // Dự phòng nếu không có dấu xuống dòng thì hiện chữ to in đậm mặc định
+        return `<div style="font-size: 16px; font-weight: 700; color: #614CFF;">${rawText}</div>`;
+    }
+
     try {
         let parsedStruct = JSON.parse(g.StructureJSON);
+        
         if (Array.isArray(parsedStruct)) {
             parsedStruct.forEach(structObj => {
                 let subContainer = document.createElement('div');
                 subContainer.style.marginBottom = "14px";
                 let table = document.createElement('table');
                 table.className = "table-neu-structure";
+                
                 let headerRow = "<tr>", dataRow = "<tr>";
                 for (let key in structObj) {
                     headerRow += `<th>${key}</th>`;
-                    dataRow += `<td>${structObj[key]}</td>`;
+                    // Áp dụng bộ lọc trang trí nội dung ô dữ liệu
+                    let cleanText = String(structObj[key]).replace(/\\n/g, '\n');
+                    dataRow += `<td>${renderCustomTdContent(cleanText)}</td>`;
                 }
                 headerRow += "</tr>"; dataRow += "</tr>";
                 table.innerHTML = headerRow + dataRow;
@@ -1279,17 +1299,19 @@ function showGrammarDetail(index) {
         } else {
             let table = document.createElement('table');
             table.className = "table-neu-structure";
+            
             let headerRow = "<tr>", dataRow = "<tr>";
             for (let key in parsedStruct) {
                 headerRow += `<th>${key}</th>`;
-                dataRow += `<td>${parsedStruct[key]}</td>`;
+                let cleanText = String(parsedStruct[key]).replace(/\\n/g, '\n');
+                dataRow += `<td>${renderCustomTdContent(cleanText)}</td>`;
             }
             headerRow += "</tr>"; dataRow += "</tr>";
             table.innerHTML = headerRow + dataRow;
             structDiv.appendChild(table);
         }
     } catch(e) {
-        structDiv.innerHTML = `<p style="font-size:13px; font-weight:600; color:var(--text-color); padding-left:8px;">${g.StructureJSON}</p>`;
+        structDiv.innerHTML = `<p style="font-size:14px; font-weight:700; color:#614CFF; padding-left:8px;">${g.StructureJSON}</p>`;
     }
     
     // 3. Render câu ví dụ phân chia theo Nghĩa + Gắn loa phát âm
@@ -1317,18 +1339,21 @@ function showGrammarDetail(index) {
         exDiv.innerHTML = `<p style="font-size:13px; color:var(--sub-text); padding-left:8px;">Chưa có câu ví dụ mẫu.</p>`;
     }
     
-    // 4. 🌟 RENDER PHẦN LƯU Ý MỚI (Hỗ trợ thẻ gạch chân <u> )
+    // 4. 🌟 NÂNG CẤP: Chuyển đổi linh hoạt từ thẻ <u> sang thẻ <b> (In đậm lưu ý cốt lõi)
     const notesSection = document.getElementById('g-notes-section');
     const notesDiv = document.getElementById('g-detail-notes');
     if (g.Notes && g.Notes.trim() !== "") {
         notesSection.style.display = "block";
-        // Cắt theo dấu gạch đứng để xuống hàng liệt kê đầu dòng
-        notesDiv.innerHTML = g.Notes.split('|').map(n => `<p style="margin-bottom:6px;">🔸 ${n.trim()}</p>`).join('');
+        
+        // Tự động chuyển đổi các thẻ <u> cũ thành thẻ <b> in đậm nếu Pen chưa kịp sửa dữ liệu trên Sheet
+        let processedNotes = g.Notes.replace(/<u>/g, '<b>').replace(/<\/u>/g, '</b>');
+        
+        notesDiv.innerHTML = processedNotes.split('|').map(n => `<p style="margin-bottom:6px;">🔸 ${n.trim()}</p>`).join('');
     } else {
         notesSection.style.display = "none";
     }
     
-    // 5. 🌟 RENDER BẢNG SO SÁNH ĐA TIÊU CHÍ (Tự động bốc key làm tiêu đề cột)
+    // 5. Render bảng so sánh đa tiêu chí mở rộng
     const compSection = document.getElementById('g-comparison-section');
     const compDiv = document.getElementById('g-detail-comparison');
     compDiv.innerHTML = "";
@@ -1341,13 +1366,8 @@ function showGrammarDetail(index) {
                 let table = document.createElement('table');
                 table.className = "table-neu-structure";
                 
-                // Trích xuất tự động tất cả các tiêu đề cột từ object đầu tiên
                 let columns = Object.keys(compArray[0]);
-                
-                // Tạo hàng tiêu đề (Header Row)
                 let headerHtml = "<tr>" + columns.map(col => `<th>${col}</th>`).join('') + "</tr>";
-                
-                // Tạo các hàng dữ liệu (Data Rows)
                 let rowsHtml = compArray.map(rowData => {
                     return "<tr>" + columns.map(col => `<td>${rowData[col] || ""}</td>`).join('') + "</tr>";
                 }).join('');
@@ -1356,7 +1376,6 @@ function showGrammarDetail(index) {
                 compDiv.appendChild(table);
             } else { compSection.style.display = "none"; }
         } catch(e) {
-            // Dự phòng nếu gõ chữ thường thì hiện khung đỏ cảnh báo dập chìm nhẹ
             compSection.style.display = "block";
             compDiv.innerHTML = `<div style="font-size:13px; color:#742a2a; background:#fff5f5; padding:12px; border-radius:var(--radius-sm); border-left:3px solid var(--error-color);">${g.ComparisonJSON}</div>`;
         }
