@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngoc Quyen's Classroom - Hệ thống ôn tập từ vựng</title>
+    <title>Ngoc Quyen's Classroom - Nền tảng ôn tập Từ vựng & Ngữ pháp</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -314,11 +314,11 @@
         <div class="art-3d-mockup">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5v-15z"></path></svg>
         </div>
-        <h3>Welcome To NQ Classroom</h3>
-        <p>Hệ thống ôn luyện từ vựng tiếng Hàn thông minh, trực quan và cá nhân hóa.</p>
+        <h3>Welcome To Ngoc Quyen Classroom</h3>
+        <p>Nền tảng ôn luyện từ vựng & ngữ pháp</p>
     </div>
     <div class="login-right-form">
-        <h2>Xin chào học viên 👋</h2>
+        <h2>Xin chào các bạn học viên 👋</h2>
         <p class="info-p">Vui lòng đăng nhập tài khoản lớp học để tiếp tục bài ôn tập.</p>
         <div class="form-group">
             <label>Tên đăng nhập / Mã học sinh</label>
@@ -332,7 +332,7 @@
             <input type="checkbox" id="login-remember-me" checked>
             <label for="login-remember-me">Ghi nhớ thông tin đăng nhập tự động</label>
         </div>
-        <button class="btn-submit-login" onclick="executeStudentLogin()">Đăng Nhập Ngay 🚀</button>
+        <button class="btn-submit-login" onclick="executeStudentLogin()">Đăng nhập</button>
     </div>
 </div>
 
@@ -344,7 +344,7 @@
         <div class="upper-nav">
             <div class="brand-logo-area">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-6 7-6-7z"></path><path d="M3 20h18v2H3z"></path></svg>
-                <span><span>NQ CLASSROOM</span></span>
+                <span><span>NGOC QUYEN CLASSROOM</span></span>
             </div>
             <ul class="menu-list">
                 <li class="menu-item active" id="menu-vocab" onclick="showAppMode('vocab')"><a href="#">
@@ -372,7 +372,7 @@
         
         <!-- 🌟 KHU VỰC BẢNG UNIT DÙNG CHUNG (ĐÃ BỐC RA TRÊN CÙNG) -->
         <div class="unit-panel-box">
-            <h4>Bảng phân quyền giáo trình (Units)</h4>
+            <h4>Các UNIT của giáo trình</h4>
             <div class="unit-grid-layout" id="unit-buttons-container"></div>
         </div>
         
@@ -389,10 +389,10 @@
                         <button id="btn-lecture" class="tab-click-btn active" onclick="switchTab('lecture')">1. Bài giảng</button>
                         <button id="btn-flashcard" class="tab-click-btn" onclick="switchTab('flashcard')">2. Flashcard</button>
                         <button id="btn-quiz" class="tab-click-btn" onclick="switchTab('quiz')">3. Trắc nghiệm</button>
-                        <button id="btn-typing" class="tab-click-btn" onclick="switchTab('typing')">4. Gõ từ</button>
-                        <button id="btn-listen" class="tab-click-btn" onclick="switchTab('listen')">5. Điền từ</button>
-                        <button id="btn-guess" class="tab-click-btn" onclick="switchTab('guess')">6. Đoán nghĩa</button>
-                        <button id="btn-visual" class="tab-click-btn" onclick="switchTab('visual')">7. Nhìn hình</button>
+                        <button id="btn-typing" class="tab-click-btn" onclick="switchTab('typing')">4. Viết từ</button>
+                        <button id="btn-listen" class="tab-click-btn" onclick="switchTab('listen')">5. Nghe và chọn từ</button>
+                        <button id="btn-guess" class="tab-click-btn" onclick="switchTab('guess')">6. Nghe và đoán nghĩa</button>
+                        <button id="btn-visual" class="tab-click-btn" onclick="switchTab('visual')">7. Nhìn hình và chọn từ</button>
                     </div>
                 </div>
 
@@ -530,21 +530,21 @@
                     <div class="grammar-section-title">1. Khái niệm / Ý nghĩa</div>
                     <div id="g-detail-concept" style="font-size: 14px; color: var(--text-color); font-weight: 500; line-height: 1.5; padding-left: 8px;"></div>
                     
-                    <div class="grammar-section-title">2. Cấu trúc kết hợp</div>
+                    <div class="grammar-section-title">2. Cấu trúc</div>
                     <div id="g-detail-structure" style="padding: 0 4px;"></div>
                     
-                    <div class="grammar-section-title">3. Câu ví dụ mẫu sinh động</div>
+                    <div class="grammar-section-title">3. Ví dụ</div>
                     <div id="g-detail-examples" style="display: flex; flex-direction: column; gap: 8px;"></div>
                     
                     <!-- KHỐI LƯU Ý MỚI -->
                     <div id="g-notes-section" style="display: none;">
-                        <div class="grammar-section-title">4. Những lưu ý quan trọng</div>
+                        <div class="grammar-section-title">4. Lưu ý</div>
                         <div id="g-detail-notes" style="font-size: 13px; color: #2d3748; background: #fffaf0; padding: 14px; border-radius: var(--radius-sm); border-left: 3px solid #dd6b20; line-height: 1.6; padding-left: 12px;"></div>
                     </div>
                     
                     <!-- KHỐI BẢNG SO SÁNH NÂNG CẤP -->
                     <div id="g-comparison-section" style="display: none;">
-                        <div class="grammar-section-title">5. Góc phân biệt & So sánh mở rộng</div>
+                        <div class="grammar-section-title">5. So sánh & Mở rộng</div>
                         <div id="g-detail-comparison" style="padding: 0 4px;"></div>
                     </div>
                 </div>
@@ -557,8 +557,8 @@
         <div id="mode-review-section" style="display: none; width:100%; height:100%;">
             <div class="work-workspace-container" style="justify-content: flex-start;">
                 <div class="workspace-header">
-                    <h1>Sổ Tay Nhắc Lại Từ Vựng 📝</h1>
-                    <p>Danh sách lưu trữ tự động những từ vựng bạn đã làm chưa đúng để rèn luyện phản xạ.</p>
+                    <h1>Sổ Tay Từ Vựng 📝</h1>
+                    <p>Danh sách lưu trữ tự động những từ vựng bạn đã làm chưa đúng để rèn luyện thêm.</p>
                 </div>
                 
                 <div class="review-table-container">
@@ -568,7 +568,7 @@
                                 <th>Tiếng Hàn <button class="action-eye-btn" onclick="toggleBlurReviewColumn('ko')"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></button></th>
                                 <th>Tiếng Việt <button class="action-eye-btn" onclick="toggleBlurReviewColumn('vi')"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></button></th>
                                 <th>Ví dụ</th>
-                                <th>Nghĩa của ví dụ</th>
+                                <th>Dịch ví dụ</th>
                                 <th>Ngày chưa thuộc</th>
                                 <th>Bạn đã nhớ chưa?</th>
                             </tr>
@@ -588,20 +588,20 @@
                 <div class="avatar-core" id="student-avatar-letter">H</div>
             </div>
             <h3 id="student-display-name">Học Viên NQ</h3>
-            <span>Tài khoản chính thức</span>
+            <span>Tài khoản học viên</span>
         </div>
         <div class="todo-list-widget">
             <h4>Nhiệm vụ hôm nay</h4>
             <div class="todo-item">
                 <div>
-                    <p>Xem lại bài giảng Slide</p>
-                    <span>Tương tác Canva lật trang bài học</span>
+                    <p>Xem lại bài giảng từ vựng</p>
+                    <span>Xem lại bài giảng ở tab đầu tiên và ôn tập ở những tab sau</span>
                 </div>
             </div>
             <div class="todo-item" style="border-left-color: var(--success-color);">
                 <div>
-                    <p>Hoàn thành Trắc nghiệm</p>
-                    <span>Đạt điểm tối đa phản xạ từ vựng</span>
+                    <p>Xem lại ngữ pháp</p>
+                    <span>Điểm lại ngữ pháp của unit ở tab Ngữ pháp</span>
                 </div>
             </div>
         </div>
@@ -613,8 +613,8 @@
     <div class="bounce-popup-box">
         <div class="popup-icon-animate">🎉</div>
         <h3 id="popup-title">Tuyệt vời quá!</h3>
-        <p id="popup-message">Sự siêng năng học tập của bạn đã mở khóa thành công một bài học mới tinh rồi nè.</p>
-        <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px;" onclick="closeCustomBouncePopup()">Bắt Đầu Học Lập Tức 🚀</button>
+        <p id="popup-message">Sự siêng năng của bạn đã thành công mở khóa bài học mới.</p>
+        <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px;" onclick="closeCustomBouncePopup()">Bắt Đầu Học</button>
     </div>
 </div>
 
@@ -719,11 +719,11 @@
                 localStorage.setItem('studentSession_QuyenClass', user);
                 await parseAndInitApp(data.allowedUnits);
             } else {
-                alert("Tài khoản hoặc mật khẩu chưa chuẩn xác!");
+                alert("Tài khoản hoặc mật khẩu chưa chính xác!");
                 window.location.reload();
             }
         } catch(e) {
-            alert("Lỗi kết nối máy chủ đồng bộ! Chi tiết lỗi đã in ra Console.");
+            alert("Lỗi kết nối máy chủ đồng bộ!");
             window.location.reload();
         }
     }
@@ -795,7 +795,7 @@
         if(isBrandNew) {
             showCustomBouncePopup(
                 `Unit ${unitNum} Đã Sẵn Sàng! 🎉`, 
-                `Chúc mừng bạn học! Sự siêng năng và chăm chỉ làm bài tập của bạn đã kích hoạt mở khóa thành công giáo trình Unit ${unitNum} rồi nè. Cùng chinh phục từ vựng mới ngay nhé!`
+                `Chúc mừng bạn học! Sự siêng năng của bạn đã mở khóa thành công Unit ${unitNum}! Cùng nhau ôn tập lại nhé!`
             );
             renderUnitGrid([]); 
         }
@@ -997,7 +997,7 @@ function activateMainUI() {
             else if (btn === selectedBtn) btn.classList.add('wrong');
         });
         if(selectedOpt === correctOpt) setFeedback("🎉 Chính xác! Bạn nhớ bài tốt lắm.", "success");
-        else { setFeedback("😢 Chưa chuẩn xác rồi, từ này đã lưu vào Sổ tay nhắc lại.", "error"); recordWrongWord(); }
+        else { setFeedback("😢 Chưa đúng rồi, từ này đã được lưu vào Sổ tay để bạn ôn lại.", "error"); recordWrongWord(); }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
@@ -1015,9 +1015,9 @@ function activateMainUI() {
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
         
         if (state.direction === 'vi-to-ko') {
-            document.getElementById('type-prompt-label').innerText = "Hãy gõ cụm từ Tiếng Hàn tương ứng:"; document.getElementById('type-word').innerText = item.vi;
+            document.getElementById('type-prompt-label').innerText = "Hãy nhập cụm từ Tiếng Hàn tương ứng:"; document.getElementById('type-word').innerText = item.vi;
         } else {
-            document.getElementById('type-prompt-label').innerText = "Hãy gõ nghĩa Tiếng Việt tương ứng:"; document.getElementById('type-word').innerText = item.ko;
+            document.getElementById('type-prompt-label').innerText = "Hãy nhập nghĩa Tiếng Việt tương ứng:"; document.getElementById('type-word').innerText = item.ko;
         }
         input.focus();
     }
@@ -1070,7 +1070,7 @@ function activateMainUI() {
     function handleListenAnswer(btn, selectedChoice, correctChoice) {
         let state = tabState.listen; if (state.answered) return; state.answered = true;
         document.getElementById('listen-vi-meaning').innerText = vocabData[state.indices[state.current]].vi;
-        if (selectedChoice === correctChoice) { btn.classList.add('selected-correct'); setFeedback("🎉 Tai nghe rất chuẩn! Chọn đúng rồi.", "success"); } 
+        if (selectedChoice === correctChoice) { btn.classList.add('selected-correct'); setFeedback("🎉 Đúng rồi. Nghe rất chuẩn!", "success"); } 
         else { btn.classList.add('selected-wrong'); setFeedback("😢 Chưa đúng rồi, hãy nghe lại nhé.", "error"); document.querySelectorAll('#listen-word-pool .pool-btn').forEach(b => { if(b.innerText === correctChoice) b.classList.add('selected-correct'); }); recordWrongWord(); }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
@@ -1106,7 +1106,7 @@ function activateMainUI() {
         let state = tabState.guess; if (state.answered) return; state.answered = true;
         document.querySelectorAll('#guess-opts .option-btn').forEach(btn => { if (btn.innerText === correctOpt) btn.classList.add('correct'); else if (btn === selectedBtn) btn.classList.add('wrong'); });
         if (selectedOpt === correctOpt) setFeedback("🎉 Xuất sắc! Chọn đúng nghĩa rồi.", "success");
-        else { setFeedback("😢 Chưa chính xác, câu này đã lưu vào Sổ tay.", "error"); recordWrongWord(); }
+        else { setFeedback("😢 Chưa chính xác, câu này đã lưu vào Sổ tay để bạn ôn lại.", "error"); recordWrongWord(); }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
@@ -1225,7 +1225,7 @@ function activateMainUI() {
             return;
         }
         
-        subtitle.innerText = `Hệ thống đã mở khóa thành công các cấu trúc ngữ pháp trọng tâm của Unit ${currentUnit}.`;
+        subtitle.innerText = `Thành công mở khoá các cấu trúc ngữ pháp của Unit ${currentUnit}.`;
         mainWrapper.style.display = "flex";
         
         grammarDataCache.forEach((g, index) => {
