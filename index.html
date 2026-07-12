@@ -403,10 +403,9 @@
 
                 <!-- 1. BÀI GIẢNG -->
                 <div id="lecture-tab" class="tab-render-view active">
-                    <!-- 🌟 KHUNG HƯỚNG DẪN TƯƠNG TÁC NEUMORPHISM MỚI -->
-                    <div class="lecture-guide-box" id="lecture-guide-area" style="display: none; margin-bottom: 14px; padding: 14px 18px; background: #ffffff; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                    <!-- 🌟 KHU VỰC HƯỚNG DẪN TƯƠNG TÁC CHUẨN UX (ĐÃ SỬA LỖI XUNG ĐỘT DISPLAY) -->
+                    <div class="lecture-guide-box" id="lecture-guide-area" style="margin-bottom: 14px; padding: 14px 18px; background: #ffffff; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); align-items: center; justify-content: space-between; gap: 12px; display: none;">
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <!-- Inline SVG Icon Canva & Figma kết hợp sinh động -->
                             <div style="display: flex; align-items: center; gap: 4px; background: var(--bg-color); padding: 6px; border-radius: var(--radius-sm); box-shadow: var(--neu-concave);">
                                 <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="#614CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5v-15z"></path></svg>
                                 <svg style="width: 16px; height: 16px; color: #614CFF;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.95 1.11 3.63 2.74 4.46v.08C8.11 12.37 7 14.05 7 16c0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.95-1.11-3.63-2.74-4.46v-.08C15.89 10.63 17 8.95 17 7c0-2.76-2.24-5-5-5zm-3 5c0-1.66 1.34-3 3-3s3 1.34 3 3-1.34 3-3 3-3-1.34-3-3z"/></svg>
@@ -416,18 +415,16 @@
                                 <p style="font-size: 11px; color: var(--sub-text); font-weight: 500; line-height: 1.4;">Tài liệu có tích hợp hiệu ứng **Slide lật trang của Canva** hoặc **Prototype Figma**. Các bạn nhớ click trực tiếp vào hình để tương tác làm bài tập phản xạ nhé!</p>
                             </div>
                         </div>
-                        <!-- Nút nhắc nhở mở to hết cỡ bằng Inline SVG phóng to -->
                         <div style="display: flex; align-items: center; gap: 6px; background: var(--point-light); padding: 6px 12px; border-radius: var(--radius-sm); color: #614CFF; font-size: 11px; font-weight: 800; border: 1px solid rgba(97, 76, 255, 0.15); white-space: nowrap;">
                             <svg style="width: 14px; height: 14px; fill: currentColor;" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                             <span>Bấm nút góc phải để Mở To hết cỡ xem bài rõ hơn nha!</span>
                         </div>
                     </div>
-
+                
                     <div class="embed-wrapper">
                         <div class="no-embed-msg" id="lecture-empty-msg">Không có slide bài giảng cho Unit này.</div>
                         <iframe id="lecture-iframe" class="lecture-iframe-box" src="" allowfullscreen></iframe>
                     </div>
-                </div>>
                 </div>
 
                 <!-- 2. FLASHCARD -->
@@ -942,29 +939,30 @@ function activateMainUI() {
         } else { localStorage.setItem('wrongWords_QuyenClass', JSON.stringify(wrongWordsList)); }
     }
 
-    function renderLectureTab() {
-        clearFeedback();
-        let config = unitsConfig.find(c => c.unit == currentUnit);
-        const iframe = document.getElementById('lecture-iframe');
-        const emptyMsg = document.getElementById('lecture-empty-msg');
-        const guideArea = document.getElementById('lecture-guide-area'); // Bốc khu vực hướng dẫn
+        function renderLectureTab() {
+            clearFeedback();
+            let config = unitsConfig.find(c => c.unit == currentUnit);
+            const iframe = document.getElementById('lecture-iframe');
+            const emptyMsg = document.getElementById('lecture-empty-msg');
+            const guideArea = document.getElementById('lecture-guide-area');
+            
+            document.getElementById('global-counter').innerText = "1 / 1";
+            document.getElementById('ctrl-next-btn').style.display = 'inline-block';
+            document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
         
-        document.getElementById('global-counter').innerText = "1 / 1";
-        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
-        document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
-
-        if(config && config.lectureLink) { 
-            iframe.src = config.lectureLink; 
-            iframe.style.display = "block"; 
-            emptyMsg.style.display = "none"; 
-            if(guideArea) guideArea.style.display = "flex"; // Hiện khung hướng dẫn khi có slide bài giảng
-        } else { 
-            iframe.src = ""; 
-            iframe.style.display = "none"; 
-            emptyMsg.style.display = "block"; 
-            if(guideArea) guideArea.style.display = "none"; // Ẩn đi khi không có bài giảng
+            if(config && config.lectureLink) { 
+                iframe.src = config.lectureLink; 
+                iframe.style.display = "block"; 
+                emptyMsg.style.display = "none"; 
+                // 🌟 SỬA TẠI ĐÂY: Hiện lên dạng flex để gióng hàng ngang mượt mà đúng chuẩn thiết kế
+                if(guideArea) guideArea.style.display = "flex"; 
+            } else { 
+                iframe.src = ""; 
+                iframe.style.display = "none"; 
+                emptyMsg.style.display = "block"; 
+                if(guideArea) guideArea.style.display = "none"; 
+            }
         }
-    }
 
     function renderFlashcard() {
         clearFeedback();
