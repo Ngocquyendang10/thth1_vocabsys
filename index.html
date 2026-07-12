@@ -1344,16 +1344,66 @@ function showGrammarDetail(index) {
         exDiv.innerHTML = `<p style="font-size:13px; color:var(--sub-text); padding-left:8px;">Chưa có câu ví dụ mẫu.</p>`;
     }
     
-    // 4. 🌟 NÂNG CẤP: Chuyển đổi linh hoạt từ thẻ <u> sang thẻ <b> (In đậm lưu ý cốt lõi)
+// 4. 🌟 NÂNG CẤP ĐỈNH CAO: Render phần Lưu ý phân cấp đa tầng (Badge tiêu đề + Giải thích + Ví dụ thụt lề)
     const notesSection = document.getElementById('g-notes-section');
     const notesDiv = document.getElementById('g-detail-notes');
+    
     if (g.Notes && g.Notes.trim() !== "") {
         notesSection.style.display = "block";
+        notesDiv.innerHTML = ""; // Xóa nội dung cũ
         
-        // Tự động chuyển đổi các thẻ <u> cũ thành thẻ <b> in đậm nếu Pen chưa kịp sửa dữ liệu trên Sheet
-        let processedNotes = g.Notes.replace(/<u>/g, '<b>').replace(/<\/u>/g, '</b>');
+        // Hỗ trợ chia làm nhiều khối hộp lưu ý riêng biệt nếu dùng dấu '||'
+        let blocks = g.Notes.split('||');
         
-        notesDiv.innerHTML = processedNotes.split('|').map(n => `<p style="margin-bottom:6px;">🔸 ${n.trim()}</p>`).join('');
+        blocks.forEach(block => {
+            let items = block.split('|').map(item => item.trim()).filter(item => item !== "");
+            if (items.length === 0) return;
+            
+            // Tạo container khối hộp màu cam nhạt dập chìm nhẹ của Pen
+            let blockWrapper = document.createElement('div');
+            blockWrapper.style.background = "#fffaf0";
+            blockWrapper.style.padding = "16px 20px";
+            blockWrapper.style.borderRadius = "var(--radius-md)";
+            blockWrapper.style.borderLeft = "4px solid #dd6b20";
+            blockWrapper.style.marginBottom = "14px";
+            blockWrapper.style.boxShadow = "var(--neu-concave)"; // Đồng bộ dập chìm nhẹ nịnh mắt
+            
+            let blockHtml = "";
+            
+            items.forEach((text, idx) => {
+                // Xử lý chuyển đổi linh hoạt thẻ <u> sang <b> nếu có để đảm bảo in đậm đồng bộ
+                let cleanText = text.replace(/<u>/g, '<b>').replace(/<\/u>/g, '</b>');
+                
+                if (idx === 0) {
+                    // Ý đầu tiên: Biến thành Badge phụ màu cam đậm, bo góc, có icon kim cương như thiết kế của Pen
+                    blockHtml += `
+                        <div style="display: inline-flex; align-items: center; gap: 6px; background: #feebc8; color: #c05621; padding: 4px 12px; border-radius: 8px; font-size: 13px; font-weight: 800; margin-bottom: 10px;">
+                            🔶 ${cleanText}
+                        </div>
+                    `;
+                } else if (cleanText.startsWith('>')) {
+                    // Nếu dòng bắt đầu bằng dấu '>' : Biến thành danh sách ví dụ nhỏ thụt lề, dùng dấu square nhỏ nhắn
+                    let listText = cleanText.substring(1).trim();
+                    blockHtml += `
+                        <div style="padding-left: 20px; font-size: 13px; color: #2d3748; font-weight: 600; line-height: 1.6; display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px;">
+                            <span style="font-size: 8px; color: #dd6b20; transform: translateY(-2px);">■</span>
+                            <span>${listText}</span>
+                        </div>
+                    `;
+                } else {
+                    // Dòng giải thích bằng lời ở giữa: Chữ font thường mềm mại
+                    blockHtml += `
+                        <div style="font-size: 13px; color: #2d3748; font-weight: 500; line-height: 1.5; margin-bottom: 10px; padding-left: 2px;">
+                            ${cleanText}
+                        </div>
+                    `;
+                }
+            });
+            
+            blockWrapper.innerHTML = blockHtml;
+            notesDiv.appendChild(blockWrapper);
+        });
+        
     } else {
         notesSection.style.display = "none";
     }
