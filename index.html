@@ -1131,18 +1131,24 @@
         });
     }
 
-    function switchTab(tabName) {
+function switchTab(tabName) {
         currentTab = tabName;
         document.querySelectorAll('.tab-click-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.tab-render-view').forEach(content => content.classList.remove('active'));
         
         document.getElementById('btn-' + tabName).classList.add('active');
         document.getElementById(tabName + '-tab').classList.add('active');
-        // Bật chế độ flex đổ dọc khi chọn trúng tab 2, các tab khác tự động ẩn ngầm theo CSS hệ thống
-        if (tabName === 'vocabTable') {
-            document.getElementById('vocabTable-tab').style.setProperty('display', 'flex', 'important');
-        } else {
-            document.getElementById('vocabTable-tab').style.removeProperty('display');
+        
+        // 🌟 GIẢI PHÁP ĐỘC QUYỀN: Kiểm soát chặt chẽ thuộc tính display của Tab 2
+        const vocabTableTab = document.getElementById('vocabTable-tab');
+        if (vocabTableTab) {
+            if (tabName === 'vocabTable') {
+                // Chỉ khi đứng đúng Tab 2 mới kích hoạt flex hiển thị bộ lọc ngay ngắn
+                vocabTableTab.style.setProperty('display', 'flex', 'important');
+            } else {
+                // Khi học sinh chuyển sang bất kỳ tab nào khác, xóa bỏ hoàn toàn để trả lại quyền ẩn ngầm cho hệ thống
+                vocabTableTab.style.display = 'none';
+            }
         }
         
         document.getElementById('ctrl-prev-btn').style.visibility = (tabName === 'flashcard' || tabName === 'typing') ? 'visible' : 'hidden';
@@ -1159,7 +1165,7 @@
         else if (tabName === 'guess') generateGuessQuestion();
         else if (tabName === 'visual') generateVisualQuestion();
 
-        // 🌟 Đồng bộ chỉ số đếm từ đã học thời gian thực khi chuyển Tab
+        // Đồng bộ chỉ số đếm từ đã học thời gian thực khi chuyển Tab
         updateDashboardStats();
     }
 
