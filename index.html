@@ -1139,6 +1139,7 @@
         document.getElementById('btn-' + tabName).classList.add('active');
         document.getElementById(tabName + '-tab').classList.add('active');
         
+        // Điều khiển bật/tắt hiển thị flex cho Tab 2 để không bị lỗi đè tab
         const vocabTableTab = document.getElementById('vocabTable-tab');
         if (vocabTableTab) {
             if (tabName === 'vocabTable') {
@@ -1425,6 +1426,7 @@
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
+    // 🌟 KHÔI PHỤC HÀM TRỘN MẢNG
     function shuffleArray(array) {
         let currentIndex = array.length, randomIndex;
         while (currentIndex != 0) {
@@ -1433,6 +1435,17 @@
             [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
         }
         return array;
+    }
+
+    // 🌟 KHÔI PHỤC HÀM XÓA PHẢN HỒI FEEDBACK BỊ THIẾU
+    function clearFeedback() {
+        const fb = document.getElementById('global-feedback');
+        if (fb) { fb.innerText = ""; fb.className = "feedback"; }
+    }
+
+    function setFeedback(text, type) {
+        const fb = document.getElementById('global-feedback');
+        if (fb) { fb.innerText = text; fb.className = `feedback ${type}`; }
     }
 
     // --- PHÂN HỆ XỬ LÝ BẢNG TỪ VỰNG TRA CỨU NHANH (VOCAB INDEX) ---
@@ -1590,6 +1603,7 @@
         }
     }
 
+    // 🌟 KHÔI PHỤC HÀM XỬ LÝ ĐÓNG SKELETON KHI IFRAME LOAD XONG BỊ THIẾU
     function handleIframeLoaded() {
         const skeleton = document.getElementById('iframe-skeleton');
         if(skeleton) {
@@ -1847,6 +1861,44 @@
             compSection.style.display = "none";
         }
     }
+
+    // --- HÀM TỰ ĐỘNG CHẠY KHI TRANG LOAD ---
+    window.onload = async function() {
+        const savedUser = localStorage.getItem('saved_user_QuyenClass'); 
+        const savedPass = localStorage.getItem('saved_pass_QuyenClass');
+        const sessionUser = localStorage.getItem('studentSession_QuyenClass');
+        
+        if (sessionUser && savedUser && savedPass) {
+            document.getElementById('login-panel-screen').style.display = 'none'; 
+            document.getElementById('main-app-layout').style.display = 'grid';
+            
+            const loadingArea = document.getElementById('loading-area');
+            if(loadingArea) {
+                loadingArea.style.display = 'block';
+                document.getElementById('loading-text').innerText = "Đang đồng bộ dữ liệu lớp học...";
+            }
+            
+            try {
+                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
+                let data = await res.json();
+                if(data.success) { 
+                    await parseAndInitApp(data.allowedUnits); 
+                } else { 
+                    executeStudentLogout(); 
+                }
+            } catch(e) { 
+                let oldHistory = localStorage.getItem('historyUnits_QuyenClass');
+                if(oldHistory) {
+                    await parseAndInitApp(oldHistory.replace(/[\[\]\"]/g, ''));
+                } else {
+                    executeStudentLogout(); 
+                }
+            }
+        } else { 
+            document.getElementById('login-panel-screen').style.display = 'flex'; 
+            document.getElementById('main-app-layout').style.display = 'none'; 
+        }
+    };
 
     // ==================== PHÂN HỆ LOGIC DASHBOARD THỐNG KÊ (SIDEBAR PHẢI) ====================
     let activeTimerInterval = null;
