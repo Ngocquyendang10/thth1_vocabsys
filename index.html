@@ -1131,7 +1131,7 @@
         });
     }
 
-function switchTab(tabName) {
+    function switchTab(tabName) {
         currentTab = tabName;
         document.querySelectorAll('.tab-click-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.tab-render-view').forEach(content => content.classList.remove('active'));
@@ -1139,7 +1139,6 @@ function switchTab(tabName) {
         document.getElementById('btn-' + tabName).classList.add('active');
         document.getElementById(tabName + '-tab').classList.add('active');
         
-        // 🌟 KHÓA CHẾ ĐỘ HIỂN THỊ FLEX: Đảm bảo Tab 2 biến mất hoàn toàn khi sang Tab khác
         const vocabTableTab = document.getElementById('vocabTable-tab');
         if (vocabTableTab) {
             if (tabName === 'vocabTable') {
@@ -1163,7 +1162,6 @@ function switchTab(tabName) {
         else if (tabName === 'guess') generateGuessQuestion();
         else if (tabName === 'visual') generateVisualQuestion();
 
-        // Cập nhật chỉ số Dashboard khi chuyển tab
         updateDashboardStats();
     }
 
@@ -1850,44 +1848,6 @@ function switchTab(tabName) {
         }
     }
 
-    // --- HÀM TỰ ĐỘNG CHẠY KHI TRANG LOAD ---
-    window.onload = async function() {
-        const savedUser = localStorage.getItem('saved_user_QuyenClass'); 
-        const savedPass = localStorage.getItem('saved_pass_QuyenClass');
-        const sessionUser = localStorage.getItem('studentSession_QuyenClass');
-        
-        if (sessionUser && savedUser && savedPass) {
-            document.getElementById('login-panel-screen').style.display = 'none'; 
-            document.getElementById('main-app-layout').style.display = 'grid';
-            
-            const loadingArea = document.getElementById('loading-area');
-            if(loadingArea) {
-                loadingArea.style.display = 'block';
-                document.getElementById('loading-text').innerText = "Đang đồng bộ dữ liệu lớp học...";
-            }
-            
-            try {
-                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
-                let data = await res.json();
-                if(data.success) { 
-                    await parseAndInitApp(data.allowedUnits); 
-                } else { 
-                    executeStudentLogout(); 
-                }
-            } catch(e) { 
-                let oldHistory = localStorage.getItem('historyUnits_QuyenClass');
-                if(oldHistory) {
-                    await parseAndInitApp(oldHistory.replace(/[\[\]\"]/g, ''));
-                } else {
-                    executeStudentLogout(); 
-                }
-            }
-        } else { 
-            document.getElementById('login-panel-screen').style.display = 'flex'; 
-            document.getElementById('main-app-layout').style.display = 'none'; 
-        }
-    };
-
     // ==================== PHÂN HỆ LOGIC DASHBOARD THỐNG KÊ (SIDEBAR PHẢI) ====================
     let activeTimerInterval = null;
     let currentUnitActiveSeconds = 0;
@@ -2004,7 +1964,7 @@ function switchTab(tabName) {
         let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
         
         let totalMinutes = parseInt(localStorage.getItem(`total_mins_${studentKey}`)) || 0;
-        if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} minutes`;
+        if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} phút`;
 
         let todaySeconds = 0;
         currentUnitActiveSeconds = 0;
