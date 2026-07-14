@@ -446,55 +446,62 @@
                 <!-- 1. BÀI GIẢNG -->
                 <div id="lecture-tab" class="tab-render-view active">
                     
-                    <!-- 🌟 KHU VỰC NÚT BẤM & KHỐI NỘI DUNG SỔ XUỐNG THÔNG MINH -->
+                    <!-- 🌟 KHU VỰC NÚT BẤM & KHỐI NỘI DUNG SỔ XUỐNG THÔNG MINH (Giữ nguyên của Pen) -->
                     <div id="lecture-guide-wrapper" style="display: none; margin-bottom: 14px; width: 100%;">
-                        
                         <!-- Chiếc nút dập nổi bấm để Đóng/Mở -->
                         <button onclick="toggleLectureGuide()" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 12px 18px; background: #ffffff; border: 1px solid rgba(255,255,255,0.8); border-radius: var(--radius-md); box-shadow: var(--neu-convex); cursor: pointer; outline: none; transition: all 0.2s ease;" onmouseover="this.style.color='#614CFF'" onmouseout="this.style.color='var(--text-color)'">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <span style="font-size: 14px;">💡</span>
                                 <span style="font-size: 13px; font-weight: 800; font-family: inherit;">Lưu ý khi xem bài giảng</span>
                             </div>
-                            <!-- Icon mũi tên trạng thái -->
                             <span id="guide-arrow" style="font-size: 11px; color: var(--sub-text); transition: transform 0.3s ease;">▼</span>
                         </button>
 
-                        <!-- Khung nội dung danh sách hướng dẫn (Ban đầu ẩn ngầm) -->
+                        <!-- Khung nội dung danh sách hướng dẫn -->
                         <div id="lecture-guide-content" style="display: none; flex-direction: column; gap: 8px; margin-top: 10px; padding: 14px 18px; background: #ffffff; border-radius: var(--radius-md); box-shadow: var(--neu-concave); border: 1px solid rgba(255,255,255,0.5); text-align: left; animation: slideDownGuide 0.25s ease-out;">
-                            
-                            <!-- Dòng 1: Hướng dẫn Canva -->
                             <div style="display: flex; align-items: baseline; gap: 8px;">
                                 <span style="color: #614CFF; font-size: 10px;">🔸</span>
                                 <span style="font-size: 13px; color: var(--sub-text); font-weight: 500; line-height: 1.5;">
                                     Đối với dạng slide (Canva), bạn có thể tương tác các nút <b style="color: #614CFF; font-weight: 700;">tới/lui</b> trong khung hình và mở chế độ <b style="color: #614CFF; font-weight: 700;">"Toàn màn hình"</b>.
                                 </span>
                             </div>
-                            
-                            <!-- Dòng 2: Hướng dẫn Figma -->
                             <div style="display: flex; align-items: baseline; gap: 8px;">
                                 <span style="color: #614CFF; font-size: 10px;">🔸</span>
                                 <span style="font-size: 13px; color: var(--sub-text); font-weight: 500; line-height: 1.5;">
                                     Đối với dạng hình tương tác, bạn có thể <b style="color: #614CFF; font-weight: 700;">di chuyển tới/lui</b> giữa các hình, <b style="color: #614CFF; font-weight: 700;">tắt/mở các nút hình vuông</b> trong hình để ôn tập và mở <b style="color: #614CFF; font-weight: 700;">toàn màn hình</b>.
                                 </span>
                             </div>
-
                         </div>
                     </div>
 
-                    <div class="embed-wrapper">
-                        <div class="no-embed-msg" id="lecture-empty-msg">Không có slide bài giảng cho Unit này.</div>
-                        <iframe id="lecture-iframe" class="lecture-iframe-box" src="" allowfullscreen></iframe>
+                    <!-- 🌟 KHU VỰC EMBED CẢI TIẾN: BỔ SUNG SKELETON ĐÈ LÊN IFRAME -->
+                    <div class="embed-wrapper" style="position: relative; width: 100%; height: 500px; background: var(--bg-color); border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden;">
+                        
+                        <!-- Khung xương Loading xám chuyển động mượt mà giả lập Canvas/Figma -->
+                        <div id="iframe-skeleton" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e2e8f0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 5; transition: opacity 0.3s ease;">
+                            <div style="border: 4px solid rgba(97, 76, 255, 0.1); border-left-color: #614CFF; width: 36px; height: 36px; border-radius: 50%; animation: spinSkeleton 1s linear infinite;"></div>
+                            <p style="font-size: 13px; color: var(--sub-text); font-weight: 600;">Đang tải tương tác Canva & Figma... 🚀</p>
+                        </div>
+
+                        <div class="no-embed-msg" id="lecture-empty-msg" style="display: none;">Không có slide bài giảng cho Unit này.</div>
+                        
+                        <!-- Iframe thêm sự kiện onload để tự báo hiệu cho JavaScript ẩn bộ khung xương -->
+                        <iframe id="lecture-iframe" class="lecture-iframe-box" src="" allowfullscreen style="width: 100%; height: 100%; border: none;" onload="handleIframeLoaded()"></iframe>
                     </div>
                 </div>
 
-                <!-- Thêm hiệu ứng hiệu năng trượt xuống mượt mà ngầm trong CSS -->
+                <!-- CSS Hiệu ứng chuyển động mượt mà ngầm -->
                 <style>
                     @keyframes slideDownGuide {
                         from { opacity: 0; transform: translateY(-6px); }
                         to { opacity: 1; transform: translateY(0); }
                     }
+                    @keyframes spinSkeleton {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
                 </style>
-
+                
                 <!-- 2. BÀI HỌC: BẢNG TRA CỨU TỪ VỰNG NHANH -->
 <div id="vocabTable-tab" class="tab-render-view">
     
@@ -894,6 +901,8 @@
         document.getElementById('loading-area').style.display = 'none';
     }
 
+    
+
     function renderUnitGrid(newUnitsArray) {
         const container = document.getElementById('unit-buttons-container');
         container.innerHTML = "";
@@ -930,20 +939,19 @@
         selectUnitLocal(unitNum);
     }
 
-async function selectUnitLocal(unitNum) {
+// Hàm chính xử lý chọn Unit nhanh
+    async function selectUnitLocal(unitNum) {
         currentUnit = unitNum;
         renderUnitGrid([]); 
         
-        // Nếu đã có dữ liệu trong cache rồi, bung lụa ra liền
+        // Nếu đã có trong cache (do đã tải trước ngầm), bung lụa ra ngay lập tức (0.1s!)
         if(allVocabCache[unitNum]) {
             vocabData = allVocabCache[unitNum];
             initTabIndices();
             activateMainUI();
         } else {
-            // Nếu chưa có, bật hiệu ứng xoay xoay loading lên
-            const isGrammarMode = document.getElementById('mode-grammar-section').style.display === 'block';
+            // Trường hợp hy hữu chưa kịp tải ngầm xong (ví dụ học sinh bấm quá nhanh lúc vừa vào web)
             document.getElementById('loading-area').style.display = 'block';
-            
             try {
                 let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unitNum}&pass=PRE_AUTHED`);
                 let data = await res.json();
@@ -957,6 +965,29 @@ async function selectUnitLocal(unitNum) {
             } catch(e) { alert("Không thể kết nối dữ liệu!"); }
             document.getElementById('loading-area').style.display = 'none';
         }
+    }
+
+    // 🌟 SIÊU PHẨM: Hàm chạy ngầm âm thầm tải sẵn toàn bộ 15 Units không gây lag máy
+    async function prefetchAllUnitsInBackground() {
+        console.log("⚡ Bắt đầu tải trước dữ liệu các Unit ngầm...");
+        // Duyệt qua toàn bộ 15 Unit để tải trước
+        for (let u = 1; u <= 15; u++) {
+            if (allVocabCache[u]) continue; // Đã có trong cache thì bỏ qua
+            
+            try {
+                // Tải ngầm cực nhẹ, hoàn toàn không hiển thị màn hình Loading làm phiền học sinh
+                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${u}&pass=PRE_AUTHED`);
+                let data = await res.json();
+                if (data.success) {
+                    allVocabCache[u] = data.vocab;
+                    allVocabCache[u + "_grammar"] = data.grammar;
+                    console.log(`✅ Đã tải ngầm sẵn Unit ${u}`);
+                }
+            } catch (e) {
+                console.log(`❌ Lỗi tải ngầm Unit ${u}, hệ thống sẽ tải lại khi click.`);
+            }
+        }
+        console.log("🎉 Hoàn tất tải ngầm toàn bộ giáo trình!");
     }
 
 function activateMainUI() {
@@ -1347,6 +1378,9 @@ function activateMainUI() {
             document.getElementById('main-app-layout').style.display = 'none'; 
         }
     };
+
+    prefetchAllUnitsInBackground(); 
+});
 
     // --- PHÂN HỆ XỬ LÝ NGỮ PHÁP HAI CỘT ---
     let grammarDataCache = []; 
@@ -1744,6 +1778,48 @@ function renderVocabTableIndex() {
         body.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--sub-text);">Không tìm thấy từ vựng nào phù hợp với bộ lọc hiện tại. 🔍</td></tr>`;
     }
 }
+    // Hàm chạy khi học sinh đổi bài giảng
+    function renderLectureTab() {
+        clearFeedback();
+        let config = unitsConfig.find(c => c.unit == currentUnit);
+        const iframe = document.getElementById('lecture-iframe');
+        const emptyMsg = document.getElementById('lecture-empty-msg');
+        const guideWrapper = document.getElementById('lecture-guide-wrapper');
+        const skeleton = document.getElementById('iframe-skeleton');
+        
+        document.getElementById('global-counter').innerText = "1 / 1";
+        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
+        document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
+
+        if(config && config.lectureLink) { 
+            // 🌟 Hiện khung xương loading giả lập lên trước để tạo cảm giác mượt mà
+            if(skeleton) {
+                skeleton.style.opacity = "1";
+                skeleton.style.display = "flex";
+            }
+            iframe.src = config.lectureLink; 
+            iframe.style.display = "block"; 
+            emptyMsg.style.display = "none"; 
+            if(guideWrapper) guideWrapper.style.display = "block"; 
+        } else { 
+            iframe.src = ""; 
+            iframe.style.display = "none"; 
+            emptyMsg.style.display = "block"; 
+            if(guideWrapper) guideWrapper.style.display = "none"; 
+            if(skeleton) skeleton.style.display = "none"; // Ẩn loading nếu không có slide
+        }
+    }
+
+    // 🌟 Khi Figma/Canva thực sự tải xong và sẵn sàng tương tác, ẩn mượt mà khung xương đi
+    function handleIframeLoaded() {
+        const skeleton = document.getElementById('iframe-skeleton');
+        if(skeleton) {
+            skeleton.style.opacity = "0";
+            setTimeout(() => {
+                skeleton.style.display = "none";
+            }, 300); // Trễ 0.3s để hiệu ứng mờ dần đẹp mắt
+        }
+    }
 </script>
 </body>
 </html>
