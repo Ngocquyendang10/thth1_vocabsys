@@ -1018,7 +1018,6 @@
                     await selectUnitLocal(allowedUnitsList[0]);
                 }
                 
-                // 🌟 GỌI TẢI TRƯỚC NGẦM TẠI ĐÂY: Sau khi dữ liệu Unit đầu tiên đã lên kệ mượt mà
                 prefetchAllUnitsInBackground();
             }
         } catch(e) {}
@@ -1061,7 +1060,6 @@
         selectUnitLocal(unitNum);
     }
 
-    // Hàm chính xử lý chọn Unit nhanh
     async function selectUnitLocal(unitNum) {
         currentUnit = unitNum;
         renderUnitGrid([]); 
@@ -1087,7 +1085,6 @@
         }
     }
 
-    // 🌟 SIÊU PHẨM: Hàm chạy ngầm âm thầm tải sẵn toàn bộ 15 Units không gây lag máy
     async function prefetchAllUnitsInBackground() {
         console.log("⚡ Bắt đầu tải trước dữ liệu các Unit ngầm...");
         for (let u = 1; u <= 15; u++) {
@@ -1121,7 +1118,6 @@
         } else {
             switchTab('lecture');
         }
-        // 🌟 KÍCH HOẠT BỘ MÁY DASHBOARD THỐNG KÊ TẠI ĐÂY NHA PEN
         initDashboardSystem();
     }
 
@@ -1157,8 +1153,12 @@
         else if (tabName === 'listen') generateListenQuestion();
         else if (tabName === 'guess') generateGuessQuestion();
         else if (tabName === 'visual') generateVisualQuestion();
+
+        // 🌟 Đồng bộ chỉ số đếm từ đã học thời gian thực khi chuyển Tab
+        updateDashboardStats();
     }
 
+    // 🌟 ĐÃ SỬA: Dọn dẹp dấu ngoặc đóng thừa và lồng ghép lệnh cập nhật Dashboard real-time
     function recordWrongWord() {
         let idx = tabState[currentTab].indices[tabState[currentTab].current];
         let word = vocabData[idx];
@@ -1168,7 +1168,6 @@
             localStorage.setItem('wrongWords_QuyenClass', JSON.stringify(wrongWordsList));
         }
         updateDashboardStats();
-}
     }
 
     function renderReviewTable() {
@@ -1202,8 +1201,6 @@
                 wrongWordsList.splice(index, 1);
                 localStorage.setItem('wrongWords_QuyenClass', JSON.stringify(wrongWordsList));
                 renderReviewTable();
-                
-                // 🌟 KÍCH HOẠT ĐỒNG BỘ REALTIME TẠI ĐÂY (Sau khi bốc từ ra khỏi mảng):
                 updateDashboardStats();
             }, 1000);
         } else { 
@@ -1486,9 +1483,7 @@
         localStorage.setItem(`starred_${studentKey}_QuyenClass`, JSON.stringify(starList));
         
         if (tabState.vocabTable.filterStarred) renderVocabTableIndex();
-
-        // 🌟 KÍCH HOẠT ĐỒNG BỘ REALTIME TẠI ĐÂY:
-    updateDashboardStats();
+        updateDashboardStats();
     }
 
     function saveVocabNote(koWord, noteText) {
@@ -1898,191 +1893,173 @@
             document.getElementById('main-app-layout').style.display = 'none'; 
         }
     };
+
     // ==================== PHÂN HỆ LOGIC DASHBOARD THỐNG KÊ (SIDEBAR PHẢI) ====================
+    let activeTimerInterval = null;
+    let currentUnitActiveSeconds = 0;
 
-let activeTimerInterval = null;
-let currentUnitActiveSeconds = 0;
+    function initDashboardSystem() {
+        renderDashboardUnitGrid();
+        updateDashboardStats();
+        refreshDashRandomVocab();
+        startDashboardTrackers();
+    }
 
-// Hàm khởi tạo toàn diện Dashboard khi đăng nhập thành công
-function initDashboardSystem() {
-    renderDashboardUnitGrid();
-    updateDashboardStats();
-    refreshDashRandomVocab();
-    startDashboardTrackers();
-}
+    function renderDashboardUnitGrid() {
+        const grid = document.getElementById('dash-unit-progress-grid');
+        if(!grid) return;
+        grid.innerHTML = "";
 
-// 1. Vẽ lưới hạt vuông 15 Unit bo góc Neumorphism gọn gàng cho Sidebar
-function renderDashboardUnitGrid() {
-    const grid = document.getElementById('dash-unit-progress-grid');
-    if(!grid) return;
-    grid.innerHTML = "";
+        let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
+        let completedUnits = JSON.parse(localStorage.getItem(`completed_units_${studentKey}`)) || [];
 
-    let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
-    let completedUnits = JSON.parse(localStorage.getItem(`completed_units_${studentKey}`)) || [];
+        for (let i = 1; i <= 15; i++) {
+            const item = document.createElement('div');
+            let isDone = completedUnits.includes(i);
+            let isCurrent = (currentUnit == i);
 
-    for (let i = 1; i <= 15; i++) {
-        const item = document.createElement('div');
-        let isDone = completedUnits.includes(i);
-        let isCurrent = (currentUnit == i);
+            item.style.padding = "8px 4px";
+            item.style.textAlign = "center";
+            item.style.fontSize = "11px";
+            item.style.fontWeight = "800";
+            item.style.borderRadius = "8px";
+            item.style.transition = "all 0.2s ease";
 
-        // Định dạng style hạt vuông Neumorphism chuẩn gu Pen
-        item.style.padding = "8px 4px";
-        item.style.textAlign = "center";
-        item.style.fontSize = "11px";
-        item.style.fontWeight = "800";
-        item.style.borderRadius = "8px";
-        item.style.transition = "all 0.2s ease";
+            if (isDone) {
+                item.style.background = "#e6fffa";
+                item.style.color = "#319795";
+                item.style.boxShadow = "var(--neu-concave)";
+                item.innerHTML = `U${i} ✓`;
+            } else if (isCurrent) {
+                item.style.background = "#ffffff";
+                item.style.color = "#614CFF";
+                item.style.border = "2px solid #614CFF";
+                item.style.boxShadow = "var(--neu-convex)";
+                item.innerHTML = `U${i} ⏳`;
+            } else {
+                item.style.background = "var(--bg-color)";
+                item.style.color = "var(--sub-text)";
+                item.style.boxShadow = "var(--neu-concave)";
+                item.innerHTML = `U${i}`;
+            }
+            grid.appendChild(item);
+        }
+    }
 
-        if (isDone) {
-            item.style.background = "#e6fffa";
-            item.style.color = "#319795";
-            item.style.boxShadow = "var(--neu-concave)";
-            item.innerHTML = `U${i} ✓`;
-        } else if (isCurrent) {
-            item.style.background = "#ffffff";
-            item.style.color = "#614CFF";
-            item.style.border = "2px solid #614CFF";
-            item.style.boxShadow = "var(--neu-convex)";
-            item.innerHTML = `U${i} ⏳`;
-        } else {
+    function updateDashboardStats() {
+        let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
+        
+        let starList = JSON.parse(localStorage.getItem(`starred_${studentKey}_QuyenClass`)) || [];
+        let wrongList = wrongWordsList || [];
+
+        let countStarred = starList.length;
+        let countWrong = wrongList.length;
+        let totalUnlearned = countStarred + countWrong;
+
+        if(document.getElementById('dash-total-unlearned')) document.getElementById('dash-total-unlearned').innerText = totalUnlearned;
+        if(document.getElementById('dash-count-wrong')) document.getElementById('dash-count-wrong').innerText = countWrong;
+        if(document.getElementById('dash-count-starred')) document.getElementById('dash-count-starred').innerText = countStarred;
+
+        let tabNamesMap = { lecture: "Bài giảng", vocabTable: "Bảng từ vựng", flashcard: "Flashcard", quiz: "Trắc nghiệm", typing: "Viết từ", listen: "Nghe & chọn từ", guess: "Nghe & tìm nghĩa", visual: "Nhìn hình chọn từ" };
+        if(document.getElementById('dash-current-status') && currentUnit) {
+            document.getElementById('dash-current-status').innerText = `Unit ${currentUnit} • ${tabNamesMap[currentTab] || currentTab}`;
+        }
+
+        if(document.getElementById('dash-vocab-progress-text') && vocabData.length > 0) {
+            let currentTabState = tabState[currentTab];
+            let reviewedCount = (currentTabState && currentTabState.current) ? currentTabState.current + 1 : 1;
+            if(currentTab === 'vocabTable' || currentTab === 'lecture') reviewedCount = vocabData.length;
+            
+            document.getElementById('dash-vocab-progress-text').innerText = `${reviewedCount} / ${vocabData.length}`;
+            let percent = (reviewedCount / vocabData.length) * 100;
+            document.getElementById('dash-vocab-progress-bar').style.width = `${percent}%`;
+        }
+    }
+
+    function refreshDashRandomVocab() {
+        const container = document.getElementById('dash-random-vocab-box');
+        if(!container || !vocabData || vocabData.length === 0) return;
+        container.innerHTML = "";
+
+        let shuffled = shuffleArray([...vocabData]);
+        let pick3 = shuffled.slice(0, 3);
+
+        pick3.forEach(word => {
+            const item = document.createElement('div');
+            item.style.padding = "10px";
             item.style.background = "var(--bg-color)";
-            item.style.color = "var(--sub-text)";
+            item.style.borderRadius = "10px";
             item.style.boxShadow = "var(--neu-concave)";
-            item.innerHTML = `U${i}`;
-        }
-        grid.appendChild(item);
-    }
-}
-
-// 2. Cập nhật các chỉ số thời gian, mảng từ chưa thuộc và thanh tiến trình lượng từ vựng
-function updateDashboardStats() {
-    let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
-    
-    // Đếm số từ sao trong LocalStorage
-    let starList = JSON.parse(localStorage.getItem(`starred_${studentKey}_QuyenClass`)) || [];
-    // Đếm số từ lỗi trong sổ tay
-    let wrongList = wrongWordsList || [];
-
-    let countStarred = starList.length;
-    let countWrong = wrongList.length;
-    let totalUnlearned = countStarred + countWrong;
-
-    if(document.getElementById('dash-total-unlearned')) document.getElementById('dash-total-unlearned').innerText = totalUnlearned;
-    if(document.getElementById('dash-count-wrong')) document.getElementById('dash-count-wrong').innerText = countWrong;
-    if(document.getElementById('dash-count-starred')) document.getElementById('dash-count-starred').innerText = countStarred;
-
-    // Cập nhật trạng thái bài học hiển thị text
-    let tabNamesMap = { lecture: "Bài giảng", vocabTable: "Bảng từ vựng", flashcard: "Flashcard", quiz: "Trắc nghiệm", typing: "Viết từ", listen: "Nghe & chọn từ", guess: "Nghe & tìm nghĩa", visual: "Nhìn hình chọn từ" };
-    if(document.getElementById('dash-current-status') && currentUnit) {
-        document.getElementById('dash-current-status').innerText = `Unit ${currentUnit} • ${tabNamesMap[currentTab] || currentTab}`;
+            item.style.cursor = "pointer";
+            item.style.display = "flex";
+            item.style.justifyContent = "between";
+            item.style.alignItems = "center";
+            
+            item.innerHTML = `
+                <span style="font-weight:800; font-size:13px; color:#1a202c;">${word.ko}</span>
+                <span class="dash-rand-vi-hide" style="font-size:11px; color:var(--sub-text); font-weight:600; margin-left:auto; filter:blur(4px); transition:filter 0.2s;" onclick="this.style.filter='none'; event.stopPropagation();">chạm để xem nghĩa</span>
+            `;
+            item.onclick = () => { item.querySelector('.dash-rand-vi-hide').innerText = word.vi; item.querySelector('.dash-rand-vi-hide').style.filter = 'none'; };
+            container.appendChild(item);
+        });
     }
 
-    // Tính toán lượng từ đã duyệt qua trên tổng số từ vựng
-    if(document.getElementById('dash-vocab-progress-text') && vocabData.length > 0) {
-        let currentTabState = tabState[currentTab];
-        let reviewedCount = (currentTabState && currentTabState.current) ? currentTabState.current + 1 : 1;
-        if(currentTab === 'vocabTable' || currentTab === 'lecture') reviewedCount = vocabData.length; // Thừa hưởng toàn bộ nếu quét bảng nhanh
+    function startDashboardTrackers() {
+        if(activeTimerInterval) clearInterval(activeTimerInterval);
         
-        document.getElementById('dash-vocab-progress-text').innerText = `${reviewedCount} / ${vocabData.length}`;
-        let percent = (reviewedCount / vocabData.length) * 100;
-        document.getElementById('dash-vocab-progress-bar').style.width = `${percent}%`;
-    }
-}
-
-// 3. Đổ dữ liệu 3 từ vựng ngẫu nhiên hôm nay bốc từ mảng gốc
-function refreshDashRandomVocab() {
-    const container = document.getElementById('dash-random-vocab-box');
-    if(!container || !vocabData || vocabData.length === 0) return;
-    container.innerHTML = "";
-
-    let shuffled = shuffleArray([...vocabData]);
-    let pick3 = shuffled.slice(0, 3);
-
-    pick3.forEach(word => {
-        const item = document.createElement('div');
-        item.style.padding = "10px";
-        item.style.background = "var(--bg-color)";
-        item.style.borderRadius = "10px";
-        item.style.boxShadow = "var(--neu-concave)";
-        item.style.cursor = "pointer";
-        item.style.display = "flex";
-        item.style.justifyContent = "between";
-        item.style.alignItems = "center";
+        let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
         
-        item.innerHTML = `
-            <span style="font-weight:800; font-size:13px; color:#1a202c;">${word.ko}</span>
-            <span class="dash-rand-vi-hide" style="font-size:11px; color:var(--sub-text); font-weight:600; margin-left:auto; filter:blur(4px); transition:filter 0.2s;" onclick="this.style.filter='none'; event.stopPropagation();">chạm để xem nghĩa</span>
-        `;
-        // Gắn sự kiện click bọc ngoài tự động hiện nghĩa luôn cho tiện
-        item.onclick = () => { item.querySelector('.dash-rand-vi-hide').innerText = word.vi; item.querySelector('.dash-rand-vi-hide').style.filter = 'none'; };
-        container.appendChild(item);
-    });
-}
+        let totalMinutes = parseInt(localStorage.getItem(`total_mins_${studentKey}`)) || 0;
+        if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} phút`;
 
-// 4. Các bộ đếm giờ chạy ngầm thời gian học tập chống treo máy
-function startDashboardTrackers() {
-    if(activeTimerInterval) clearInterval(activeTimerInterval);
-    
-    let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
-    
-    // Nạp tổng số phút lưu trữ tích lũy cũ từ Local
-    let totalMinutes = parseInt(localStorage.getItem(`total_mins_${studentKey}`)) || 0;
-    if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} phút`;
+        let todaySeconds = 0;
+        currentUnitActiveSeconds = 0;
 
-    let todaySeconds = 0;
-    currentUnitActiveSeconds = 0;
+        let lastActiveTime = Date.now();
+        window.onmousemove = () => { lastActiveTime = Date.now(); };
+        window.onkeydown = () => { lastActiveTime = Date.now(); };
 
-    // Lắng nghe hành vi của học sinh để kiểm tra chống treo máy
-    let lastActiveTime = Date.now();
-    window.onmousemove = () => { lastActiveTime = Date.now(); };
-    window.onkeydown = () => { lastActiveTime = Date.now(); };
+        activeTimerInterval = setInterval(() => {
+            if (Date.now() - lastActiveTime > 180000) return;
 
-    activeTimerInterval = setInterval(() => {
-        // Nếu treo máy quá 3 phút (180 giây), ngưng không tính thời gian cống hiến
-        if (Date.now() - lastActiveTime > 180000) return;
+            todaySeconds++;
+            currentUnitActiveSeconds++;
 
-        todaySeconds++;
-        currentUnitActiveSeconds++;
-
-        // Render đồng hồ hôm nay định dạng MM:SS
-        let mins = Math.floor(todaySeconds / 60);
-        let secs = todaySeconds % 60;
-        if(document.getElementById('dash-today-time')) {
-            document.getElementById('dash-today-time').innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        }
-
-        // Cứ mỗi 1 phút trôi qua, cập nhật tổng tích lũy lên 1 phút
-        if (todaySeconds % 60 === 0) {
-            totalMinutes++;
-            localStorage.setItem(`total_mins_${studentKey}`, totalMinutes);
-            if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} phút`;
-        }
-
-        // Kiểm tra cơ chế tích lũy 15 phút của Unit hiện tại
-        if (currentUnit) {
-            const timerZone = document.getElementById('dash-timer-zone');
-            if (timerZone) {
-                timerZone.style.display = "block";
-                document.getElementById('dash-timer-unit').innerText = currentUnit;
-                
-                let uMins = Math.floor(currentUnitActiveSeconds / 60);
-                let uSecs = currentUnitActiveSeconds % 60;
-                document.getElementById('dash-timer-countdown').innerText = `${String(uMins).padStart(2, '0')}:${String(uSecs).padStart(2, '0')}`;
+            let mins = Math.floor(todaySeconds / 60);
+            let secs = todaySeconds % 60;
+            if(document.getElementById('dash-today-time')) {
+                document.getElementById('dash-today-time').innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
             }
 
-            // Đủ mốc 15 phút (900 giây) hoạt động thực tế ➔ Đánh dấu tích xanh hoàn thành
-            if (currentUnitActiveSeconds >= 900) {
-                let completedUnits = JSON.parse(localStorage.getItem(`completed_units_${studentKey}`)) || [];
-                if (!completedUnits.includes(currentUnit)) {
-                    completedUnits.push(currentUnit);
-                    localStorage.setItem(`completed_units_${studentKey}`, JSON.stringify(completedUnits));
-                    renderDashboardUnitGrid();
-                    showCustomBouncePopup("Thành Tựu Mới! 🎖️", `Bạn đã hoàn thành mốc 15 phút rèn luyện nghiêm túc và làm chủ hoàn toàn kiến thức của Unit ${currentUnit}!`);
+            if (todaySeconds % 60 === 0) {
+                totalMinutes++;
+                localStorage.setItem(`total_mins_${studentKey}`, totalMinutes);
+                if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} phút`;
+            }
+
+            if (currentUnit) {
+                const timerZone = document.getElementById('dash-timer-zone');
+                if (timerZone) {
+                    timerZone.style.display = "block";
+                    document.getElementById('dash-timer-unit').innerText = currentUnit;
+                    
+                    let uMins = Math.floor(currentUnitActiveSeconds / 60);
+                    let uSecs = currentUnitActiveSeconds % 60;
+                    document.getElementById('dash-timer-countdown').innerText = `${String(uMins).padStart(2, '0')}:${String(uSecs).padStart(2, '0')}`;
+                }
+
+                if (currentUnitActiveSeconds >= 900) {
+                    let completedUnits = JSON.parse(localStorage.getItem(`completed_units_${studentKey}`)) || [];
+                    if (!completedUnits.includes(currentUnit)) {
+                        completedUnits.push(currentUnit);
+                        localStorage.setItem(`completed_units_${studentKey}`, JSON.stringify(completedUnits));
+                        renderDashboardUnitGrid();
+                        showCustomBouncePopup("Thành Tựu Mới! 🎖️", `Bạn đã hoàn thành mốc 15 phút rèn luyện nghiêm túc và làm chủ hoàn toàn kiến thức of Unit ${currentUnit}!`);
+                    }
                 }
             }
-        }
-    }, 1000);
-}
+        }, 1000);
+    }
 </script>
 </body>
 </html>
