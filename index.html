@@ -56,9 +56,9 @@
             transition: all 0.3s ease;
         }
         .login-left-art { flex: 1.1; background: linear-gradient(135deg, #e0e8ff 0%, #f4f7fc 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
-        .art-3d-mockup { width: 170px; height: 170px; background: #ffffff; border-radius: 36px; box-shadow: var(--neu-convex); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; animation: floatArt 4s ease-in-out infinite; }
+        .art-3d-mockup { width: 170px; height: 170px; background: transparent; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; animation: floatArt 4s ease-in-out infinite; }
         @keyframes floatArt { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-        .art-3d-mockup svg { width: 74px; height: 74px; color: var(--point-color); }
+        .book-icon-img { width: 150px; height: auto; display: block; }
         .login-left-art h3 { font-size: 20px; font-weight: 800; color: #1a202c; margin-bottom: 6px; }
         .login-left-art p { font-size: 13px; color: var(--sub-text); text-align: center; max-width: 280px; }
         .login-right-form { flex: 0.9; padding: 40px 45px; display: flex; flex-direction: column; justify-content: center; }
@@ -237,8 +237,8 @@
         @media (max-width: 768px) {
             .login-page-container { flex-direction: column; margin: 16px; height: auto; min-height: unset; }
             .login-left-art { padding: 30px 20px; flex: none; }
-            .art-3d-mockup { width: 110px; height: 110px; border-radius: var(--radius-md); margin-bottom: 12px; }
-            .art-3d-mockup svg { width: 48px; height: 48px; }
+            .art-3d-mockup { width: 110px; height: 110px; margin-bottom: 12px; }
+            .book-icon-img { width: 95px; }
             .login-right-form { padding: 30px 24px; flex: none; }
             .login-right-form h2 { font-size: 20px; }
             .remember-row { margin-bottom: 16px; }
@@ -373,7 +373,7 @@
 <div class="login-page-container" id="login-panel-screen">
     <div class="login-left-art">
         <div class="art-3d-mockup">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5v-15z"></path></svg>
+            <img src="assets/book-icon.png" alt="Book icon" class="book-icon-img">
         </div>
         <h3>Welcome To Ngoc Quyen Classroom</h3>
         <p>Nền tảng ôn luyện từ vựng & ngữ pháp</p>
