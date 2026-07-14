@@ -1139,13 +1139,15 @@
         document.getElementById('btn-' + tabName).classList.add('active');
         document.getElementById(tabName + '-tab').classList.add('active');
         
-        // Điều khiển bật/tắt hiển thị flex cho Tab 2 để không bị lỗi đè tab
+        // 🌟 ĐIỀU CHỈNH HOÀN HẢO: Quản lý bật/tắt thuộc tính hiển thị flex của Tab 2
         const vocabTableTab = document.getElementById('vocabTable-tab');
         if (vocabTableTab) {
             if (tabName === 'vocabTable') {
+                // Chỉ kích hoạt flex khi học sinh nhấn chọn đúng Tab 2 Bảng từ vựng
                 vocabTableTab.style.setProperty('display', 'flex', 'important');
             } else {
-                vocabTableTab.style.display = 'none';
+                // Ép ẩn hoàn toàn khi học sinh chuyển sang các Tab game khác
+                vocabTableTab.style.setProperty('display', 'none', 'important');
             }
         }
         
@@ -1163,6 +1165,7 @@
         else if (tabName === 'guess') generateGuessQuestion();
         else if (tabName === 'visual') generateVisualQuestion();
 
+        // Cập nhật chỉ số thống kê Dashboard
         updateDashboardStats();
     }
 
