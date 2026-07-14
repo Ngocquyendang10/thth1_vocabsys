@@ -1139,7 +1139,7 @@ function switchTab(tabName) {
         document.getElementById('btn-' + tabName).classList.add('active');
         document.getElementById(tabName + '-tab').classList.add('active');
         
-        // Cố định hiển thị cho Tab 2 Bảng từ vựng khi kích hoạt
+        // 🌟 KHÓA CHẾ ĐỘ HIỂN THỊ FLEX: Đảm bảo Tab 2 biến mất hoàn toàn khi sang Tab khác
         const vocabTableTab = document.getElementById('vocabTable-tab');
         if (vocabTableTab) {
             if (tabName === 'vocabTable') {
@@ -1562,6 +1562,49 @@ function switchTab(tabName) {
         }
     }
 
+    function renderLectureTab() {
+        clearFeedback();
+        let config = unitsConfig.find(c => c.unit == currentUnit);
+        const iframe = document.getElementById('lecture-iframe');
+        const emptyMsg = document.getElementById('lecture-empty-msg');
+        const guideWrapper = document.getElementById('lecture-guide-wrapper');
+        const skeleton = document.getElementById('iframe-skeleton');
+        
+        document.getElementById('global-counter').innerText = "1 / 1";
+        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
+        document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
+
+        if(config && config.lectureLink) { 
+            if(skeleton) {
+                skeleton.style.opacity = "1";
+                skeleton.style.display = "flex";
+            }
+            iframe.src = config.lectureLink; 
+            iframe.style.display = "block"; 
+            emptyMsg.style.display = "none"; 
+            if(guideWrapper) guideWrapper.style.display = "block"; 
+        } else { 
+            iframe.src = ""; 
+            iframe.style.display = "none"; 
+            emptyMsg.style.display = "block"; 
+            if(guideWrapper) guideWrapper.style.display = "none"; 
+            if(skeleton) skeleton.style.display = "none"; 
+        }
+    }
+
+    function handleIframeLoaded() {
+        const skeleton = document.getElementById('iframe-skeleton');
+        if(skeleton) {
+            skeleton.style.opacity = "0";
+            setTimeout(() => {
+                skeleton.style.display = "none";
+            }, 300); 
+        }
+    }
+
+    // --- PHÂN HỆ XỬ LÝ NGỮ PHÁP HAI CỘT ---
+    let grammarDataCache = []; 
+
     function renderGrammarMode() {
         const sidebarContainer = document.getElementById('grammar-sidebar-container');
         const mainWrapper = document.getElementById('grammar-main-wrapper');
@@ -1807,6 +1850,44 @@ function switchTab(tabName) {
         }
     }
 
+    // --- HÀM TỰ ĐỘNG CHẠY KHI TRANG LOAD ---
+    window.onload = async function() {
+        const savedUser = localStorage.getItem('saved_user_QuyenClass'); 
+        const savedPass = localStorage.getItem('saved_pass_QuyenClass');
+        const sessionUser = localStorage.getItem('studentSession_QuyenClass');
+        
+        if (sessionUser && savedUser && savedPass) {
+            document.getElementById('login-panel-screen').style.display = 'none'; 
+            document.getElementById('main-app-layout').style.display = 'grid';
+            
+            const loadingArea = document.getElementById('loading-area');
+            if(loadingArea) {
+                loadingArea.style.display = 'block';
+                document.getElementById('loading-text').innerText = "Đang đồng bộ dữ liệu lớp học...";
+            }
+            
+            try {
+                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
+                let data = await res.json();
+                if(data.success) { 
+                    await parseAndInitApp(data.allowedUnits); 
+                } else { 
+                    executeStudentLogout(); 
+                }
+            } catch(e) { 
+                let oldHistory = localStorage.getItem('historyUnits_QuyenClass');
+                if(oldHistory) {
+                    await parseAndInitApp(oldHistory.replace(/[\[\]\"]/g, ''));
+                } else {
+                    executeStudentLogout(); 
+                }
+            }
+        } else { 
+            document.getElementById('login-panel-screen').style.display = 'flex'; 
+            document.getElementById('main-app-layout').style.display = 'none'; 
+        }
+    };
+
     // ==================== PHÂN HỆ LOGIC DASHBOARD THỐNG KÊ (SIDEBAR PHẢI) ====================
     let activeTimerInterval = null;
     let currentUnitActiveSeconds = 0;
@@ -1923,7 +2004,7 @@ function switchTab(tabName) {
         let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
         
         let totalMinutes = parseInt(localStorage.getItem(`total_mins_${studentKey}`)) || 0;
-        if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} phút`;
+        if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} minutes`;
 
         let todaySeconds = 0;
         currentUnitActiveSeconds = 0;
