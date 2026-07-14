@@ -1139,14 +1139,12 @@ function switchTab(tabName) {
         document.getElementById('btn-' + tabName).classList.add('active');
         document.getElementById(tabName + '-tab').classList.add('active');
         
-        // 🌟 GIẢI PHÁP ĐỘC QUYỀN: Kiểm soát chặt chẽ thuộc tính display của Tab 2
+        // 🌟 ÉP ĐỒNG BỘ HIỂN THỊ TRƯỚC: Để tránh bị dòng chặn return làm mất bộ khung div
         const vocabTableTab = document.getElementById('vocabTable-tab');
         if (vocabTableTab) {
             if (tabName === 'vocabTable') {
-                // Chỉ khi đứng đúng Tab 2 mới kích hoạt flex hiển thị bộ lọc ngay ngắn
                 vocabTableTab.style.setProperty('display', 'flex', 'important');
             } else {
-                // Khi học sinh chuyển sang bất kỳ tab nào khác, xóa bỏ hoàn toàn để trả lại quyền ẩn ngầm cho hệ thống
                 vocabTableTab.style.display = 'none';
             }
         }
@@ -1154,6 +1152,7 @@ function switchTab(tabName) {
         document.getElementById('ctrl-prev-btn').style.visibility = (tabName === 'flashcard' || tabName === 'typing') ? 'visible' : 'hidden';
         document.getElementById('ctrl-mix-btn').style.visibility = (tabName === 'lecture') ? 'hidden' : 'visible';
         
+        // Dòng chặn điều kiện kiểm tra dữ liệu rỗng (Đã dời xuống đây để an toàn)
         if (vocabData.length === 0 && tabName !== 'lecture') return;
 
         if (tabName === 'lecture') renderLectureTab();
