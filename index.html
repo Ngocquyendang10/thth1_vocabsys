@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ngoc Quyen's Classroom - Nền tảng ôn tập Từ vựng & Ngữ pháp</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://vocabTable" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -514,11 +514,11 @@
                     }
                 </style>
                 
-                <!-- 2. BÀI HỌC: BẢNG TRA CỨU TỪ VỰNG NHANH -->
-<div id="vocabTable-tab" class="tab-render-view">
+               <!-- 2. BÀI HỌC: BẢNG TRA CỨU TỪ VỰNG NHANH -->
+<div id="vocabTable-tab" class="tab-render-view" style="display: none; flex-direction: column; width: 100%;">
     
-    <!-- Thanh điều khiển Bộ lọc đã rút gọn chữ -->
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; padding: 12px 16px; background: #ffffff; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); width: 100%;">
+    <!-- Thanh điều khiển Bộ lọc (Giữ nguyên cấu trúc nhưng ép cứng không gian) -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; padding: 12px 16px; background: #ffffff; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); width: 100%; flex-shrink: 0;">
         <!-- Rút ngắn text các nút thành dạng Toggle gọn gàng -->
         <div style="display: flex; flex-wrap: wrap; gap: 8px;">
             <button id="tgl-ko-btn" class="audio-inline-btn" style="box-shadow: var(--neu-convex); width: auto; padding: 0 14px;" onclick="toggleVocabColumn('ko')">👁️ Hàn: Hiện</button>
@@ -536,8 +536,8 @@
         </div>
     </div>
 
-    <!-- Khung bảng dữ liệu (Giữ nguyên phần dưới của Pen) -->
-    <div class="review-table-container" style="margin-top: 0; padding: 14px; box-shadow: var(--neu-convex);">
+    <!-- Khung bảng dữ liệu (Bổ sung min-height để khóa chặt chân móng UI) -->
+    <div class="review-table-container" style="margin-top: 0; padding: 14px; box-shadow: var(--neu-convex); width: 100%; min-height: 380px; background: #ffffff;">
         <table class="review-table" style="width: 100%; table-layout: fixed;">
             <thead>
                 <tr>
@@ -726,31 +726,125 @@
 
     </main>
 
-    <!-- CỘT 3: WIDGET PHẢI SÁT BIÊN -->
-    <aside class="widget-right-profile">
-        <div class="profile-card-box">
-            <div class="avatar-circle-wrapper">
-                <div class="avatar-core" id="student-avatar-letter">H</div>
-            </div>
-            <h3 id="student-display-name">Học Viên NQ</h3>
-            <span>Tài khoản học viên</span>
+<!-- CỘT 3: WIDGET PHẢI - DASHBOARD THỐNG KÊ TOÀN DIỆN -->
+<aside class="widget-right-profile" style="overflow-y: auto; max-height: 100vh; padding-bottom: 20px;">
+    <!-- Profile Card (Giữ lại của Pen) -->
+    <div class="profile-card-box">
+        <div class="avatar-circle-wrapper">
+            <div class="avatar-core" id="student-avatar-letter">H</div>
         </div>
-        <div class="todo-list-widget">
-            <h4>Nhiệm vụ hôm nay</h4>
-            <div class="todo-item">
-                <div>
-                    <p>Xem lại bài giảng từ vựng</p>
-                    <span>Xem lại bài giảng ở tab đầu tiên và ôn tập ở những tab sau</span>
-                </div>
-            </div>
-            <div class="todo-item" style="border-left-color: var(--success-color);">
-                <div>
-                    <p>Xem lại ngữ pháp</p>
-                    <span>Điểm lại ngữ pháp của unit ở tab Ngữ pháp</span>
-                </div>
+        <h3 id="student-display-name">Học Viên NQ</h3>
+        <span>Tài khoản học viên</span>
+    </div>
+
+    <!-- 🌟 KHỐI 1: KHUNG THÀNH TỰU (THỜI GIAN & TRẠNG THÁI REALTIME) -->
+    <div style="background: #ffffff; padding: 16px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8);">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <div style="background: #614CFF; color: white; width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🏆</div>
+            <div>
+                <h4 style="font-size: 12px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0;">Khung thành tựu</h4>
+                <span style="font-size: 10px; color: var(--sub-text);">Tổng quan quá trình học</span>
             </div>
         </div>
-    </aside>
+        
+        <!-- Thời gian hôm nay & Tổng cộng -->
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+            <div style="flex: 1; padding: 10px; background: var(--bg-color); border-radius: var(--radius-sm); box-shadow: var(--neu-concave); text-align: center;">
+                <div id="dash-today-time" style="font-size: 16px; font-weight: 800; color: #1a202c;">00:00</div>
+                <span style="font-size: 9px; color: var(--sub-text); font-weight: 600;">Hôm nay</span>
+            </div>
+            <div style="flex: 1; padding: 10px; background: var(--bg-color); border-radius: var(--radius-sm); box-shadow: var(--neu-concave); text-align: center;">
+                <div id="dash-total-time" style="font-size: 16px; font-weight: 800; color: #1a202c;">0 phút</div>
+                <span style="font-size: 9px; color: var(--sub-text); font-weight: 600;">Tổng tích lũy</span>
+            </div>
+        </div>
+
+        <!-- Trạng thái học tập Realtime -->
+        <div style="padding: 10px 12px; background: var(--bg-color); border-radius: var(--radius-sm); box-shadow: var(--neu-concave); border-left: 3px solid #614CFF; margin-bottom: 12px; text-align: left;">
+            <div style="font-size: 9px; font-weight: 800; color: var(--sub-text); letter-spacing: 0.5px; margin-bottom: 2px;">ĐANG HỌC • ĐANG LÀM</div>
+            <div id="dash-current-status" style="font-size: 11px; font-weight: 700; color: #614CFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Unit 1 • Bài giảng</div>
+        </div>
+
+        <!-- Thanh tiến độ tổng lượng từ vựng -->
+        <div style="text-align: left;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--text-color); margin-bottom: 4px;">
+                <span>Từ vựng đã ôn</span>
+                <span id="dash-vocab-progress-text">0 / 0</span>
+            </div>
+            <div style="width: 100%; height: 8px; background: var(--bg-color); border-radius: 4px; box-shadow: var(--neu-concave); overflow: hidden;">
+                <div id="dash-vocab-progress-bar" style="width: 0%; height: 100%; background: #614CFF; border-radius: 4px; transition: width 0.4s ease;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🌟 KHỐI 2: KHUNG ALERT TỪ VỰNG CHƯA THUỘC -->
+    <div style="background: #ffffff; padding: 16px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); margin-top: 14px; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <div style="background: #f56565; color: white; width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px;">⚠️</div>
+            <div>
+                <h4 style="font-size: 12px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0;">Từ vựng chưa thuộc</h4>
+                <span style="font-size: 10px; color: var(--sub-text);">Từ sổ tay & từ đã đánh dấu ⭐</span>
+            </div>
+        </div>
+
+        <div style="font-size: 24px; font-weight: 800; color: #f56565; margin-bottom: 10px;">
+            <span id="dash-total-unlearned">0</span> <span style="font-size: 13px; color: var(--text-color); font-weight: 600;">từ cần ôn lại</span>
+        </div>
+
+        <!-- Chi tiết phân loại -->
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <div style="flex: 1; font-size: 10px; color: var(--sub-text); font-weight: 500;">❌ Sổ tay: <b id="dash-count-wrong" style="color:#1a202c;">0</b></div>
+            <div style="flex: 1; font-size: 10px; color: var(--sub-text); font-weight: 500;">⭐ Đã dấu: <b id="dash-count-starred" style="color:#1a202c;">0</b></div>
+        </div>
+
+        <!-- Nút hành động phản hồi nhanh -->
+        <button onclick="showAppMode('review')" style="width: 100%; padding: 10px; background: #f56565; color: white; border: none; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(245, 101, 101, 0.2); transition: all 0.2s;" onmouseover="this.style.background='#e53e3e'" onmouseout="this.style.background='#f56565'">
+            Ôn tập ngay lập tức ➔
+        </button>
+    </div>
+
+    <!-- 🌟 KHỐI 3: LỘ TRÌNH 15 UNIT (THIẾT KẾ GRID TỐI ƯU SIDEBAR) -->
+    <div style="background: #ffffff; padding: 16px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); margin-top: 14px; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <div style="background: #48bb78; color: white; width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px;">📅</div>
+            <div>
+                <h4 style="font-size: 12px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0;">Lộ trình tích lũy</h4>
+                <span style="font-size: 10px; color: var(--sub-text);">Đạt mốc 15 phút hoạt động/Unit</span>
+            </div>
+        </div>
+
+        <!-- Grid 3x5 dập nổi nhẹ -->
+        <div id="dash-unit-progress-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px;">
+            <!-- 15 nút hạt vuông sẽ tự tạo từ JS -->
+        </div>
+        
+        <!-- Bộ đếm ngược thời gian hoạt động ngầm của dòng đang học -->
+        <div id="dash-timer-zone" style="font-size: 10px; color: var(--sub-text); font-weight: 600; text-align: center; background: var(--bg-color); padding: 4px; border-radius: 6px; box-shadow: var(--neu-concave); display: none;">
+            ⏳ Đang tích lũy Unit <span id="dash-timer-unit">0</span>: <span id="dash-timer-countdown">00:00</span> / 15:00
+        </div>
+    </div>
+
+    <!-- 🌟 KHỐI 4: BOX RANDOM 3 TỪ VỰNG HÔM NAY -->
+    <div style="background: #ffffff; padding: 16px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); margin-top: 14px; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <div style="background: #ed8936; color: white; width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px;">🎲</div>
+            <div>
+                <h4 style="font-size: 12px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0;">Ôn nhanh 3 từ</h4>
+                <span style="font-size: 10px; color: var(--sub-text);">Thách thức trí nhớ ngẫu nhiên</span>
+            </div>
+        </div>
+
+        <!-- Khung danh sách từ random -->
+        <div id="dash-random-vocab-box" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px;">
+            <!-- Đổ từ JS -->
+        </div>
+
+        <button onclick="refreshDashRandomVocab()" style="width: 100%; padding: 8px; background: none; border: 1px solid rgba(237, 137, 54, 0.3); border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; color: #ed8936; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(237, 137, 54, 0.05)'" onmouseout="this.style.background='none'">
+            🔄 Đổi 3 từ khác
+        </button>
+    </div>
+</aside>
+
 </div>
 
 <!-- POPUP MODAL KHEN NGỢI -->
@@ -1010,6 +1104,8 @@
         } else {
             switchTab('lecture');
         }
+        // 🌟 KÍCH HOẠT BỘ MÁY DASHBOARD THỐNG KÊ TẠI ĐÂY NHA PEN
+        initDashboardSystem();
     }
 
     function initTabIndices() {
@@ -1029,6 +1125,7 @@
         
         document.getElementById('btn-' + tabName).classList.add('active');
         document.getElementById(tabName + '-tab').classList.add('active');
+        if(tabName === 'vocabTable') { document.getElementById('vocabTable-tab').style.display = 'flex'; }
         
         document.getElementById('ctrl-prev-btn').style.visibility = (tabName === 'flashcard' || tabName === 'typing') ? 'visible' : 'hidden';
         document.getElementById('ctrl-mix-btn').style.visibility = (tabName === 'lecture') ? 'hidden' : 'visible';
@@ -1773,6 +1870,191 @@
             document.getElementById('main-app-layout').style.display = 'none'; 
         }
     };
+    // ==================== PHÂN HỆ LOGIC DASHBOARD THỐNG KÊ (SIDEBAR PHẢI) ====================
+
+let activeTimerInterval = null;
+let currentUnitActiveSeconds = 0;
+
+// Hàm khởi tạo toàn diện Dashboard khi đăng nhập thành công
+function initDashboardSystem() {
+    renderDashboardUnitGrid();
+    updateDashboardStats();
+    refreshDashRandomVocab();
+    startDashboardTrackers();
+}
+
+// 1. Vẽ lưới hạt vuông 15 Unit bo góc Neumorphism gọn gàng cho Sidebar
+function renderDashboardUnitGrid() {
+    const grid = document.getElementById('dash-unit-progress-grid');
+    if(!grid) return;
+    grid.innerHTML = "";
+
+    let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
+    let completedUnits = JSON.parse(localStorage.getItem(`completed_units_${studentKey}`)) || [];
+
+    for (let i = 1; i <= 15; i++) {
+        const item = document.createElement('div');
+        let isDone = completedUnits.includes(i);
+        let isCurrent = (currentUnit == i);
+
+        // Định dạng style hạt vuông Neumorphism chuẩn gu Pen
+        item.style.padding = "8px 4px";
+        item.style.textAlign = "center";
+        item.style.fontSize = "11px";
+        item.style.fontWeight = "800";
+        item.style.borderRadius = "8px";
+        item.style.transition = "all 0.2s ease";
+
+        if (isDone) {
+            item.style.background = "#e6fffa";
+            item.style.color = "#319795";
+            item.style.boxShadow = "var(--neu-concave)";
+            item.innerHTML = `U${i} ✓`;
+        } else if (isCurrent) {
+            item.style.background = "#ffffff";
+            item.style.color = "#614CFF";
+            item.style.border = "2px solid #614CFF";
+            item.style.boxShadow = "var(--neu-convex)";
+            item.innerHTML = `U${i} ⏳`;
+        } else {
+            item.style.background = "var(--bg-color)";
+            item.style.color = "var(--sub-text)";
+            item.style.boxShadow = "var(--neu-concave)";
+            item.innerHTML = `U${i}`;
+        }
+        grid.appendChild(item);
+    }
+}
+
+// 2. Cập nhật các chỉ số thời gian, mảng từ chưa thuộc và thanh tiến trình lượng từ vựng
+function updateDashboardStats() {
+    let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
+    
+    // Đếm số từ sao trong LocalStorage
+    let starList = JSON.parse(localStorage.getItem(`starred_${studentKey}_QuyenClass`)) || [];
+    // Đếm số từ lỗi trong sổ tay
+    let wrongList = wrongWordsList || [];
+
+    let countStarred = starList.length;
+    let countWrong = wrongList.length;
+    let totalUnlearned = countStarred + countWrong;
+
+    if(document.getElementById('dash-total-unlearned')) document.getElementById('dash-total-unlearned').innerText = totalUnlearned;
+    if(document.getElementById('dash-count-wrong')) document.getElementById('dash-count-wrong').innerText = countWrong;
+    if(document.getElementById('dash-count-starred')) document.getElementById('dash-count-starred').innerText = countStarred;
+
+    // Cập nhật trạng thái bài học hiển thị text
+    let tabNamesMap = { lecture: "Bài giảng", vocabTable: "Bảng từ vựng", flashcard: "Flashcard", quiz: "Trắc nghiệm", typing: "Viết từ", listen: "Nghe & chọn từ", guess: "Nghe & tìm nghĩa", visual: "Nhìn hình chọn từ" };
+    if(document.getElementById('dash-current-status') && currentUnit) {
+        document.getElementById('dash-current-status').innerText = `Unit ${currentUnit} • ${tabNamesMap[currentTab] || currentTab}`;
+    }
+
+    // Tính toán lượng từ đã duyệt qua trên tổng số từ vựng
+    if(document.getElementById('dash-vocab-progress-text') && vocabData.length > 0) {
+        let currentTabState = tabState[currentTab];
+        let reviewedCount = (currentTabState && currentTabState.current) ? currentTabState.current + 1 : 1;
+        if(currentTab === 'vocabTable' || currentTab === 'lecture') reviewedCount = vocabData.length; // Thừa hưởng toàn bộ nếu quét bảng nhanh
+        
+        document.getElementById('dash-vocab-progress-text').innerText = `${reviewedCount} / ${vocabData.length}`;
+        let percent = (reviewedCount / vocabData.length) * 100;
+        document.getElementById('dash-vocab-progress-bar').style.width = `${percent}%`;
+    }
+}
+
+// 3. Đổ dữ liệu 3 từ vựng ngẫu nhiên hôm nay bốc từ mảng gốc
+function refreshDashRandomVocab() {
+    const container = document.getElementById('dash-random-vocab-box');
+    if(!container || !vocabData || vocabData.length === 0) return;
+    container.innerHTML = "";
+
+    let shuffled = shuffleArray([...vocabData]);
+    let pick3 = shuffled.slice(0, 3);
+
+    pick3.forEach(word => {
+        const item = document.createElement('div');
+        item.style.padding = "10px";
+        item.style.background = "var(--bg-color)";
+        item.style.borderRadius = "10px";
+        item.style.boxShadow = "var(--neu-concave)";
+        item.style.cursor = "pointer";
+        item.style.display = "flex";
+        item.style.justifyContent = "between";
+        item.style.alignItems = "center";
+        
+        item.innerHTML = `
+            <span style="font-weight:800; font-size:13px; color:#1a202c;">${word.ko}</span>
+            <span class="dash-rand-vi-hide" style="font-size:11px; color:var(--sub-text); font-weight:600; margin-left:auto; filter:blur(4px); transition:filter 0.2s;" onclick="this.style.filter='none'; event.stopPropagation();">chạm để xem nghĩa</span>
+        `;
+        // Gắn sự kiện click bọc ngoài tự động hiện nghĩa luôn cho tiện
+        item.onclick = () => { item.querySelector('.dash-rand-vi-hide').innerText = word.vi; item.querySelector('.dash-rand-vi-hide').style.filter = 'none'; };
+        container.appendChild(item);
+    });
+}
+
+// 4. Các bộ đếm giờ chạy ngầm thời gian học tập chống treo máy
+function startDashboardTrackers() {
+    if(activeTimerInterval) clearInterval(activeTimerInterval);
+    
+    let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
+    
+    // Nạp tổng số phút lưu trữ tích lũy cũ từ Local
+    let totalMinutes = parseInt(localStorage.getItem(`total_mins_${studentKey}`)) || 0;
+    if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} phút`;
+
+    let todaySeconds = 0;
+    currentUnitActiveSeconds = 0;
+
+    // Lắng nghe hành vi của học sinh để kiểm tra chống treo máy
+    let lastActiveTime = Date.now();
+    window.onmousemove = () => { lastActiveTime = Date.now(); };
+    window.onkeydown = () => { lastActiveTime = Date.now(); };
+
+    activeTimerInterval = setInterval(() => {
+        // Nếu treo máy quá 3 phút (180 giây), ngưng không tính thời gian cống hiến
+        if (Date.now() - lastActiveTime > 180000) return;
+
+        todaySeconds++;
+        currentUnitActiveSeconds++;
+
+        // Render đồng hồ hôm nay định dạng MM:SS
+        let mins = Math.floor(todaySeconds / 60);
+        let secs = todaySeconds % 60;
+        if(document.getElementById('dash-today-time')) {
+            document.getElementById('dash-today-time').innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // Cứ mỗi 1 phút trôi qua, cập nhật tổng tích lũy lên 1 phút
+        if (todaySeconds % 60 === 0) {
+            totalMinutes++;
+            localStorage.setItem(`total_mins_${studentKey}`, totalMinutes);
+            if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} phút`;
+        }
+
+        // Kiểm tra cơ chế tích lũy 15 phút của Unit hiện tại
+        if (currentUnit) {
+            const timerZone = document.getElementById('dash-timer-zone');
+            if (timerZone) {
+                timerZone.style.display = "block";
+                document.getElementById('dash-timer-unit').innerText = currentUnit;
+                
+                let uMins = Math.floor(currentUnitActiveSeconds / 60);
+                let uSecs = currentUnitActiveSeconds % 60;
+                document.getElementById('dash-timer-countdown').innerText = `${String(uMins).padStart(2, '0')}:${String(uSecs).padStart(2, '0')}`;
+            }
+
+            // Đủ mốc 15 phút (900 giây) hoạt động thực tế ➔ Đánh dấu tích xanh hoàn thành
+            if (currentUnitActiveSeconds >= 900) {
+                let completedUnits = JSON.parse(localStorage.getItem(`completed_units_${studentKey}`)) || [];
+                if (!completedUnits.includes(currentUnit)) {
+                    completedUnits.push(currentUnit);
+                    localStorage.setItem(`completed_units_${studentKey}`, JSON.stringify(completedUnits));
+                    renderDashboardUnitGrid();
+                    showCustomBouncePopup("Thành Tựu Mới! 🎖️", `Bạn đã hoàn thành mốc 15 phút rèn luyện nghiêm túc và làm chủ hoàn toàn kiến thức của Unit ${currentUnit}!`);
+                }
+            }
+        }
+    }, 1000);
+}
 </script>
 </body>
 </html>
