@@ -507,7 +507,7 @@
                         <div class="no-embed-msg" id="lecture-empty-msg" style="display: none;">Không có slide bài giảng cho Unit này.</div>
                         
                         <!-- Iframe thêm sự kiện onload để tự báo hiệu cho JavaScript ẩn bộ khung xương -->
-                        <iframe id="lecture-iframe" class="lecture-iframe-box" src="" allowfullscreen style="width: 100%; height: 100%; border: none;" onload="handleIframeLoaded()"></iframe>
+                        <iframe id="lecture-iframe" class="lecture-iframe-box" src="" allowfullscreen style="width: 100%; height: 100%; border: none;"></iframe>
                     </div>
                 </div>
 
@@ -1170,6 +1170,41 @@
         updateDashboardStats();
     }
 
+    // 🌟 Ánh xạ tên tab -> hàm render tương ứng, dùng chung cho nút Trước đó / Tiếp theo / Trộn bài
+    const tabRenderMap = {
+        flashcard: renderFlashcard,
+        quiz: generateQuizQuestion,
+        typing: renderTypingQuestion,
+        listen: generateListenQuestion,
+        guess: generateGuessQuestion,
+        visual: generateVisualQuestion
+    };
+
+    function handleNextAction() {
+        let state = tabState[currentTab];
+        if (!state || !state.indices || state.indices.length === 0) return;
+        state.current = (state.current + 1) % state.indices.length;
+        if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
+        updateDashboardStats();
+    }
+
+    function handlePrevAction() {
+        let state = tabState[currentTab];
+        if (!state || !state.indices || state.indices.length === 0) return;
+        state.current = (state.current - 1 + state.indices.length) % state.indices.length;
+        if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
+        updateDashboardStats();
+    }
+
+    function handleMixAction() {
+        let state = tabState[currentTab];
+        if (!state || !state.indices || state.indices.length === 0) return;
+        state.indices = shuffleArray([...state.indices]);
+        state.current = 0;
+        if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
+        updateDashboardStats();
+    }
+
     function recordWrongWord() {
         let idx = tabState[currentTab].indices[tabState[currentTab].current];
         let word = vocabData[idx];
@@ -1617,6 +1652,9 @@
             }, 300); 
         }
     }
+    // 🌟 Gắn sự kiện onload bằng JS thay vì HTML để tránh lỗi "chưa định nghĩa"
+    // (vì thẻ iframe nằm trước thẻ script trong HTML, nên onload="" inline sẽ bị gọi sớm hơn lúc hàm được khai báo)
+    document.getElementById('lecture-iframe').onload = handleIframeLoaded;
 
     // --- PHÂN HỆ XỬ LÝ NGỮ PHÁP HAI CỘT ---
     let grammarDataCache = []; 
