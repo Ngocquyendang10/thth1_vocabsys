@@ -13,7 +13,7 @@
             --sidebar-color: #ffffff;
             --card-color: #ffffff;
             --text-color: #2d3748;
-            --sub-text: #718096;
+            --sub-text: #718096;iframe
             --point-color: #614CFF; 
             --point-hover: #4b36e3;
             --point-light: rgba(97, 76, 255, 0.08);
@@ -138,7 +138,7 @@
         /* NỘI DUNG CHỨC NĂNG GAME ÔN TẬP GỐC */
         .tab-render-view { display: none; width: 100%; }
         .tab-render-view.active { display: block; }
-        .lecture-iframe-box { width: 100%; height: 440px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden; border: none; background: #e2e8f0; }
+        .lecture-iframe-box { width: 100%; height: 100%; border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden; border: none; background: #e2e8f0; }
 
         /* FLASHCARD */
         .card-container { perspective: 1000px; width: 100%; height: 260px; margin-bottom: 24px; cursor: pointer; }
@@ -526,7 +526,7 @@
                     </div>
 
                     <!-- 🌟 KHU VỰC EMBED CẢI TIẾN: BỔ SUNG SKELETON ĐÈ LÊN IFRAME -->
-                    <div class="embed-wrapper" style="position: relative; width: 100%; height: 500px; background: var(--bg-color); border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden;">
+                   <div class="embed-wrapper" style="position: relative; width: 100%; aspect-ratio: 16 / 9; min-height: 480px; max-height: 82vh; background: var(--bg-color); border-radius: var(--radius-md); box-shadow: var(--neu-concave); overflow: hidden;">
                         
                         <!-- Khung xương Loading xám chuyển động mượt mà giả lập Canvas/Figma -->
                         <div id="iframe-skeleton" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #e2e8f0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 5; transition: opacity 0.3s ease;">
