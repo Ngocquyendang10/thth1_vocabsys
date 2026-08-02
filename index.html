@@ -13,8 +13,8 @@
             --sidebar-color: #ffffff;
             --card-color: #ffffff;
             --text-color: #2d3748;
-            --sub-text: #718096;iframe
-            --point-color: #614CFF; 
+            --sub-text: #718096;
+            --point-color: #614CFF;
             --point-hover: #4b36e3;
             --point-light: rgba(97, 76, 255, 0.08);
             --success-color: #48bb78;
@@ -173,12 +173,48 @@
         .option-btn.correct { background: #e6fffa !important; border-color: var(--success-color) !important; color: #234e52 !important; font-weight: 700; box-shadow: none; }
         .option-btn.wrong { background: #fff5f5 !important; border-color: var(--error-color) !important; color: #742a2a !important; box-shadow: none; }
 
-        /* TYPING */
-        .typing-container-box { width: 100%; max-width: 650px; margin: 0 auto 24px auto; background: var(--card-color); padding: 32px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255, 255, 255, 0.7); text-align: center; }
-        .typing-prompt { font-size: 14px; color: var(--sub-text); margin-bottom: 12px; font-weight: 600; text-align: left; }
-        .typing-word { font-size: 32px; font-weight: 800; color: #1a202c; margin-bottom: 28px; line-height: 1.3; }
-        .input-field-typing { width: 100%; max-width: 500px; padding: 16px; font-size: 16px; border: 1px solid rgba(226, 232, 240, 0.8); border-radius: var(--radius-sm); outline: none; background: var(--card-color); box-shadow: var(--neu-concave); transition: all 0.2s; text-align: center; margin: 0 auto; display: block; }
-        .input-field-typing:focus { border-color: var(--point-color); }
+        /* TYPING — PHIẾU LUYỆN VIẾT TỪ (BẢNG DANH SÁCH) */
+        .typing-sheet-card { width: 100%; background: var(--card-color); padding: 20px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255, 255, 255, 0.7); }
+        .typing-sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+        .typing-sheet-titlewrap { display: flex; align-items: center; gap: 12px; }
+        .typing-sheet-icon { width: 42px; height: 42px; flex: 0 0 42px; border-radius: 12px; background: var(--point-light); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .typing-sheet-titlewrap h3 { font-size: 19px; font-weight: 800; color: #1a202c; }
+        .typing-sheet-titlewrap p { font-size: 12px; color: var(--sub-text); font-weight: 500; margin-top: 2px; }
+        .typing-dir-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; background: var(--card-color); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; color: var(--text-color); cursor: pointer; box-shadow: var(--neu-convex); outline: none; transition: all 0.2s; }
+        .typing-dir-btn:hover { color: var(--point-color); }
+
+        .typing-sheet-scroll { max-height: 56vh; overflow-y: auto; overflow-x: auto; border-radius: var(--radius-sm); background: var(--bg-color); padding: 4px; }
+        .typing-sheet-table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 480px; }
+        .typing-sheet-table thead th { position: sticky; top: 0; z-index: 2; background: var(--bg-color); padding: 12px 14px; font-size: 11px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: 0.5px; text-align: left; white-space: nowrap; }
+        .typing-sheet-table td { padding: 8px 14px; vertical-align: middle; border-top: 1px solid rgba(226, 232, 240, 0.7); }
+        .typing-sheet-table tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.55); }
+        .ts-col-no { width: 62px; font-size: 13px; font-weight: 700; color: var(--sub-text); }
+        .ts-col-mark { width: 64px; text-align: center; }
+        .ts-word { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #1a202c; }
+        .ts-speak-btn { flex: 0 0 auto; background: transparent; border: none; cursor: pointer; font-size: 15px; line-height: 1; padding: 4px; border-radius: 8px; opacity: 0.55; transition: all 0.15s; outline: none; }
+        .ts-speak-btn:hover { opacity: 1; background: var(--point-light); }
+
+        .ts-input { width: 100%; padding: 12px 14px; font-size: 15px; border: 1.5px solid rgba(203, 213, 224, 0.9); border-radius: 10px; outline: none; background: #ffffff; transition: border-color 0.18s, background-color 0.3s, box-shadow 0.18s; }
+        .ts-input::placeholder { color: #a0aec0; font-weight: 500; }
+        .ts-input:focus { border-color: var(--point-color); box-shadow: 0 0 0 3px var(--point-light); }
+        .ts-row.is-correct .ts-input { border-color: var(--success-color); background: #f0fff4; color: #22543d; font-weight: 700; }
+        .ts-row.is-wrong .ts-input { border-color: var(--error-color); background: #fff5f5; }
+        .ts-flash-ok { animation: tsFlashOk 0.3s ease-out; }
+        @keyframes tsFlashOk { 0% { background: #c6f6d5; } 100% { background: #f0fff4; } }
+        .ts-shake { animation: tsShake 0.3s ease-in-out; }
+        @keyframes tsShake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+
+        .ts-mark { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; color: #ffffff; font-size: 15px; font-weight: 800; animation: tsBounce 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .ts-mark.ok { background: var(--success-color); }
+        .ts-mark.bad { background: var(--error-color); }
+        @keyframes tsBounce { 0% { transform: scale(0.3); } 60% { transform: scale(1.18); } 100% { transform: scale(1); } }
+        .ts-answer-hint { display: block; font-size: 11px; color: var(--error-color); font-weight: 600; margin-top: 5px; }
+
+        .typing-progress-wrap { display: flex; align-items: center; gap: 10px; }
+        .typing-progress-label { font-size: 12px; font-weight: 700; color: var(--sub-text); white-space: nowrap; }
+        .typing-progress-track { width: 150px; height: 8px; border-radius: 6px; background: var(--bg-color); box-shadow: var(--neu-concave); overflow: hidden; }
+        .typing-progress-fill { height: 100%; width: 0%; border-radius: 6px; background: var(--point-color); transition: width 0.35s ease; }
+        .typing-progress-pct { font-size: 12px; font-weight: 800; color: var(--point-color); min-width: 38px; text-align: right; }
         .toggle-mode { font-size: 12px; color: var(--point-color); background: var(--card-color); border: none; cursor: pointer; font-weight: 700; padding: 8px 18px; border-radius: 20px; box-shadow: var(--neu-convex); margin-bottom: 24px; display: inline-block; outline: none; transition: all 0.2s ease; }
 
         /* LISTEN */
@@ -292,9 +328,21 @@
             .ko-text { font-size: 28px !important; }
             .vi-text { font-size: 22px !important; }
             .fc-speaker-row .audio-inline-btn { padding: 4px 12px !important; height: 32px !important; font-size: 11px !important; }
-            .typing-container-box { padding: 16px !important; }
-            .typing-word { font-size: 24px !important; }
-            .input-field-typing { font-size: 14px !important; padding: 12px !important; }
+            .typing-sheet-card { padding: 12px !important; }
+            .typing-sheet-head { gap: 10px !important; }
+            .typing-sheet-titlewrap h3 { font-size: 16px !important; }
+            .typing-sheet-titlewrap p { font-size: 11px !important; }
+            .typing-dir-btn { padding: 10px 14px !important; font-size: 12px !important; width: 100% !important; justify-content: center !important; }
+            .typing-sheet-scroll { max-height: 62vh !important; }
+            .typing-sheet-table { min-width: 460px !important; }
+            .typing-sheet-table td { padding: 6px 8px !important; }
+            .typing-sheet-table thead th { padding: 10px 8px !important; }
+            .ts-col-no { width: 40px !important; }
+            .ts-col-mark { width: 44px !important; }
+            .ts-word { font-size: 13px !important; }
+            .ts-input { font-size: 14px !important; padding: 10px !important; }
+            .typing-progress-track { width: 100% !important; }
+            .typing-progress-wrap { width: 100% !important; }
             .listen-box { padding: 16px !important; min-height: 110px !important; margin-bottom: 16px !important; }
             .listen-circle-btn { width: 56px !important; height: 56px !important; font-size: 11px !important; }
             .pool-btn { padding: 8px 14px !important; font-size: 13px !important; }
@@ -629,13 +677,30 @@
 
                 <!-- 5. GÕ TỪ -->
                 <div id="typing-tab" class="tab-render-view">
-                    <div style="text-align: center;">
-                        <button class="toggle-mode" onclick="toggleTypingDirection()" id="typing-dir-btn">Chế độ: Tiếng Việt ➔ Tiếng Hàn</button>
-                    </div>
-                    <div class="typing-container-box">
-                        <div class="typing-prompt" id="type-prompt-label">Hãy gõ cụm từ Tiếng Hàn tương ứng:</div>
-                        <div class="typing-word" id="type-word">...</div>
-                        <input type="text" class="input-field-typing" id="type-input" placeholder="Nhập câu trả lời tại đây..." autocomplete="off" onkeydown="checkTypingEnter(event)">
+                    <div class="typing-sheet-card">
+                        <div class="typing-sheet-head">
+                            <div class="typing-sheet-titlewrap">
+                                <span class="typing-sheet-icon">✏️</span>
+                                <div>
+                                    <h3>Viết từ</h3>
+                                    <p id="typing-sheet-sub">Hãy nhập cụm từ Tiếng Hàn tương ứng với từ vựng tiếng Việt bên dưới.</p>
+                                </div>
+                            </div>
+                            <button type="button" class="typing-dir-btn" id="typing-dir-btn" onclick="toggleTypingDirection()">⇄ Đổi hướng: Việt → Hàn</button>
+                        </div>
+                        <div class="typing-sheet-scroll" id="typing-sheet-scroll">
+                            <table class="typing-sheet-table">
+                                <thead>
+                                    <tr>
+                                        <th class="ts-col-no">STT</th>
+                                        <th id="typing-th-word">Từ vựng (Tiếng Việt)</th>
+                                        <th id="typing-th-input">Nhập đáp án (Tiếng Hàn)</th>
+                                        <th class="ts-col-mark">Kết quả</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="typing-sheet-body"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -681,6 +746,11 @@
                         <button class="btn" id="ctrl-mix-btn" onclick="handleMixAction()">🔀 Trộn bài</button>
                     </div>
                     <div class="controls-right">
+                        <div class="typing-progress-wrap" id="typing-progress-wrap" style="display: none;">
+                            <span class="typing-progress-label">Tiến độ bài học</span>
+                            <div class="typing-progress-track"><div class="typing-progress-fill" id="typing-progress-fill"></div></div>
+                            <span class="typing-progress-pct" id="typing-progress-pct">0%</span>
+                        </div>
                         <button class="btn btn-primary" id="ctrl-next-btn" onclick="handleNextAction()">Tiếp theo</button>
                     </div>
                 </div>
@@ -1243,9 +1313,12 @@
         tabState.flashcard.indices = [...fullIndices];
         tabState.flashcard.current = 0;
         ["quiz", "typing", "listen", "guess", "visual"].forEach(t => {
-            tabState[t].indices = shuffleArray(fullIndices);
+            tabState[t].indices = shuffleArray([...fullIndices]);
             tabState[t].current = 0;
         });
+        // Reset bảng Viết từ khi đổi Unit
+        tabState.typing.status = tabState.typing.indices.map(() => 'none');
+        tabState.typing.values = tabState.typing.indices.map(() => '');
     }
 
     function switchTab(tabName) {
@@ -1271,14 +1344,19 @@
         
         document.getElementById('ctrl-prev-btn').style.visibility = (tabName === 'flashcard' || tabName === 'typing') ? 'visible' : 'hidden';
         document.getElementById('ctrl-mix-btn').style.visibility = (tabName === 'lecture') ? 'hidden' : 'visible';
-        
+
+        // Tab Viết từ dùng thanh tiến độ thay cho nút "Tiếp theo"
+        const typingProgressWrap = document.getElementById('typing-progress-wrap');
+        if (typingProgressWrap) typingProgressWrap.style.display = (tabName === 'typing') ? 'flex' : 'none';
+        document.getElementById('ctrl-next-btn').style.display = (tabName === 'typing') ? 'none' : 'inline-block';
+
         if (vocabData.length === 0 && tabName !== 'lecture') return;
 
         if (tabName === 'lecture') renderLectureTab();
         else if (tabName === 'vocabTable') renderVocabTableIndex();    
         else if (tabName === 'flashcard') renderFlashcard();
         else if (tabName === 'quiz') generateQuizQuestion();
-        else if (tabName === 'typing') renderTypingQuestion();
+        else if (tabName === 'typing') renderTypingSheet(true);
         else if (tabName === 'listen') generateListenQuestion();
         else if (tabName === 'guess') generateGuessQuestion();
         else if (tabName === 'visual') generateVisualQuestion();
@@ -1291,7 +1369,7 @@
     const tabRenderMap = {
         flashcard: renderFlashcard,
         quiz: generateQuizQuestion,
-        typing: renderTypingQuestion,
+        typing: () => renderTypingSheet(true),
         listen: generateListenQuestion,
         guess: generateGuessQuestion,
         visual: generateVisualQuestion
@@ -1306,6 +1384,12 @@
     }
 
     function handlePrevAction() {
+        // Bảng Viết từ hiển thị cả danh sách nên không có "từ trước đó" — nút này quay lại màn hình trước
+        if (currentTab === 'typing') {
+            if (hasTypingProgress() && !confirm("Bạn đang làm dở phiếu Viết từ. Rời khỏi màn hình này chứ?")) return;
+            switchTab('quiz');
+            return;
+        }
         let state = tabState[currentTab];
         if (!state || !state.indices || state.indices.length === 0) return;
         state.current = (state.current - 1 + state.indices.length) % state.indices.length;
@@ -1316,15 +1400,26 @@
     function handleMixAction() {
         let state = tabState[currentTab];
         if (!state || !state.indices || state.indices.length === 0) return;
+        if (currentTab === 'typing') {
+            if (hasTypingProgress() && !confirm("Trộn bài sẽ xoá hết đáp án bạn đã nhập. Bạn có chắc không?")) return;
+            state.indices = shuffleArray([...state.indices]);
+            state.current = 0;
+            renderTypingSheet(false); // reset toàn bộ tiến độ, focus lại hàng đầu tiên
+            updateDashboardStats();
+            return;
+        }
         state.indices = shuffleArray([...state.indices]);
         state.current = 0;
         if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
         updateDashboardStats();
     }
 
-    function recordWrongWord() {
-        let idx = tabState[currentTab].indices[tabState[currentTab].current];
+    function recordWrongWord(explicitIndex) {
+        let idx = (typeof explicitIndex === 'number')
+            ? explicitIndex
+            : tabState[currentTab].indices[tabState[currentTab].current];
         let word = vocabData[idx];
+        if (!word) return;
         if (!wrongWordsList.some(item => item.ko === word.ko)) {
             let today = new Date().toLocaleDateString('vi-VN');
             wrongWordsList.push({ ko: word.ko, vi: word.vi, ex: word.ex || "...", exVi: word.exVi || "...", date: today, remembered: false });
@@ -1439,38 +1534,255 @@
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
+    /* ============================================================
+       PHIẾU LUYỆN VIẾT TỪ — hiển thị toàn bộ danh sách dạng bảng
+       Gõ ➔ Enter ➔ gõ ➔ Enter, không cần dùng chuột.
+       ============================================================ */
+
+    function cleanString(str) { return String(str == null ? '' : str).toLowerCase().replace(/[^a-zA-Z0-9가-힣]/g, '').trim(); }
+
+    // Bỏ dấu tiếng Việt để chấp nhận cả khi học viên gõ không dấu
+    function stripVietTones(str) {
+        return String(str == null ? '' : str).normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đ]/g, 'd').replace(/[Đ]/g, 'D');
+    }
+
+    // Tách một ô dữ liệu thành nhiều đáp án được chấp nhận: ngăn bởi ";" "/" hoặc xuống dòng
+    function splitAcceptedAnswers(raw) {
+        if (raw == null) return [];
+        let full = String(raw).trim();
+        if (!full) return [];
+        let parts = full.split(/[;/\n]+/).map(s => s.trim()).filter(Boolean);
+        // Giữ luôn chuỗi gốc (vd "Nhà hàng / Quán ăn" gõ đầy đủ vẫn đúng)
+        if (!parts.some(p => p === full)) parts.push(full);
+        return parts;
+    }
+
+    // Danh sách mọi đáp án hợp lệ của 1 từ theo chiều đang học.
+    // Chiều Hàn ➔ Việt chấp nhận cả cột "Vi (Nghĩa tiếng Việt)" lẫn "Nghĩa tiếng Việt khác".
+    function getTypingAcceptedAnswers(item, direction) {
+        if (direction === 'vi-to-ko') return splitAcceptedAnswers(item.ko);
+        let list = splitAcceptedAnswers(item.vi);
+        ['viAlt', 'viOther', 'viAlts', 'viKhac', 'viExtra', 'vi2'].forEach(key => {
+            if (item[key]) list = list.concat(splitAcceptedAnswers(item[key]));
+        });
+        return list;
+    }
+
+    function isTypingAnswerCorrect(userInput, item, direction) {
+        const answers = getTypingAcceptedAnswers(item, direction);
+        const typed = cleanString(userInput);
+        if (!typed) return false;
+        return answers.some(ans => {
+            const target = cleanString(ans);
+            if (!target) return false;
+            if (target === typed) return true;
+            // Chiều Hàn ➔ Việt: chấp nhận luôn khi học viên gõ tiếng Việt không dấu
+            if (direction === 'ko-to-vi' && cleanString(stripVietTones(ans)) === cleanString(stripVietTones(userInput))) return true;
+            return false;
+        });
+    }
+
     function toggleTypingDirection() {
-        tabState.typing.direction = tabState.typing.direction === 'vi-to-ko' ? 'ko-to-vi' : 'vi-to-ko';
-        document.getElementById('typing-dir-btn').innerText = tabState.typing.direction === 'vi-to-ko' ? 'Chế độ: Tiếng Việt ➔ Tiếng Hàn' : 'Chế độ: Tiếng Hàn ➔ Tiếng Việt';
-        renderTypingQuestion();
+        let state = tabState.typing;
+        state.direction = state.direction === 'vi-to-ko' ? 'ko-to-vi' : 'vi-to-ko';
+        renderTypingSheet(true); // giữ nguyên tiến độ, chỉ đổi ngôn ngữ hiển thị
     }
-    
-    function renderTypingQuestion() {
+
+    function renderTypingSheet(keepProgress) {
         clearFeedback();
-        let state = tabState.typing; const item = vocabData[state.indices[state.current]];
-        const input = document.getElementById('type-input'); input.value = ""; input.style.borderColor = '';
-        document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
-        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
-        
-        if (state.direction === 'vi-to-ko') {
-            document.getElementById('type-prompt-label').innerText = "Hãy nhập cụm từ Tiếng Hàn tương ứng:"; document.getElementById('type-word').innerText = item.vi;
-        } else {
-            document.getElementById('type-prompt-label').innerText = "Hãy nhập nghĩa Tiếng Việt tương ứng:"; document.getElementById('type-word').innerText = item.ko;
+        let state = tabState.typing;
+        if (!state.indices || state.indices.length === 0) return;
+
+        // status[i] / values[i] chạy song song với state.indices
+        if (!keepProgress || !state.status || state.status.length !== state.indices.length) {
+            state.status = state.indices.map(() => 'none');
+            state.values = state.indices.map(() => '');
         }
-        input.focus();
+
+        const isViToKo = state.direction === 'vi-to-ko';
+        document.getElementById('typing-dir-btn').innerText = isViToKo ? '⇄ Đổi hướng: Việt → Hàn' : '⇄ Đổi hướng: Hàn → Việt';
+        document.getElementById('typing-sheet-sub').innerText = isViToKo
+            ? 'Hãy nhập cụm từ Tiếng Hàn tương ứng với từ vựng tiếng Việt bên dưới.'
+            : 'Hãy nhập nghĩa Tiếng Việt tương ứng với từ vựng tiếng Hàn bên dưới.';
+        document.getElementById('typing-th-word').innerText = isViToKo ? 'Từ vựng (Tiếng Việt)' : 'Từ vựng (Tiếng Hàn)';
+        document.getElementById('typing-th-input').innerText = isViToKo ? 'Nhập đáp án (Tiếng Hàn)' : 'Nhập đáp án (Tiếng Việt)';
+
+        const body = document.getElementById('typing-sheet-body');
+        body.innerHTML = "";
+
+        state.indices.forEach((vocabIdx, rowIdx) => {
+            const item = vocabData[vocabIdx];
+            if (!item) return;
+            const shownWord = isViToKo ? item.vi : item.ko;
+
+            const tr = document.createElement('tr');
+            tr.className = 'ts-row';
+            tr.id = 'ts-row-' + rowIdx;
+
+            const tdNo = document.createElement('td');
+            tdNo.className = 'ts-col-no';
+            tdNo.innerText = rowIdx + 1;
+
+            const tdWord = document.createElement('td');
+            const wordWrap = document.createElement('div');
+            wordWrap.className = 'ts-word';
+            const wordSpan = document.createElement('span');
+            wordSpan.innerText = shownWord || '...';
+            wordWrap.appendChild(wordSpan);
+            // Chỉ gắn loa khi từ hiển thị là tiếng Hàn (chiều Việt ➔ Hàn sẽ lộ đáp án)
+            if (!isViToKo) {
+                const spk = document.createElement('button');
+                spk.type = 'button';
+                spk.className = 'ts-speak-btn';
+                spk.title = 'Nghe phát âm';
+                spk.innerText = '🔊';
+                // Không cho nút cướp focus của ô đang gõ
+                spk.onmousedown = (e) => e.preventDefault();
+                spk.onclick = (e) => { e.stopPropagation(); triggerKoreanVoice(item.ko, false); };
+                wordWrap.appendChild(spk);
+            }
+            tdWord.appendChild(wordWrap);
+
+            const tdInput = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'ts-input';
+            input.id = 'ts-input-' + rowIdx;
+            input.autocomplete = 'off';
+            input.setAttribute('autocapitalize', 'off');
+            input.setAttribute('spellcheck', 'false');
+            input.placeholder = isViToKo ? 'Nhập tiếng Hàn...' : 'Nhập tiếng Việt...';
+            input.value = state.values[rowIdx] || '';
+            input.onkeydown = (e) => handleTypingRowKey(e, rowIdx);
+            input.oninput = () => { state.values[rowIdx] = input.value; };
+            tdInput.appendChild(input);
+
+            const tdMark = document.createElement('td');
+            tdMark.className = 'ts-col-mark';
+            tdMark.id = 'ts-mark-' + rowIdx;
+
+            tr.appendChild(tdNo); tr.appendChild(tdWord); tr.appendChild(tdInput); tr.appendChild(tdMark);
+            body.appendChild(tr);
+
+            // Vẽ lại trạng thái cũ khi đổi hướng / render lại
+            if (state.status[rowIdx] === 'ok') paintTypingRow(rowIdx, 'ok', false);
+            else if (state.status[rowIdx] === 'bad') paintTypingRow(rowIdx, 'bad', false);
+        });
+
+        document.getElementById('ctrl-next-btn').style.display = 'none';
+        updateTypingProgress();
+        focusTypingRow(findNextUnansweredTypingRow(-1), false);
     }
-    function checkTypingEnter(e) { if (e.key === 'Enter') submitTypingAnswer(); }
-    function cleanString(str) { return str.toLowerCase().replace(/[^a-zA-Z0-9가-힣]/g, '').trim(); }
-    
-    function submitTypingAnswer() {
-        let state = tabState.typing; const item = vocabData[state.indices[state.current]];
-        const userInput = document.getElementById('type-input').value.trim(); if (!userInput) return;
 
-        let isCorrect = false, targetAns = state.direction === 'vi-to-ko' ? item.ko : item.vi;
-        if (cleanString(targetAns) === cleanString(userInput)) isCorrect = true;
+    function paintTypingRow(rowIdx, status, animate) {
+        const tr = document.getElementById('ts-row-' + rowIdx);
+        const mark = document.getElementById('ts-mark-' + rowIdx);
+        const input = document.getElementById('ts-input-' + rowIdx);
+        if (!tr || !mark || !input) return;
 
-        if (isCorrect) { setFeedback("🎉 Xuất sắc! Gõ chính xác rồi.", "success"); document.getElementById('type-input').style.borderColor = "var(--success-color)"; } 
-        else { setFeedback(`😢 Chưa đúng rồi, đáp án là: "${targetAns}". Đã lưu vào sổ tay.`, "error"); document.getElementById('type-input').style.borderColor = "var(--error-color)"; recordWrongWord(); }
+        tr.classList.remove('is-correct', 'is-wrong');
+        mark.innerHTML = "";
+        input.classList.remove('ts-flash-ok', 'ts-shake');
+
+        if (status === 'ok') {
+            tr.classList.add('is-correct');
+            mark.innerHTML = '<span class="ts-mark ok">✓</span>';
+            if (animate) { input.classList.add('ts-flash-ok'); setTimeout(() => input.classList.remove('ts-flash-ok'), 320); }
+        } else if (status === 'bad') {
+            tr.classList.add('is-wrong');
+            mark.innerHTML = '<span class="ts-mark bad">✕</span>';
+            if (animate) { input.classList.add('ts-shake'); setTimeout(() => input.classList.remove('ts-shake'), 320); }
+        }
+    }
+
+    function handleTypingRowKey(e, rowIdx) {
+        if (e.key !== 'Enter') return; // Tab / Shift+Tab để trình duyệt xử lý tự nhiên
+        e.preventDefault();
+        submitTypingRow(rowIdx);
+    }
+
+    function submitTypingRow(rowIdx) {
+        let state = tabState.typing;
+        const vocabIdx = state.indices[rowIdx];
+        const item = vocabData[vocabIdx];
+        const input = document.getElementById('ts-input-' + rowIdx);
+        if (!item || !input) return;
+
+        const userInput = input.value.trim();
+        if (!userInput) return;
+        state.values[rowIdx] = input.value;
+
+        if (isTypingAnswerCorrect(userInput, item, state.direction)) {
+            state.status[rowIdx] = 'ok';
+            paintTypingRow(rowIdx, 'ok', true);
+            clearFeedback();
+            updateTypingProgress();
+            const nextRow = findNextUnansweredTypingRow(rowIdx);
+            if (nextRow === -1) {
+                setFeedback("🎉 Tuyệt vời! Bạn đã hoàn thành toàn bộ danh sách từ vựng.", "success");
+                input.blur();
+            } else {
+                focusTypingRow(nextRow, true);
+            }
+        } else {
+            state.status[rowIdx] = 'bad';
+            paintTypingRow(rowIdx, 'bad', true);
+            recordWrongWord(vocabIdx);
+            setFeedback("😢 Chưa đúng rồi, bạn sửa lại rồi nhấn Enter nha. Từ này đã được lưu vào sổ tay.", "error");
+            updateTypingProgress();
+            input.focus();
+            input.select();
+        }
+    }
+
+    // Tìm hàng chưa trả lời đúng kế tiếp; quay vòng về đầu nếu cuối bảng đã xong
+    function findNextUnansweredTypingRow(fromRow) {
+        let state = tabState.typing;
+        const total = state.indices.length;
+        for (let i = fromRow + 1; i < total; i++) { if (state.status[i] !== 'ok') return i; }
+        for (let i = 0; i <= fromRow && i < total; i++) { if (state.status[i] !== 'ok') return i; }
+        return -1;
+    }
+
+    function focusTypingRow(rowIdx, smoothScroll) {
+        if (rowIdx < 0) return;
+        const input = document.getElementById('ts-input-' + rowIdx);
+        if (!input) return;
+        input.focus();
+        input.select();
+        const row = document.getElementById('ts-row-' + rowIdx);
+        const scroller = document.getElementById('typing-sheet-scroll');
+        if (row && scroller) {
+            const rowTop = row.offsetTop, rowBottom = rowTop + row.offsetHeight;
+            const viewTop = scroller.scrollTop, viewBottom = viewTop + scroller.clientHeight;
+            if (rowBottom > viewBottom - 8 || rowTop < viewTop + 8) {
+                scroller.scrollTo({ top: rowTop - scroller.clientHeight / 2 + row.offsetHeight, behavior: smoothScroll ? 'smooth' : 'auto' });
+            }
+        }
+    }
+
+    function countTypingCorrect() {
+        let state = tabState.typing;
+        return (state.status || []).filter(s => s === 'ok').length;
+    }
+
+    function updateTypingProgress() {
+        let state = tabState.typing;
+        const total = state.indices.length;
+        const done = countTypingCorrect();
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+        const fill = document.getElementById('typing-progress-fill');
+        const pctLabel = document.getElementById('typing-progress-pct');
+        if (fill) fill.style.width = pct + '%';
+        if (pctLabel) pctLabel.innerText = pct + '%';
+        document.getElementById('global-counter').innerText = done + " / " + total;
+        updateDashboardStats();
+    }
+
+    function hasTypingProgress() {
+        let state = tabState.typing;
+        return (state.status || []).some(s => s !== 'none');
     }
 
     function generateListenQuestion() {
@@ -2134,6 +2446,8 @@
             let currentTabState = tabState[currentTab];
             let reviewedCount = (currentTabState && currentTabState.current) ? currentTabState.current + 1 : 1;
             if(currentTab === 'vocabTable' || currentTab === 'lecture') reviewedCount = vocabData.length;
+            // Tab Viết từ: tiến độ = số từ đã trả lời ĐÚNG
+            if(currentTab === 'typing') reviewedCount = countTypingCorrect();
             
             document.getElementById('dash-vocab-progress-text').innerText = `${reviewedCount} / ${vocabData.length}`;
             let percent = (reviewedCount / vocabData.length) * 100;
