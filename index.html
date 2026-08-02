@@ -974,6 +974,20 @@
     </div>
 </div>
 
+<!-- POPUP CHÚC MỪNG HOÀN THÀNH BÀI LUYỆN TẬP -->
+<div class="bounce-popup-overlay" id="tab-done-popup">
+    <div class="bounce-popup-box">
+        <div class="popup-icon-animate">🏆</div>
+        <h3 id="tab-done-title">Chúc mừng hoàn thành!</h3>
+        <p id="tab-done-message">Bạn đã hoàn thành toàn bộ bài luyện tập.</p>
+        <div id="tab-done-score" style="display:flex; justify-content:center; gap:10px; margin: 14px 0 4px 0; flex-wrap: wrap;"></div>
+        <div style="display:flex; justify-content:center; gap:10px; margin-top:16px; flex-wrap: wrap;">
+            <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px;" onclick="restartCurrentTabFromPopup()">🔄 Làm lại</button>
+            <button class="btn" style="padding: 10px 24px; font-size: 13px;" onclick="closeTabDonePopup()">Thoát</button>
+        </div>
+    </div>
+</div>
+
 <!-- POPUP MODAL CHÍNH SÁCH SỬ DỤNG NỀN TẢNG -->
 <div class="bounce-popup-overlay" id="policy-modal-popup">
     <div class="bounce-popup-box policy-modal-box">
@@ -1032,6 +1046,84 @@
         guess: { indices: [], current: 0, answered: false },
         visual: { indices: [], current: 0, answered: false }
     };
+
+    /* ============================================================
+       POPUP CHÚC MỪNG HOÀN THÀNH — dùng chung cho các tab luyện tập
+       ============================================================ */
+
+    const TAB_DONE_LABELS = {
+        flashcard: "Flashcard", quiz: "Trắc nghiệm", typing: "Viết từ",
+        listen: "Nghe & chọn từ", guess: "Nghe & tìm nghĩa", visual: "Nhìn hình chọn từ"
+    };
+
+    function resetTabScore(tabName) {
+        if (!tabState[tabName]) return;
+        tabState[tabName].right = 0;
+        tabState[tabName].wrong = 0;
+        tabState[tabName].seen = [];
+    }
+
+    // Ghi nhận kết quả 1 câu; mỗi câu chỉ tính điểm 1 lần dù có quay lại
+    function markTabAnswered(tabName, isRight) {
+        let state = tabState[tabName];
+        if (!state) return;
+        if (!state.seen) resetTabScore(tabName);
+        if (state.seen.includes(state.current)) return;
+        state.seen.push(state.current);
+        if (isRight) state.right++; else state.wrong++;
+    }
+
+    function isTabFinished(tabName) {
+        let state = tabState[tabName];
+        if (!state || !state.indices || state.indices.length === 0) return false;
+        if (tabName === 'flashcard') return state.current >= state.indices.length - 1;
+        // Viết từ có luồng riêng: xong khi mọi hàng đều đã trả lời đúng
+        if (tabName === 'typing') return countTypingCorrect() >= state.indices.length;
+        return (state.seen || []).length >= state.indices.length;
+    }
+
+    function showTabDonePopup(tabName) {
+        let state = tabState[tabName];
+        const total = state.indices.length;
+        const label = TAB_DONE_LABELS[tabName] || tabName;
+
+        document.getElementById('tab-done-title').innerText = "Chúc mừng hoàn thành! 🎉";
+        const scoreBox = document.getElementById('tab-done-score');
+
+        if (tabName === 'flashcard') {
+            document.getElementById('tab-done-message').innerText =
+                `Bạn đã xem hết ${total} thẻ từ vựng của phần "${label}" — Unit ${currentUnit}.`;
+            scoreBox.innerHTML = `<span class="counter" style="box-shadow:none;">${total} / ${total} thẻ</span>`;
+        } else {
+            // Viết từ: bắt buộc sửa đến khi đúng nên "đúng" luôn = tổng số từ,
+            // "sai" đếm số từ từng gõ sai ít nhất một lần
+            const right = (tabName === 'typing') ? countTypingCorrect() : (state.right || 0);
+            const wrong = state.wrong || 0;
+            const pct = total > 0 ? Math.round((right / total) * 100) : 0;
+            document.getElementById('tab-done-message').innerText =
+                `Bạn đã hoàn thành ${total}/${total} câu của phần "${label}" — Unit ${currentUnit}.`;
+            scoreBox.innerHTML =
+                `<span class="counter" style="box-shadow:none; color:var(--success-color); font-weight:800;">✓ Đúng: ${right}</span>` +
+                `<span class="counter" style="box-shadow:none; color:var(--error-color); font-weight:800;">✕ Sai: ${wrong}</span>` +
+                `<span class="counter" style="box-shadow:none; color:var(--point-color); font-weight:800;">${pct}%</span>`;
+        }
+
+        document.getElementById('tab-done-popup').classList.add('active');
+    }
+
+    function closeTabDonePopup() { document.getElementById('tab-done-popup').classList.remove('active'); }
+
+    function restartCurrentTabFromPopup() {
+        closeTabDonePopup();
+        let state = tabState[currentTab];
+        if (!state || !state.indices || state.indices.length === 0) return;
+        state.indices = shuffleArray([...state.indices]);
+        state.current = 0;
+        resetTabScore(currentTab);
+        if (currentTab === 'typing') renderTypingSheet(false);
+        else if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
+        updateDashboardStats();
+    }
 
     function showCustomBouncePopup(title, text) {
         document.getElementById('popup-title').innerText = title;
@@ -1179,34 +1271,87 @@
         window.location.reload();
     }
 
+    /* ============================================================
+       TẢI DỮ LIỆU GIÁO TRÌNH — TỐI ƯU TỐC ĐỘ ĐĂNG NHẬP
+       Mỗi lần gọi Apps Script mất khoảng 2–3 giây. Bản cũ gọi nối tiếp
+       đăng nhập ➔ getUnits ➔ tải Unit đầu (3 lượt ≈ 8–10 giây).
+       Nay: gọi getBundle (1 lượt, có sẵn toàn bộ Unit) NGAY khi mở trang,
+       chạy song song với lúc học viên đang gõ mật khẩu.
+       ============================================================ */
+    const BUNDLE_CACHE_KEY = 'bundleCache_QuyenClass';
+    const BUNDLE_CACHE_TTL = 12 * 60 * 60 * 1000; // 12 tiếng
+    let bundlePromise = null;
+
+    function startBundlePrefetch() {
+        if (bundlePromise) return bundlePromise;
+        bundlePromise = (async () => {
+            try {
+                let res = await fetch(`${SCRIPT_URL}?action=getBundle`);
+                let data = await res.json();
+                if (data && data.success && data.vocabByUnit) {
+                    try {
+                        localStorage.setItem(BUNDLE_CACHE_KEY, JSON.stringify({ at: Date.now(), data: data }));
+                    } catch (e) { /* hết dung lượng localStorage thì bỏ qua, không ảnh hưởng gì */ }
+                    return data;
+                }
+            } catch (e) {}
+            return null; // Apps Script chưa cập nhật action getBundle -> dùng đường cũ
+        })();
+        return bundlePromise;
+    }
+
+    function readBundleCache() {
+        try {
+            let raw = localStorage.getItem(BUNDLE_CACHE_KEY);
+            if (!raw) return null;
+            let parsed = JSON.parse(raw);
+            if (!parsed || !parsed.data || (Date.now() - parsed.at) > BUNDLE_CACHE_TTL) return null;
+            return parsed.data;
+        } catch (e) { return null; }
+    }
+
+    function applyBundle(bundle) {
+        unitsConfig = bundle.units || [];
+        Object.keys(bundle.vocabByUnit || {}).forEach(u => { allVocabCache[u] = bundle.vocabByUnit[u]; });
+        Object.keys(bundle.grammarByUnit || {}).forEach(u => { allVocabCache[u + "_grammar"] = bundle.grammarByUnit[u]; });
+    }
+
     async function parseAndInitApp(allowedUnitsString) {
         allowedUnitsList = allowedUnitsString.split(',').map(s => String(s).trim());
         const currentUser = localStorage.getItem('studentSession_QuyenClass') || "Học Viên";
-        
+
         document.getElementById('student-display-name').innerText = currentUser.toUpperCase();
         document.getElementById('student-avatar-letter').innerText = currentUser.charAt(0).toUpperCase();
-        
-        try {
-            let res = await fetch(`${SCRIPT_URL}?action=getUnits`);
-            let data = await res.json();
-            if(data.success) {
-                unitsConfig = data.units;
-                let oldHistory = JSON.parse(localStorage.getItem('historyUnits_QuyenClass')) || [];
-                let newUnitsFound = [];
-                
-                allowedUnitsList.forEach(u => {
-                    if(!oldHistory.includes(String(u))) { newUnitsFound.push(String(u)); }
-                });
-                
-                renderUnitGrid(newUnitsFound);
-                localStorage.setItem('historyUnits_QuyenClass', JSON.stringify(allowedUnitsList));
 
-                if(allowedUnitsList.length > 0) {
-                    await selectUnitLocal(allowedUnitsList[0]);
-                }
-                
-                prefetchAllUnitsInBackground();
+        try {
+            // Lần học trước còn dữ liệu trong máy -> hiện bài ngay, không phải chờ mạng
+            let bundle = readBundleCache();
+            if (bundle) { applyBundle(bundle); startBundlePrefetch(); }
+            else { bundle = await startBundlePrefetch(); if (bundle) applyBundle(bundle); }
+
+            if (!bundle) {
+                // Đường dự phòng: Apps Script vẫn là bản cũ, chưa có action getBundle
+                let res = await fetch(`${SCRIPT_URL}?action=getUnits`);
+                let data = await res.json();
+                if (!data.success) { document.getElementById('loading-area').style.display = 'none'; return; }
+                unitsConfig = data.units;
             }
+
+            let oldHistory = JSON.parse(localStorage.getItem('historyUnits_QuyenClass')) || [];
+            let newUnitsFound = [];
+
+            allowedUnitsList.forEach(u => {
+                if(!oldHistory.includes(String(u))) { newUnitsFound.push(String(u)); }
+            });
+
+            renderUnitGrid(newUnitsFound);
+            localStorage.setItem('historyUnits_QuyenClass', JSON.stringify(allowedUnitsList));
+
+            if(allowedUnitsList.length > 0) {
+                await selectUnitLocal(allowedUnitsList[0]);
+            }
+
+            if (!bundle) prefetchAllUnitsInBackground();
         } catch(e) {}
         document.getElementById('loading-area').style.display = 'none';
     }
@@ -1319,6 +1464,8 @@
         // Reset bảng Viết từ khi đổi Unit
         tabState.typing.status = tabState.typing.indices.map(() => 'none');
         tabState.typing.values = tabState.typing.indices.map(() => '');
+        // Reset điểm số của tất cả các tab luyện tập
+        ["flashcard", "quiz", "typing", "listen", "guess", "visual"].forEach(resetTabScore);
     }
 
     function switchTab(tabName) {
@@ -1378,6 +1525,10 @@
     function handleNextAction() {
         let state = tabState[currentTab];
         if (!state || !state.indices || state.indices.length === 0) return;
+
+        // Làm hết bài rồi thì chúc mừng thay vì lặng lẽ quay lại câu 1
+        if (isTabFinished(currentTab)) { showTabDonePopup(currentTab); return; }
+
         state.current = (state.current + 1) % state.indices.length;
         if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
         updateDashboardStats();
@@ -1404,12 +1555,14 @@
             if (hasTypingProgress() && !confirm("Trộn bài sẽ xoá hết đáp án bạn đã nhập. Bạn có chắc không?")) return;
             state.indices = shuffleArray([...state.indices]);
             state.current = 0;
+            resetTabScore('typing');
             renderTypingSheet(false); // reset toàn bộ tiến độ, focus lại hàng đầu tiên
             updateDashboardStats();
             return;
         }
         state.indices = shuffleArray([...state.indices]);
         state.current = 0;
+        resetTabScore(currentTab);
         if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
         updateDashboardStats();
     }
@@ -1529,8 +1682,8 @@
             if (btn.innerText === correctOpt) btn.classList.add('correct');
             else if (btn === selectedBtn) btn.classList.add('wrong');
         });
-        if(selectedOpt === correctOpt) setFeedback("🎉 Chính xác! Bạn nhớ bài tốt lắm.", "success");
-        else { setFeedback("😢 Chưa đúng rồi, từ này đã được lưu vào Sổ tay để bạn ôn lại.", "error"); recordWrongWord(); }
+        if(selectedOpt === correctOpt) { setFeedback("🎉 Chính xác! Bạn nhớ bài tốt lắm.", "success"); markTabAnswered('quiz', true); }
+        else { setFeedback("😢 Chưa đúng rồi, từ này đã được lưu vào Sổ tay để bạn ôn lại.", "error"); recordWrongWord(); markTabAnswered('quiz', false); }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
@@ -1584,8 +1737,17 @@
 
     function toggleTypingDirection() {
         let state = tabState.typing;
+        const dangLam = state.direction === 'vi-to-ko' ? 'Việt → Hàn' : 'Hàn → Việt';
+        const sapSang = state.direction === 'vi-to-ko' ? 'Hàn → Việt' : 'Việt → Hàn';
+
+        // Đáp án của chiều cũ không còn đúng ở chiều mới, nên phải làm lại từ đầu
+        if (hasTypingProgress() &&
+            !confirm(`Bạn đang làm mode ${dangLam}. Bạn có muốn bắt đầu lại từ đầu với mode ${sapSang} không?`)) {
+            return;
+        }
+
         state.direction = state.direction === 'vi-to-ko' ? 'ko-to-vi' : 'vi-to-ko';
-        renderTypingSheet(true); // giữ nguyên tiến độ, chỉ đổi ngôn ngữ hiển thị
+        renderTypingSheet(false); // reset sạch bảng cho chiều học mới
     }
 
     function renderTypingSheet(keepProgress) {
@@ -1597,6 +1759,7 @@
         if (!keepProgress || !state.status || state.status.length !== state.indices.length) {
             state.status = state.indices.map(() => 'none');
             state.values = state.indices.map(() => '');
+            resetTabScore('typing');
         }
 
         const isViToKo = state.direction === 'vi-to-ko';
@@ -1655,6 +1818,16 @@
             input.value = state.values[rowIdx] || '';
             input.onkeydown = (e) => handleTypingRowKey(e, rowIdx);
             input.oninput = () => { state.values[rowIdx] = input.value; };
+            // Bộ gõ tiếng Hàn / tiếng Việt gõ chữ theo kiểu "ghép dần" (composition).
+            // Phải đợi ghép xong mới được kiểm tra, nếu không chữ cuối sẽ rơi xuống ô kế tiếp.
+            // Lưu ý: composition event KHÔNG có thuộc tính oncompositionend, bắt buộc dùng addEventListener.
+            input.addEventListener('compositionend', () => {
+                state.values[rowIdx] = input.value;
+                if (input.dataset.pendingEnter === '1') {
+                    input.dataset.pendingEnter = '';
+                    setTimeout(() => submitTypingRow(rowIdx), 0);
+                }
+            });
             tdInput.appendChild(input);
 
             const tdMark = document.createElement('td');
@@ -1697,6 +1870,15 @@
 
     function handleTypingRowKey(e, rowIdx) {
         if (e.key !== 'Enter') return; // Tab / Shift+Tab để trình duyệt xử lý tự nhiên
+
+        // Enter khi bộ gõ đang ghép chữ dở (vd 화장시 + ㄹ, hoặc Telex tiếng Việt):
+        // lần Enter này chỉ để CHỐT chữ. Không đụng vào, để bộ gõ chốt xong đã,
+        // rồi sự kiện compositionend sẽ tự gọi kiểm tra giúp — học viên vẫn chỉ cần nhấn Enter 1 lần.
+        if (e.isComposing || e.keyCode === 229) {
+            e.target.dataset.pendingEnter = '1';
+            return;
+        }
+
         e.preventDefault();
         submitTypingRow(rowIdx);
     }
@@ -1721,12 +1903,15 @@
             if (nextRow === -1) {
                 setFeedback("🎉 Tuyệt vời! Bạn đã hoàn thành toàn bộ danh sách từ vựng.", "success");
                 input.blur();
+                showTabDonePopup('typing');
             } else {
                 focusTypingRow(nextRow, true);
             }
         } else {
             state.status[rowIdx] = 'bad';
             paintTypingRow(rowIdx, 'bad', true);
+            if (!state.seen) resetTabScore('typing');
+            if (!state.seen.includes(rowIdx)) { state.seen.push(rowIdx); state.wrong++; }
             recordWrongWord(vocabIdx);
             setFeedback("😢 Chưa đúng rồi, bạn sửa lại rồi nhấn Enter nha. Từ này đã được lưu vào sổ tay.", "error");
             updateTypingProgress();
@@ -1820,8 +2005,8 @@
     function handleListenAnswer(btn, selectedChoice, correctChoice) {
         let state = tabState.listen; if (state.answered) return; state.answered = true;
         document.getElementById('listen-vi-meaning').innerText = vocabData[state.indices[state.current]].vi;
-        if (selectedChoice === correctChoice) { btn.classList.add('selected-correct'); setFeedback("🎉 Đúng rồi. Nghe rất chuẩn!", "success"); } 
-        else { btn.classList.add('selected-wrong'); setFeedback("😢 Chưa đúng rồi, hãy nghe lại nhé.", "error"); document.querySelectorAll('#listen-word-pool .pool-btn').forEach(b => { if(b.innerText === correctChoice) b.classList.add('selected-correct'); }); recordWrongWord(); }
+        if (selectedChoice === correctChoice) { btn.classList.add('selected-correct'); setFeedback("🎉 Đúng rồi. Nghe rất chuẩn!", "success"); markTabAnswered('listen', true); } 
+        else { btn.classList.add('selected-wrong'); setFeedback("😢 Chưa đúng rồi, hãy nghe lại nhé.", "error"); document.querySelectorAll('#listen-word-pool .pool-btn').forEach(b => { if(b.innerText === correctChoice) b.classList.add('selected-correct'); }); recordWrongWord(); markTabAnswered('listen', false); }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
@@ -1855,8 +2040,8 @@
     function handleGuessAnswer(selectedBtn, selectedOpt, correctOpt) {
         let state = tabState.guess; if (state.answered) return; state.answered = true;
         document.querySelectorAll('#guess-opts .option-btn').forEach(btn => { if (btn.innerText === correctOpt) btn.classList.add('correct'); else if (btn === selectedBtn) btn.classList.add('wrong'); });
-        if (selectedOpt === correctOpt) setFeedback("🎉 Xuất sắc! Chọn đúng nghĩa rồi.", "success");
-        else { setFeedback("😢 Chưa chính xác, câu này đã lưu vào Sổ tay để bạn ôn lại.", "error"); recordWrongWord(); }
+        if (selectedOpt === correctOpt) { setFeedback("🎉 Xuất sắc! Chọn đúng nghĩa rồi.", "success"); markTabAnswered('guess', true); }
+        else { setFeedback("😢 Chưa chính xác, câu này đã lưu vào Sổ tay để bạn ôn lại.", "error"); recordWrongWord(); markTabAnswered('guess', false); }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
@@ -1889,8 +2074,8 @@
     function handleVisualAnswer(selectedBtn, selectedOpt, correctOpt) {
         let state = tabState.visual; if (state.answered) return; state.answered = true;
         document.querySelectorAll('#visual-opts .option-btn').forEach(btn => { if (btn.innerText === correctOpt) btn.classList.add('correct'); else if (btn === selectedBtn) btn.classList.add('wrong'); });
-        if (selectedOpt === correctOpt) { setFeedback("🎉 Rất tốt! Bạn chọn đúng mẫu câu rồi.", "success"); triggerKoreanVoice(correctOpt, false); }
-        else { setFeedback(`😢 Chưa chính xác, câu chuẩn là: "${correctOpt}"`, "error"); recordWrongWord(); }
+        if (selectedOpt === correctOpt) { setFeedback("🎉 Rất tốt! Bạn chọn đúng mẫu câu rồi.", "success"); triggerKoreanVoice(correctOpt, false); markTabAnswered('visual', true); }
+        else { setFeedback(`😢 Chưa chính xác, câu chuẩn là: "${correctOpt}"`, "error"); recordWrongWord(); markTabAnswered('visual', false); }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
     }
 
@@ -2335,10 +2520,14 @@
 
     // --- HÀM TỰ ĐỘNG CHẠY KHI TRANG LOAD ---
     window.onload = async function() {
-        const savedUser = localStorage.getItem('saved_user_QuyenClass'); 
+        // Bắt đầu tải giáo trình NGAY, song song với lúc học viên đang gõ mật khẩu.
+        // Dữ liệu giáo trình không phụ thuộc tài khoản nên tải sớm được.
+        startBundlePrefetch();
+
+        const savedUser = localStorage.getItem('saved_user_QuyenClass');
         const savedPass = localStorage.getItem('saved_pass_QuyenClass');
         const sessionUser = localStorage.getItem('studentSession_QuyenClass');
-        
+
         if (sessionUser && savedUser && savedPass) {
             document.getElementById('login-panel-screen').style.display = 'none'; 
             document.getElementById('main-app-layout').style.display = 'grid';
@@ -2483,38 +2672,80 @@
         });
     }
 
+    /* ============================================================
+       BỘ ĐẾM THỜI GIAN HỌC THỰC TẾ
+       Chỉ tính khi học viên ĐANG THẬT SỰ HỌC:
+         - tab của web phải đang hiển thị và cửa sổ đang được chọn
+         - có thao tác (chuột / bàn phím / cuộn / chạm) trong vòng 60 giây
+       Đo bằng mốc thời gian thật chứ không đếm nhịp setInterval,
+       vì trình duyệt bóp nhịp khi tab chạy nền sẽ làm đếm sai.
+       ============================================================ */
+    const IDLE_LIMIT_MS = 60000;   // không thao tác quá 60s coi như đã rời máy
+    const TICK_MS = 1000;
+
     function startDashboardTrackers() {
         if(activeTimerInterval) clearInterval(activeTimerInterval);
-        
-        let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
-        
-        let totalMinutes = parseInt(localStorage.getItem(`total_mins_${studentKey}`)) || 0;
-        if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} phút`;
 
-        let todaySeconds = 0;
+        let studentKey = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
+        const todayStr = new Date().toLocaleDateString('vi-VN');
+
+        // "Hôm nay" phải reset sang ngày mới, và không được mất khi tải lại trang
+        if (localStorage.getItem(`study_date_${studentKey}`) !== todayStr) {
+            localStorage.setItem(`study_date_${studentKey}`, todayStr);
+            localStorage.setItem(`today_secs_${studentKey}`, '0');
+        }
+
+        let totalSeconds = parseInt(localStorage.getItem(`total_secs_${studentKey}`));
+        if (isNaN(totalSeconds)) {
+            // Chuyển dữ liệu cũ (lưu theo phút) sang đơn vị giây, chỉ chạy 1 lần
+            totalSeconds = (parseInt(localStorage.getItem(`total_mins_${studentKey}`)) || 0) * 60;
+        }
+        let todaySeconds = parseInt(localStorage.getItem(`today_secs_${studentKey}`)) || 0;
         currentUnitActiveSeconds = 0;
 
+        const paintTimes = () => {
+            if(document.getElementById('dash-total-time')) {
+                document.getElementById('dash-total-time').innerText = `${Math.floor(totalSeconds / 60)} phút`;
+            }
+            if(document.getElementById('dash-today-time')) {
+                let mins = Math.floor(todaySeconds / 60), secs = todaySeconds % 60;
+                document.getElementById('dash-today-time').innerText =
+                    `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+        };
+        paintTimes();
+
         let lastActiveTime = Date.now();
-        window.onmousemove = () => { lastActiveTime = Date.now(); };
-        window.onkeydown = () => { lastActiveTime = Date.now(); };
+        let lastTickTime = Date.now();
+        const touch = () => { lastActiveTime = Date.now(); };
+        ['mousemove', 'mousedown', 'keydown', 'wheel', 'scroll', 'touchstart', 'focus']
+            .forEach(evt => window.addEventListener(evt, touch, { passive: true }));
+
+        // Quay lại trang sau khi chuyển tab: coi như vừa có thao tác và bỏ qua quãng vừa vắng mặt.
+        // Việc DỪNG đếm lúc vắng mặt do chính điều kiện document.hidden / hasFocus bên dưới lo.
+        const resume = () => { touch(); lastTickTime = Date.now(); };
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) resume(); });
+        window.addEventListener('focus', resume);
 
         activeTimerInterval = setInterval(() => {
-            if (Date.now() - lastActiveTime > 180000) return;
+            const now = Date.now();
+            const elapsed = now - lastTickTime;
+            lastTickTime = now;
 
-            todaySeconds++;
-            currentUnitActiveSeconds++;
+            const isIdle = (now - lastActiveTime > IDLE_LIMIT_MS) || document.hidden || !document.hasFocus();
+            if (isIdle) return;
 
-            let mins = Math.floor(todaySeconds / 60);
-            let secs = todaySeconds % 60;
-            if(document.getElementById('dash-today-time')) {
-                document.getElementById('dash-today-time').innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-            }
+            // Cộng đúng số giây đã trôi qua, chặn trên để một lần "đơ" không cộng vống lên
+            const gain = Math.min(Math.round(elapsed / 1000), 2);
+            if (gain <= 0) return;
 
-            if (todaySeconds % 60 === 0) {
-                totalMinutes++;
-                localStorage.setItem(`total_mins_${studentKey}`, totalMinutes);
-                if(document.getElementById('dash-total-time')) document.getElementById('dash-total-time').innerText = `${totalMinutes} phút`;
-            }
+            todaySeconds += gain;
+            totalSeconds += gain;
+            currentUnitActiveSeconds += gain;
+
+            paintTimes();
+            localStorage.setItem(`today_secs_${studentKey}`, todaySeconds);
+            localStorage.setItem(`total_secs_${studentKey}`, totalSeconds);
 
             if (currentUnit) {
                 const timerZone = document.getElementById('dash-timer-zone');
@@ -2537,7 +2768,7 @@
                     }
                 }
             }
-        }, 1000);
+        }, TICK_MS);
     }
 </script>
 </body>
