@@ -123,7 +123,8 @@
         .dashboard-layout.right-collapsed .widget-right-profile > *:not(.sidebar-collapse-btn) { display: none !important; }
         .dashboard-layout.left-collapsed .sidebar-left { padding: 14px 6px; align-items: center; }
         .dashboard-layout.right-collapsed .widget-right-profile { padding: 14px 6px; align-items: center; }
-        .brand-logo-area { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding-left: 10px; margin-bottom: 30px; }
+        .brand-logo-area { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding-left: 10px; margin-bottom: 24px; }
+        .brand-top { display: flex; align-items: center; gap: 10px; }
         .brand-logo-img { width: 30px; height: 30px; object-fit: contain; border-radius: 6px; }
                 .brand-logo-area span { font-size: 14px; font-weight: 800; color: #1a202c; }
         /* Badge cấp độ — ánh kim lấp lánh, tia sáng chạy qua lại */
@@ -132,16 +133,20 @@
             padding: 3px 12px; border-radius: 999px;
             font-size: 10.5px; font-weight: 800; letter-spacing: .4px;
             color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.2);
-            background-image: linear-gradient(100deg,#8ED8FF,#3AA0EE,#1567CE,#0B3E9E,rgba(255,255,255,.85),#1567CE,#3AA0EE,#8ED8FF);
+            background-image: linear-gradient(100deg,#B6E3FF,#84C2F2,#57A0E4,#3E8FDD,rgba(255,255,255,.9),#57A0E4,#84C2F2,#B6E3FF);
             background-size: 250% 100%;
-            animation: badgeSheen 3s ease-in-out infinite alternate;
-            box-shadow: 0 3px 12px rgba(21,103,206,.42);
+            animation: badgeSheen 12s ease-in-out infinite alternate;
+            box-shadow: 0 3px 10px rgba(62,143,221,.28);
             border: 1px solid rgba(255,255,255,.55);
-            white-space: nowrap; margin-top: 10px; flex-basis: 100%;
+            white-space: nowrap; margin-top: 2px;
         }
-        .app-level-badge .badge-spark { width: 12px; height: 12px; fill: #fff; animation: badgeTwinkle 1.6s ease-in-out infinite; filter: drop-shadow(0 0 2px rgba(255,255,255,.95)); }
+        .app-level-badge .badge-spark { width: 12px; height: 12px; fill: #fff; animation: badgeTwinkle 6s ease-in-out infinite; filter: drop-shadow(0 0 2px rgba(255,255,255,.95)); }
         @keyframes badgeSheen { 0% { background-position: 0% 0; } 100% { background-position: 100% 0; } }
         @keyframes badgeTwinkle { 0%,100% { opacity:.55; transform: scale(.82) rotate(0deg); } 50% { opacity:1; transform: scale(1.18) rotate(25deg); } }
+        .dash-mobile-actions { display: none; }
+        .dash-action-link { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; color: var(--sub-text); text-decoration: none; }
+        .dash-action-link svg { width: 18px; height: 18px; fill: currentColor; }
+        .dash-action-link.dash-action-logout { color: var(--error-color); }
 
         .menu-list { display: flex; flex-direction: column; gap: 4px; list-style: none; }
         .menu-item a { display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: var(--sub-text); font-size: 12px; font-weight: 700; text-decoration: none; border-radius: var(--radius-sm); transition: all 0.2s; }
@@ -470,6 +475,7 @@
             .sidebar-left { display: flex !important; flex-direction: column !important; align-items: flex-start !important; padding: 12px !important; height: auto !important; border-radius: var(--radius-md); gap: 8px; }
             .brand-logo-area { margin-bottom: 4px !important; padding-left: 4px !important; width: 100%; justify-content: flex-start; gap: 8px; }
             .app-level-badge { flex-basis: auto; margin-top: 0; }
+            .dash-mobile-actions { display: flex; flex-direction: column; gap: 4px; margin-top: 18px; padding-top: 14px; border-top: 1px solid #edf2f7; }
             .sidebar-left .menu-list { display: flex !important; flex-direction: row !important; flex-wrap: wrap; gap: 6px !important; width: 100%; }
             .menu-item a { padding: 6px 10px !important; font-size: 12px !important; }
             .menu-item a svg { display: none; }
@@ -772,8 +778,10 @@
         <button class="sidebar-collapse-btn" id="left-collapse-btn" title="Thu gọn / mở rộng menu trái" onclick="toggleSidebar('left')">‹</button>
         <div class="upper-nav">
             <div class="brand-logo-area">
-                <img src="assets/logo-web.png" alt="Logo" class="brand-logo-img">
-                <span><span>NGOC QUYEN CLASSROOM</span></span>
+                <div class="brand-top">
+                    <img src="assets/logo-web.png" alt="Logo" class="brand-logo-img">
+                    <span><span>NGOC QUYEN CLASSROOM</span></span>
+                </div>
                 <span class="app-level-badge"><svg class="badge-spark" viewBox="0 0 24 24"><path d="M12 0l2.7 8.3H23l-6.8 5 2.6 8.3L12 18.6 5.2 21.6l2.6-8.3L1 8.3h8.3z"/></svg>Sơ cấp 1</span>
             </div>
             <ul class="menu-list">
@@ -1378,6 +1386,11 @@
         <button onclick="refreshDashRandomVocab()" style="width: 100%; padding: 8px; background: none; border: 1px solid rgba(237, 137, 54, 0.3); border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; color: #ed8936; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(237, 137, 54, 0.05)'" onmouseout="this.style.background='none'">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-0.14em;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> Đổi 3 từ khác
         </button>
+    </div>
+    <!-- Mobile: Chính sách + Rời phòng học ở cuối ngăn kéo Dashboard -->
+    <div class="dash-mobile-actions">
+        <a href="#" class="dash-action-link" onclick="event.preventDefault(); toggleMobileDash(); openPolicyModal();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>Chính sách</a>
+        <a href="#" class="dash-action-link dash-action-logout" onclick="event.preventDefault(); executeStudentLogout();"><svg viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Rời phòng học</a>
     </div>
 </aside>
 
