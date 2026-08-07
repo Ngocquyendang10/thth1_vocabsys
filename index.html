@@ -1480,6 +1480,23 @@
 </div>
 
 <script>
+    // ============================================================================
+    // 🔒 CÔ LẬP localStorage THEO TỪNG WEB (THTH1 vs THTH2)
+    // ----------------------------------------------------------------------------
+    // Hai web THTH1 & THTH2 nằm CHUNG một origin (ngocquyendang10.github.io) nên
+    // trình duyệt DÙNG CHUNG localStorage -> trước đây bị TRÙNG lịch sử hoạt động.
+    // Đoạn này thêm tiền tố "T1::" cho MỌI khoá localStorage của THTH1, cách ly
+    // hoàn toàn khỏi THTH2 (dùng "T2::"). Phải đặt TRƯỚC mọi lần đọc/ghi localStorage.
+    // ============================================================================
+    (function () {
+        var NS = "T1::";
+        var proto = Storage.prototype;
+        var _get = proto.getItem, _set = proto.setItem, _rem = proto.removeItem;
+        proto.getItem = function (k) { return _get.call(this, this === window.localStorage ? NS + k : k); };
+        proto.setItem = function (k, v) { return _set.call(this, this === window.localStorage ? NS + k : k, v); };
+        proto.removeItem = function (k) { return _rem.call(this, this === window.localStorage ? NS + k : k); };
+    })();
+
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2tUfMpGnL-n5aLAAI-L2Ga2mj-houcJcw0o6ssSTk3iT0s7TaO8PSeXmJCkk7V0C2/exec";
 
     /* ============================================================
