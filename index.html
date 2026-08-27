@@ -136,10 +136,10 @@
             padding: 3px 12px; border-radius: 999px;
             font-size: 12px; font-weight: 800; letter-spacing: .4px;
             color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.2);
-            background-image: linear-gradient(100deg,#D6FBEE,#8CEBD0,#52D9B2,#38C9A2,rgba(255,255,255,.92),#52D9B2,#8CEBD0,#D6FBEE);
+            background-image: linear-gradient(100deg,#B6E3FF,#84C2F2,#57A0E4,#3E8FDD,rgba(255,255,255,.9),#57A0E4,#84C2F2,#B6E3FF);
             background-size: 250% 100%;
             animation: badgeSheen 12s ease-in-out infinite alternate;
-            box-shadow: 0 3px 10px rgba(56,201,162,.28);
+            box-shadow: 0 3px 10px rgba(62,143,221,.28);
             border: 1px solid rgba(255,255,255,.55);
             white-space: nowrap; margin-top: 2px;
         }
@@ -1173,7 +1173,7 @@
                     <img src="assets/logo-web.png" alt="Logo" class="brand-logo-img">
                     <span><span>NGOC QUYEN CLASSROOM</span></span>
                 </div>
-                <span class="app-level-badge"><svg class="badge-spark" viewBox="0 0 24 24"><path d="M12 0l2.7 8.3H23l-6.8 5 2.6 8.3L12 18.6 5.2 21.6l2.6-8.3L1 8.3h8.3z"/></svg>Sơ cấp 2</span>
+                <span class="app-level-badge"><svg class="badge-spark" viewBox="0 0 24 24"><path d="M12 0l2.7 8.3H23l-6.8 5 2.6 8.3L12 18.6 5.2 21.6l2.6-8.3L1 8.3h8.3z"/></svg>Sơ cấp 1</span>
             </div>
             <ul class="menu-list">
                 <li class="menu-item active" id="menu-vocab" onclick="showAppMode('vocab')"><a href="#">
@@ -2264,6 +2264,10 @@
         if (!m) return;
         ['pw-old', 'pw-new', 'pw-new2'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
         const show = document.getElementById('pw-show'); if (show) { show.checked = false; toggleChangePwVisible(false); }
+        // 🔁 Trả nút bấm về trạng thái ban đầu — nếu không, sau 1 lần đổi thành công nút
+        //    sẽ kẹt ở "Đã đổi ✓" + disabled, khiến KHÔNG đổi mật khẩu được lần thứ hai.
+        const pwBtn = document.getElementById('pw-submit-btn');
+        if (pwBtn) { pwBtn.disabled = false; pwBtn.textContent = 'Đổi mật khẩu'; }
         setPwMsg('', '');
         m.classList.add('active');
         setTimeout(() => { const f = document.getElementById('pw-old'); if (f) f.focus(); }, 60);
