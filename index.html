@@ -383,7 +383,27 @@
         .sum-toggle.sel { background:#2d3748; color:#fff; border-color:transparent; box-shadow:0 2px 6px rgba(45,55,72,0.25); }
 
         /* ===== OVERLAY BÀI KIỂM TRA TỔNG HỢP ===== */
-        #combined-test-overlay { display:none; position:fixed; inset:0; z-index:1200; background:var(--bg-color); }
+        #combined-test-overlay { display:none; position:fixed; inset:0; z-index:2200; background:var(--bg-color); }
+
+        /* 🔄 Thanh báo có bản cập nhật mới (nằm trên MỌI lớp khác) */
+        #app-update-bar {
+            display:none; position:fixed; left:50%; transform:translateX(-50%);
+            top:calc(10px + env(safe-area-inset-top, 0px)); z-index:99999;
+            width:calc(100% - 24px); max-width:460px; box-sizing:border-box;
+            background:#ffffff; border:1.5px solid var(--point-color); border-radius:16px;
+            box-shadow:0 12px 30px rgba(97,76,255,0.22); padding:12px 14px;
+            font-family:inherit; align-items:center; gap:10px;
+        }
+        #app-update-bar.show { display:flex; }
+        #app-update-bar .au-txt { flex:1; min-width:0; }
+        #app-update-bar .au-title { font-size:13px; font-weight:800; color:#1a202c; }
+        #app-update-bar .au-sub { font-size:11px; color:var(--sub-text); margin-top:2px; }
+        #app-update-bar button {
+            border:none; cursor:pointer; font-family:inherit; font-weight:800;
+            border-radius:10px; padding:9px 14px; font-size:12px; white-space:nowrap;
+        }
+        #app-update-bar .au-go { background:var(--point-color); color:#fff; }
+        #app-update-bar .au-later { background:transparent; color:var(--sub-text); padding:9px 6px; }
         #combined-test-overlay.active { display:flex; flex-direction:column; }
         .ct-topbar { flex:0 0 auto; display:flex; align-items:center; justify-content:space-between; padding:14px 22px; background:#fff; box-shadow:0 2px 10px rgba(0,0,0,0.04); border-bottom:1px solid #edf2f7; }
         .ct-topbar-left { font-size:14px; font-weight:800; color:var(--point-color); flex:1; }
@@ -1937,6 +1957,16 @@
 </div>
 
 <!-- 🎯 OVERLAY BÀI KIỂM TRA TỔNG HỢP (toàn màn hình) -->
+<!-- 🔄 Thanh báo bản cập nhật mới (tự hiện khi GitHub đã deploy bản mới) -->
+<div id="app-update-bar">
+    <div class="au-txt">
+        <div class="au-title">🎉 Đã có bản cập nhật mới!</div>
+        <div class="au-sub" id="au-sub">Trang sẽ tự làm mới để bạn dùng bản mới nhất.</div>
+    </div>
+    <button class="au-later" onclick="dismissAppUpdate()">Để sau</button>
+    <button class="au-go" onclick="applyAppUpdate()">Cập nhật</button>
+</div>
+
 <div id="combined-test-overlay">
     <div class="ct-topbar">
         <div class="ct-topbar-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg> Kiểm tra tổng hợp</div>
@@ -2028,9 +2058,22 @@
         if (!sess || !pass) return null; // chỉ đồng bộ khi có phiên thật + mật khẩu đã lưu
         return JSON.stringify({ action: 'saveProgress', user: sess, pass: pass, data: JSON.stringify(snapshotProgress(sess)) });
     }
+    // Apps Script xử lý TUẦN TỰ theo từng tài khoản: mỗi lần gửi tiến độ mà chưa xong
+    // sẽ chiếm chỗ hàng đợi, làm mọi lời gọi khác (nhất là lấy giọng đọc) phải chờ.
+    // -> Chỉ cho 1 lần gửi chạy tại một thời điểm, và bỏ qua khi dữ liệu không đổi.
+    var _progressInFlight = false, _progressLastSent = '';
     function pushProgressToServer() {
+        if (_progressInFlight) { clearTimeout(_progressPushTimer); _progressPushTimer = setTimeout(pushProgressToServer, 3000); return; }
         var payload = buildProgressPayload(); if (!payload) return;
-        try { fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: payload }).catch(function () {}); } catch (e) {}
+        if (payload === _progressLastSent) return; // không có gì mới -> khỏi gọi mạng
+        _progressInFlight = true;
+        var sending = payload;
+        try {
+            fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: payload })
+                .then(function () { _progressLastSent = sending; })
+                .catch(function () {})
+                .then(function () { _progressInFlight = false; });
+        } catch (e) { _progressInFlight = false; }
     }
     function flushProgressNow() {
         var payload = buildProgressPayload(); if (!payload) return;
@@ -2388,7 +2431,47 @@
     // 남 (nút "nam"): giọng Google Translate — KHÔNG gọi thẳng được từ trình duyệt
     //   (Google chặn theo Referer), nên nhờ backend Apps Script gọi giùm rồi trả
     //   file MP3 dạng base64. Miễn phí, không cần key. Có cache + dự phòng giọng nữ.
-    const _ttsMaleCache = {}; // text -> base64 (để bấm lần 2 phát ngay, và giúp iOS phát được)
+    const _ttsMaleCache = {};      // text -> base64 (để bấm lần 2 phát ngay, và giúp iOS phát được)
+    const _ttsMaleOrder = [];      // thứ tự đã lưu, dùng để giới hạn dung lượng nhớ
+    const TTS_CACHE_MAX = 40;      // giữ tối đa 40 file mp3 base64 (trước đây lưu vô hạn -> phình RAM, máy học viên ì dần)
+    const TTS_TIMEOUT_MS = 6000;   // quá 6 giây coi như hỏng -> phát ngay giọng nữ, không bắt chờ
+    const TTS_MAX_INFLIGHT = 1;    // backend chạy tuần tự -> chỉ cho 1 yêu cầu chờ tại một thời điểm
+    let _ttsInFlight = 0;
+    let _ttsToken = 0;             // đánh dấu yêu cầu mới nhất: phản hồi đến muộn sẽ bị bỏ qua
+    let _prefetchTimer = null;
+    let _voiceAudio = null;        // audio đang phát (chỉ giữ 1 cái, tránh chồng tiếng & rác bộ nhớ)
+
+    function _ttsCachePut(key, b64) {
+        if (_ttsMaleCache[key]) return;
+        _ttsMaleCache[key] = b64;
+        _ttsMaleOrder.push(key);
+        while (_ttsMaleOrder.length > TTS_CACHE_MAX) { delete _ttsMaleCache[_ttsMaleOrder.shift()]; }
+    }
+
+    // fetch có hạn giờ: không để một yêu cầu "treo" giữ chỗ hàng đợi mãi mãi
+    function _ttsFetch(url) {
+        const ctrl = ('AbortController' in window) ? new AbortController() : null;
+        const t = setTimeout(function () { try { if (ctrl) ctrl.abort(); } catch (_) {} }, TTS_TIMEOUT_MS);
+        const p = fetch(url, ctrl ? { signal: ctrl.signal } : undefined);
+        p.then(function () { clearTimeout(t); }, function () { clearTimeout(t); });
+        return p;
+    }
+
+    function _stopCurrentVoice() {
+        if (_voiceAudio) { try { _voiceAudio.pause(); } catch (_) {} _voiceAudio = null; }
+        try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (_) {}
+    }
+
+    // Chuỗi an toàn khi nhét vào thuộc tính onclick="ham('...')":
+    // escape cho cả chuỗi JS (\ và ') lẫn thuộc tính HTML (" & < >).
+    // Trước đây chỉ escape dấu ' -> một dấu " trong câu ví dụ là làm hỏng cả nút bấm.
+    function jsAttr(v) {
+        return String(v == null ? '' : v)
+            .replace(/\\/g, '\\\\').replace(/'/g, "\\'")
+            .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/[\r\n]+/g, ' ');
+    }
 
     function _cleanKoreanText(text) {
         if (typeof text === 'undefined' || !text) return "";
@@ -2419,6 +2502,7 @@
                   encodeURIComponent(clean) +
                   "&lang=ko&engine=g3&name=Korean%20Female&pitch=0.5&rate=0.45&volume=1";
         let audio = new Audio(url);
+        _voiceAudio = audio;
         audio.load();
         audio.play().catch(function () {
             try {
@@ -2434,38 +2518,61 @@
     }
 
     function _playBase64Mp3(b64) {
-        try { let a = new Audio("data:audio/mpeg;base64," + b64); a.play().catch(function () {}); return a; } catch (_) { return null; }
+        try { let a = new Audio("data:audio/mpeg;base64," + b64); _voiceAudio = a; a.play().catch(function () {}); return a; } catch (_) { return null; }
     }
 
     // Tải trước base64 giọng nam cho 1 từ (gọi khi hiện flashcard) -> bấm là phát ngay.
+    // Trước đây MỖI thẻ flashcard lật qua đều bắn 1 yêu cầu lên Apps Script.
+    // Lướt 15-20 thẻ = 15-20 yêu cầu xếp hàng, nên lúc bấm "nghe" phải đợi 5-10 giây mới ra tiếng.
+    // Nay: chỉ tải trước khi học viên DỪNG ở một thẻ >1,2 giây và đường truyền đang rảnh.
     function prefetchMaleVoice(text) {
         let clean = _cleanKoreanText(text);
         if (!clean || _ttsMaleCache[clean]) return;
-        fetch(`${SCRIPT_URL}?action=tts&text=${encodeURIComponent(clean)}`)
-            .then(r => r.json())
-            .then(d => { if (d && d.success && d.audio) _ttsMaleCache[clean] = d.audio; })
-            .catch(function () {});
+        clearTimeout(_prefetchTimer);
+        _prefetchTimer = setTimeout(function () {
+            if (_ttsInFlight >= TTS_MAX_INFLIGHT || _ttsMaleCache[clean]) return;
+            _ttsInFlight++;
+            _ttsFetch(`${SCRIPT_URL}?action=tts&text=${encodeURIComponent(clean)}`)
+                .then(r => r.json())
+                .then(d => { if (d && d.success && d.audio) _ttsCachePut(clean, d.audio); })
+                .catch(function () {})
+                .then(function () { _ttsInFlight--; });
+        }, 1200);
     }
 
     function triggerKoreanVoice(text, isMale, speakerBtn) {
         let clean = _cleanKoreanText(text);
         if (!clean) return;
+        clearTimeout(_prefetchTimer);   // học viên đã bấm nghe -> huỷ tải nền, nhường đường
+        _stopCurrentVoice();            // dừng tiếng cũ, không để chồng tiếng khi bấm liên tiếp
+        const myToken = ++_ttsToken;    // mọi phản hồi của yêu cầu cũ từ giờ sẽ bị bỏ qua
 
         if (!isMale) { _bindSpeakerPulse(_playFemaleVoice(clean), speakerBtn); return; }
 
         // 남: có sẵn trong cache thì phát ngay (đồng bộ -> hợp lệ trên iOS)
         if (_ttsMaleCache[clean]) { _bindSpeakerPulse(_playBase64Mp3(_ttsMaleCache[clean]), speakerBtn); return; }
 
+        // Backend đang bận (Apps Script chạy tuần tự) -> phát giọng nữ ngay, KHÔNG bắt học viên chờ
+        if (_ttsInFlight >= TTS_MAX_INFLIGHT) { _bindSpeakerPulse(_playFemaleVoice(clean), speakerBtn); return; }
+
         // Chưa có -> nhờ backend lấy giọng Google Translate rồi phát
         if (speakerBtn) speakerBtn.classList.add('is-playing');
-        fetch(`${SCRIPT_URL}?action=tts&text=${encodeURIComponent(clean)}`)
+        _ttsInFlight++;
+        _ttsFetch(`${SCRIPT_URL}?action=tts&text=${encodeURIComponent(clean)}`)
             .then(r => r.json())
             .then(d => {
                 if (speakerBtn) speakerBtn.classList.remove('is-playing');
-                if (d && d.success && d.audio) { _ttsMaleCache[clean] = d.audio; _bindSpeakerPulse(_playBase64Mp3(d.audio), speakerBtn); }
-                else { _bindSpeakerPulse(_playFemaleVoice(clean), speakerBtn); } // backend chưa hỗ trợ / lỗi -> dùng giọng nữ
+                if (d && d.success && d.audio) _ttsCachePut(clean, d.audio);
+                if (myToken !== _ttsToken) return;   // đã sang từ/câu khác -> không phát tiếng đến muộn
+                if (d && d.success && d.audio) _bindSpeakerPulse(_playBase64Mp3(d.audio), speakerBtn);
+                else _bindSpeakerPulse(_playFemaleVoice(clean), speakerBtn); // backend lỗi -> giọng nữ
             })
-            .catch(function () { if (speakerBtn) speakerBtn.classList.remove('is-playing'); _bindSpeakerPulse(_playFemaleVoice(clean), speakerBtn); });
+            .catch(function () {
+                if (speakerBtn) speakerBtn.classList.remove('is-playing');
+                if (myToken !== _ttsToken) return;
+                _bindSpeakerPulse(_playFemaleVoice(clean), speakerBtn);
+            })
+            .then(function () { _ttsInFlight--; });
     }
 
     async function executeStudentLogin() {
@@ -3078,11 +3185,16 @@
             if (!it.exVi || it.exVi.trim() === '' || it.exVi === correctVi) return false;
             if (seen[it.exVi]) return false; seen[it.exVi] = true; return true;
         });
-        cands.forEach(it => { let s = 0; _viWords(it.exVi).forEach(w => { if (cWords.has(w)) s++; }); it.__sim = s; });
-        const similar = cands.filter(it => it.__sim > 0).sort((a, b) => b.__sim - a.__sim);
+        // Tính điểm giống nhau trên MẢNG RIÊNG, không gắn thuộc tính vào object từ vựng dùng chung
+        // (gắn vào object gốc sẽ đọng lại và bị đồng bộ/serialize lây sang chỗ khác).
+        const scored = cands.map(it => {
+            let sc = 0; _viWords(it.exVi).forEach(w => { if (cWords.has(w)) sc++; });
+            return { exVi: it.exVi, sim: sc };
+        });
+        const similar = scored.filter(o => o.sim > 0).sort((a, b) => b.sim - a.sim);
         const topSimilar = shuffleArray(similar.slice(0, Math.max(n * 3, 8))); // trộn trong nhóm giống nhất
-        const rest = shuffleArray(cands.filter(it => it.__sim === 0));
-        return topSimilar.concat(rest).slice(0, n).map(it => it.exVi);
+        const rest = shuffleArray(scored.filter(o => o.sim === 0));
+        return topSimilar.concat(rest).slice(0, n).map(o => o.exVi);
     }
 
     // Tách chuỗi Hàn thành danh sách "jamo" (phụ âm/nguyên âm) để so khớp
@@ -4386,7 +4498,7 @@
                 <td style="vertical-align:middle; font-weight:800; font-size:15px;">
                     <div style="display:flex; align-items:center; gap:6px;">
                         ${koDisplay}
-                        <button class="action-eye-btn" style="margin-left:auto;" onclick="triggerKoreanVoice('${item.ko.replace(/'/g, "\\'")}', false); event.stopPropagation();">
+                        <button class="action-eye-btn" style="margin-left:auto;" onclick="triggerKoreanVoice('${jsAttr(item.ko)}', false); event.stopPropagation();">
                             <svg style="width:14px; height:14px;" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
                         </button>
                     </div>
@@ -4649,7 +4761,7 @@
                             <span class="grammar-ex-ko">${ex.ko}</span>
                             <span class="grammar-ex-vi">${ex.vi}</span>
                         </div>
-                        <button class="audio-inline-btn" onclick="triggerKoreanVoice('${ex.ko.replace(/'/g, "\\'")}', false); event.stopPropagation();"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Phát âm</button>
+                        <button class="audio-inline-btn" onclick="triggerKoreanVoice('${jsAttr(ex.ko)}', false); event.stopPropagation();"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Phát âm</button>
                     </div>
                 `;
                 exDiv.appendChild(row);
@@ -5029,13 +5141,25 @@
         scheduleProgressPush();
 
         saveQuizSession(tab);   // lưu vị trí câu để lần sau làm tiếp
-        renderUnitReport();
-        renderDashboardUnitGrid();
+        scheduleDashboardRepaint();
+    }
+
+    /* Vẽ lại "Báo cáo Unit" + lưới 15 Unit tối đa 1 lần mỗi 250ms.
+       Trước đây MỖI câu trả lời đều vẽ lại ngay lập tức (kèm 15 lần JSON.parse localStorage),
+       nên càng làm nhiều câu thì mỗi lần bấm càng khựng. */
+    let _dashRepaintTimer = null;
+    function scheduleDashboardRepaint() {
+        if (_dashRepaintTimer) return;
+        _dashRepaintTimer = setTimeout(function () {
+            _dashRepaintTimer = null;
+            try { renderUnitReport(); renderDashboardUnitGrid(); } catch (e) {}
+        }, 250);
     }
 
     // Số sao của 1 Unit = số bài quiz đã hoàn thành (tối đa 5)
-    function starsForUnit(unit) {
-        const data = getUnitQuizData(unit);
+    function starsForUnit(unit, storeIn) {
+        // storeIn: truyền sẵn store đã đọc để khỏi JSON.parse lại cho từng Unit
+        const data = storeIn ? (storeIn[unit] || {}) : getUnitQuizData(unit);
         let n = 0;
         UNIT_QUIZ_TABS.forEach(t => { if (data[t.key] && data[t.key].done) n++; });
         return n;
@@ -5217,6 +5341,21 @@
     let activeTimerInterval = null;
     let currentUnitActiveSeconds = 0;
 
+    /* Mốc thao tác gần nhất — để Ở NGOÀI startDashboardTrackers().
+       Trước đây mỗi lần chọn Unit lại gắn thêm 9 trình lắng nghe (mousemove/scroll/touchstart...)
+       vào window mà không gỡ cái cũ; chọn Unit 20 lần = mỗi cú chạm/cuộn chạy 20 hàm -> web ì dần. */
+    let _lastActiveTime = Date.now();
+    let _lastTickTime = Date.now();
+    (function bindActivityListenersOnce() {
+        const touch = () => { _lastActiveTime = Date.now(); };
+        ['mousemove', 'mousedown', 'keydown', 'wheel', 'scroll', 'touchstart', 'focus']
+            .forEach(evt => window.addEventListener(evt, touch, { passive: true }));
+        // Quay lại trang sau khi chuyển tab: coi như vừa có thao tác và bỏ qua quãng vừa vắng mặt.
+        const resume = () => { touch(); _lastTickTime = Date.now(); };
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) resume(); });
+        window.addEventListener('focus', resume);
+    })();
+
     function initDashboardSystem() {
         renderDashboardUnitGrid();
         updateDashboardStats();
@@ -5231,12 +5370,13 @@
 
         let studentKey = getStudentKey();
         let completedUnits = JSON.parse(localStorage.getItem(`completed_units_${studentKey}`)) || [];
+        const uqStore = loadUnitQuizStore();   // đọc 1 lần, dùng cho cả 15 ô
 
         for (let i = 1; i <= 15; i++) {
             const item = document.createElement('div');
             let isDone = completedUnits.some(u => String(u) === String(i));  // đã đạt 15 phút hoạt động (so khớp chuỗi/số)
             let isCurrent = (currentUnit == i);
-            let stars = starsForUnit(i);                     // số bài quiz đã hoàn thành
+            let stars = starsForUnit(i, uqStore);            // số bài quiz đã hoàn thành
 
             // Thu nhỏ ~75%: padding & font gọn hơn bản cũ
             item.style.padding = "5px 3px 4px";
@@ -5456,24 +5596,15 @@
         };
         paintTimes();
 
-        let lastActiveTime = Date.now();
-        let lastTickTime = Date.now();
-        const touch = () => { lastActiveTime = Date.now(); };
-        ['mousemove', 'mousedown', 'keydown', 'wheel', 'scroll', 'touchstart', 'focus']
-            .forEach(evt => window.addEventListener(evt, touch, { passive: true }));
-
-        // Quay lại trang sau khi chuyển tab: coi như vừa có thao tác và bỏ qua quãng vừa vắng mặt.
-        // Việc DỪNG đếm lúc vắng mặt do chính điều kiện document.hidden / hasFocus bên dưới lo.
-        const resume = () => { touch(); lastTickTime = Date.now(); };
-        document.addEventListener('visibilitychange', () => { if (!document.hidden) resume(); });
-        window.addEventListener('focus', resume);
+        _lastActiveTime = Date.now();
+        _lastTickTime = Date.now();
 
         activeTimerInterval = setInterval(() => {
             const now = Date.now();
-            const elapsed = now - lastTickTime;
-            lastTickTime = now;
+            const elapsed = now - _lastTickTime;
+            _lastTickTime = now;
 
-            const isIdle = (now - lastActiveTime > IDLE_LIMIT_MS) || document.hidden || !document.hasFocus();
+            const isIdle = (now - _lastActiveTime > IDLE_LIMIT_MS) || document.hidden || !document.hasFocus();
             if (isIdle) return;
 
             // Cộng đúng số giây đã trôi qua, chặn trên để một lần "đơ" không cộng vống lên
@@ -5659,7 +5790,7 @@
         if (mixed.length === 0) { body.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--sub-text);">Chưa có dữ liệu từ vựng.</td></tr>`; return; }
         mixed.forEach(item => {
             let isStar = starList.includes(item.ko);
-            let safeKo = item.ko.replace(/'/g, "\\'");
+            let safeKo = jsAttr(item.ko);
             let tr = document.createElement('tr');
             tr.innerHTML =
                 `<td style="text-align:center;vertical-align:middle;"><span style="font-size:18px;cursor:pointer;color:${isStar ? '#dd6b20' : '#cbd5e0'};" onclick="toggleVocabStar('${safeKo}', this)">★</span></td>` +
@@ -5818,6 +5949,7 @@
             const type = useTypes[Math.floor(Math.random() * useTypes.length)];
             sumTest.questions.push(buildCombinedQuestion(item, type, pool));
         });
+        document.body.classList.remove('dash-open'); // đóng ngăn kéo thống kê kẻo nền mờ phủ lên đề
         renderCombinedTest();
         document.getElementById('combined-test-overlay').classList.add('active');
     }
@@ -5862,8 +5994,38 @@
         return q;
     }
 
+    // Câu ví dụ tiếng Hàn của cô có thể chứa dấu nháy ' hoặc " (vd: 친구가 "안녕" 했어요).
+    // Trước đây các nút được dựng bằng onclick="...'${text}'..." nên chỉ cần MỘT dấu nháy trong câu
+    // là thuộc tính HTML bị đứt giữa chừng -> thẻ câu hỏi vỡ, các nút đáp án phía sau mất luôn
+    // sự kiện bấm (bấm cỡ nào cũng không phản hồi). Nay: escape + gắn sự kiện bằng uỷ quyền.
+    function ctEsc(v) {
+        return String(v == null ? '' : v)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    let _ctDelegated = false;
+    function bindCombinedTestEvents() {
+        if (_ctDelegated) return;
+        _ctDelegated = true;
+        const wrap = document.getElementById('ct-questions');
+        if (!wrap) return;
+        wrap.addEventListener('click', function (e) {
+            const audioBtn = e.target.closest('.ct-audio-btn');
+            if (audioBtn) { triggerKoreanVoice(audioBtn.dataset.audio || '', false, audioBtn); return; }
+            const opt = e.target.closest('.ct-opt');
+            if (opt) { selectCombinedOption(parseInt(opt.dataset.q, 10), opt); return; }
+        });
+        wrap.addEventListener('input', function (e) {
+            const inp = e.target.closest('.ct-input');
+            if (!inp || !sumTest) return;
+            sumTest.questions[parseInt(inp.dataset.q, 10)].userAnswer = inp.value;
+            updateCtCounter();
+        });
+    }
+
     function renderCombinedTest() {
         const wrap = document.getElementById('ct-questions'); wrap.innerHTML = '';
+        bindCombinedTestEvents();
         document.getElementById('ct-result-banner').style.display = 'none';
         document.getElementById('ct-submit-zone').style.display = 'block';
         document.getElementById('ct-subtitle').innerText = 'Unit ' + sumTest.units.join(', ');
@@ -5872,7 +6034,7 @@
             const card = document.createElement('div'); card.className = 'ct-card'; card.id = 'ct-card-' + i;
             let inner = `<div class="ct-card-head"><span>Câu ${i+1}/${sumTest.questions.length}</span><span class="ct-type-badge">${q.badge || SUM_TYPE_LABEL[q.type]}</span></div>`;
             if (q.type === 'listen' || q.type === 'guess') {
-                inner += `<button class="ct-audio-btn" onclick="triggerKoreanVoice('${q.audio.replace(/'/g,"\\'")}',false)"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Nghe</button>`;
+                inner += `<button class="ct-audio-btn" data-audio="${ctEsc(q.audio)}"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Nghe</button>`;
                 if (q.type === 'listen' && q.sub === 'sentence') {
                     inner += `<div class="ct-prompt" style="font-size:17px;">${q.cloze}</div>`;
                     inner += `<div class="ct-prompt-sub">Nghe câu và chọn từ điền vào chỗ trống:</div>`;
@@ -5883,15 +6045,15 @@
                 }
             } else if (q.type === 'visual') {
                 // Câu dạng này chỉ được tạo cho từ đã có ảnh thật; link chết thì ẩn ảnh, không thay ảnh random.
-                inner += `<div class="ct-img-frame"><img src="${q.img}" alt="Hình minh họa" onerror="this.onerror=null;this.style.display='none';"></div><div class="ct-prompt-sub">Nhìn hình và chọn từ đúng:</div>`;
+                inner += `<div class="ct-img-frame"><img src="${ctEsc(q.img)}" alt="Hình minh họa" onerror="this.onerror=null;this.style.display='none';"></div><div class="ct-prompt-sub">Nhìn hình và chọn từ đúng:</div>`;
             } else {
-                inner += `<div class="ct-prompt">${q.prompt}</div><div class="ct-prompt-sub">${q.type === 'typing' ? 'Gõ đáp án:' : (q.promptLabel || 'Chọn đáp án đúng')}</div>`;
+                inner += `<div class="ct-prompt">${ctEsc(q.prompt)}</div><div class="ct-prompt-sub">${q.type === 'typing' ? 'Gõ đáp án:' : (q.promptLabel || 'Chọn đáp án đúng')}</div>`;
             }
             if (q.type === 'typing') {
-                inner += `<input type="text" class="ct-input" id="ct-input-${i}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Nhập đáp án..." oninput="sumTest.questions[${i}].userAnswer=this.value; updateCtCounter();">`;
+                inner += `<input type="text" class="ct-input" id="ct-input-${i}" data-q="${i}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Nhập đáp án...">`;
             } else {
                 inner += `<div class="ct-opts" id="ct-opts-${i}">`;
-                q.options.forEach(opt => { inner += `<button class="ct-opt" onclick="selectCombinedOption(${i}, this)">${opt}</button>`; });
+                q.options.forEach((opt, oi) => { inner += `<button class="ct-opt" data-q="${i}" data-oi="${oi}">${ctEsc(opt)}</button>`; });
                 inner += `</div>`;
             }
             inner += `<div class="ct-correct-hint" id="ct-hint-${i}" style="display:none;"></div>`;
@@ -5902,11 +6064,13 @@
     }
 
     function selectCombinedOption(i, btn) {
-        if (sumTest.graded) return;
+        if (!sumTest || sumTest.graded || isNaN(i)) return;
         const cont = btn.parentElement;
         cont.querySelectorAll('.ct-opt').forEach(b => b.classList.remove('sel'));
         btn.classList.add('sel');
-        sumTest.questions[i].userAnswer = btn.innerText;
+        // Lấy đúng chuỗi gốc trong dữ liệu (không đọc innerText, tránh sai lệch do escape/xuống dòng)
+        const oi = parseInt(btn.dataset.oi, 10);
+        sumTest.questions[i].userAnswer = isNaN(oi) ? btn.innerText : sumTest.questions[i].options[oi];
         updateCtCounter();
     }
     function updateCtCounter() {
@@ -5929,14 +6093,15 @@
                 if (inp) { inp.classList.add(ok ? 'correct' : 'wrong'); inp.disabled = true; }
             } else {
                 document.querySelectorAll('#ct-opts-' + i + ' .ct-opt').forEach(b => {
-                    if (b.innerText === q.answer) b.classList.add('correct');
-                    else if (b.innerText === q.userAnswer) b.classList.add('wrong');
+                    const val = q.options[parseInt(b.dataset.oi, 10)];
+                    if (val === q.answer) b.classList.add('correct');
+                    else if (val === q.userAnswer) b.classList.add('wrong');
                     b.style.pointerEvents = 'none';
                 });
             }
             if (!ok) {
                 const hint = document.getElementById('ct-hint-' + i);
-                if (hint) { hint.style.display = 'block'; hint.style.color = 'var(--error-color)'; hint.innerText = '✕ Đáp án đúng: ' + q.answer; }
+                if (hint) { hint.style.display = 'block'; hint.style.color = 'var(--error-color)'; hint.textContent = '✕ Đáp án đúng: ' + q.answer; }
                 recordSummaryWrong(q.item);
             }
         });
@@ -5965,6 +6130,125 @@
         document.getElementById('combined-test-overlay').classList.remove('active');
         sumTest = null;
     }
+
+    /* ============================================================
+       🔄 TỰ ĐỘNG LÀM MỚI KHI GITHUB CÓ BẢN DEPLOY MỚI
+       ------------------------------------------------------------
+       Vì sao cần: trang chạy trên GitHub Pages, trình duyệt (và nhất là app đã
+       "Thêm vào màn hình chính" trên iPhone/iPad) giữ bản cũ trong bộ nhớ đệm rất lâu,
+       nên cô đã deploy nhiều bản mới mà học viên vẫn thấy giao diện cũ cả tháng.
+
+       Cách hoạt động: cứ mỗi 60 giây (và mỗi lần học viên mở lại app / quay lại tab),
+       web hỏi thẳng máy chủ "file index.html trên đó còn giống bản đang chạy không?"
+       bằng ETag / Last-Modified — KHÔNG cần cô sửa số phiên bản bằng tay.
+       Khác nhau = có bản mới -> xoá bộ nhớ đệm rồi tự tải lại trang.
+       Nếu học viên đang làm quiz tổng hợp hoặc đang gõ dở thì chỉ hiện thanh báo,
+       KHÔNG tự tải lại giữa chừng (tránh mất bài đang làm).
+       ============================================================ */
+    (function () {
+        const CHECK_EVERY_MS = 60000;   // hỏi máy chủ mỗi 60 giây
+        const AUTO_RELOAD_SEC = 8;      // đếm ngược trước khi tự làm mới
+        let baseSig = null;             // "chữ ký" của bản đang chạy
+        let newSig = null;              // chữ ký bản mới phát hiện được
+        let checking = false, dismissed = false, countdownTimer = null;
+
+        function quickHash(str) {
+            let h = 5381;
+            for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+            return String(h);
+        }
+
+        async function fetchSignature() {
+            const url = location.pathname + (location.pathname.endsWith('/') ? '' : '') + '?_chk=' + Date.now();
+            try {
+                const res = await fetch(url, { method: 'HEAD', cache: 'no-store' });
+                if (res.ok) {
+                    const sig = [res.headers.get('etag'), res.headers.get('last-modified'), res.headers.get('content-length')]
+                                .filter(Boolean).join('|');
+                    if (sig) return sig;
+                }
+            } catch (e) {}
+            // Dự phòng: máy chủ không trả ETag -> tải nội dung trang rồi băm
+            try {
+                const res = await fetch(url, { cache: 'no-store' });
+                if (!res.ok) return null;
+                return 'h' + quickHash(await res.text());
+            } catch (e) { return null; }
+        }
+
+        // Đang làm dở thì không tự tải lại
+        function safeToReloadNow() {
+            const ct = document.getElementById('combined-test-overlay');
+            if (ct && ct.classList.contains('active')) return false;
+            const ae = document.activeElement;
+            if (ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA') && ae.value) return false;
+            return true;
+        }
+
+        function showBar(auto) {
+            const bar = document.getElementById('app-update-bar');
+            const sub = document.getElementById('au-sub');
+            if (!bar || bar.classList.contains('show')) return;
+            bar.classList.add('show');
+            if (!auto) { sub.textContent = 'Bấm "Cập nhật" khi bạn làm xong bài đang dở nhé.'; return; }
+            let left = AUTO_RELOAD_SEC;
+            sub.textContent = 'Trang sẽ tự làm mới sau ' + left + ' giây…';
+            countdownTimer = setInterval(function () {
+                left--;
+                if (left <= 0) { clearInterval(countdownTimer); countdownTimer = null; window.applyAppUpdate(); return; }
+                sub.textContent = 'Trang sẽ tự làm mới sau ' + left + ' giây…';
+            }, 1000);
+        }
+
+        window.dismissAppUpdate = function () {
+            dismissed = true;
+            if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+            const bar = document.getElementById('app-update-bar');
+            if (bar) bar.classList.remove('show');
+        };
+
+        window.applyAppUpdate = async function () {
+            if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+            try { if (typeof flushProgressNow === 'function') flushProgressNow(); } catch (e) {}   // lưu tiến độ trước khi tải lại
+            try { if (window.caches && caches.keys) { const ks = await caches.keys(); await Promise.all(ks.map(k => caches.delete(k))); } } catch (e) {}
+            try {
+                if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+                    const rs = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(rs.map(r => r.unregister()));
+                }
+            } catch (e) {}
+            // Đổi tham số ?v= để chắc chắn không lấy lại bản cũ trong bộ nhớ đệm
+            try {
+                const u = new URL(location.href);
+                u.searchParams.set('v', String(Date.now()));
+                location.replace(u.toString());
+            } catch (e) { location.reload(); }
+        };
+
+        async function check(force) {
+            if (checking) return;
+            // Tab đang ẩn thì khỏi hỏi máy chủ — nhưng lần ĐẦU vẫn phải lấy mốc bản đang chạy,
+            // vì app trên màn hình chính thường mở ra ở trạng thái nền.
+            if (document.hidden && baseSig) return;
+            checking = true;
+            try {
+                const sig = await fetchSignature();
+                if (!sig) return;
+                if (!baseSig) { baseSig = sig; return; }      // lần đầu: ghi nhận bản đang chạy
+                if (sig === baseSig) return;                  // chưa có gì mới
+                newSig = sig;
+                if (dismissed && !force) return;              // học viên đã bấm "Để sau"
+                showBar(safeToReloadNow());
+            } finally { checking = false; }
+        }
+
+        check();
+        setInterval(check, CHECK_EVERY_MS);
+        // Mở lại app / quay lại tab -> kiểm tra ngay (bắt đúng trường hợp app trên màn hình chính)
+        document.addEventListener('visibilitychange', function () { if (!document.hidden) check(); });
+        window.addEventListener('focus', function () { check(); });
+        window.addEventListener('online', function () { check(); });
+    })();
 </script>
 </body>
 </html>
