@@ -3382,7 +3382,8 @@
         const card = vocabData[state.indices[state.current]];
         document.getElementById('fc-ko').innerText = card.ko;
         document.getElementById('fc-vi').innerText = card.vi;
-        prefetchMaleVoice(card.ko); // tải trước giọng nam để bấm 남 phát ngay (kể cả iOS)
+        prefetchMaleVoice(card.ko);      // tải trước giọng nam để bấm 남 phát ngay (kể cả iOS)
+        prefetchKoreanVoice(card.ko);    // 🔊 và cả giọng nữ (nút 여) -> bấm là ra tiếng ngay
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
         document.getElementById('fcard').classList.remove('flipped');
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
@@ -3481,6 +3482,10 @@
         return score;
     }
     const CLOZE_VERB_END = /[요다까죠네지고서면음임]$/;   // đuôi câu tiếng Hàn thường gặp
+    // Trợ từ đi sau DANH TỪ. Token kết thúc bằng mấy chữ này gần như chắc chắn là danh từ,
+    // không phải động/tính từ đã chia -> không được đục lỗ vào đó.
+    // (Cố tình BỎ QUA 는/은 vì động từ cũng dùng: 보는 사람, 먹은 밥.)
+    const CLOZE_NOUN_PARTICLE = /(을|를|이|가|의|도|만|에|에서|에게|한테|으로|로|와|과|랑|부터|까지|처럼)$/;
 
     // Tìm chỗ đục lỗ -> { ok, before, hit, after }. hit = ĐÚNG chữ bị che trong câu.
     function clozeSplit(ex, ko) {
@@ -3494,26 +3499,46 @@
 
         // 2) Động/tính từ đuôi 다 -> dò token chứa dạng đã chia, che TRỌN token
         if (!/다$/.test(word)) return { ok: false };
-        let stems = [];
-        [word.replace(/하다$/, '').replace(/되다$/, ''), word.replace(/다$/, '')]
-            .forEach(st => { if (st && stems.indexOf(st) < 0) stems.push(st); });
-        if (!stems.length) return { ok: false };
+        // ⚠️ Chỉ so bằng GỐC TỪ (đã bỏ 다). Trước đây còn thử cả dạng nguyên "보다",
+        //    mà chữ 다 đó không bao giờ xuất hiện khi chia đuôi — nó chỉ vô tình khớp với
+        //    DANH TỪ cũng kết thúc bằng 다: câu "바다를 봐요" với từ 보다 bị đục nhầm thành
+        //    "______ 봐요" (đáp án đúng phải là 봐요), nên ABCD không có đáp án nào khớp.
+        const base = word.replace(/다$/, '');
+        if (!base) return { ok: false };
+        let stems = [base];
+        // Động từ ghép: 공부하다 -> thử cả "공부하" lẫn "공부"; 준비되다 -> "준비되" và "준비"
+        if (/하$/.test(base) && base.length > 1) stems.push(base.replace(/하$/, ''));
+        if (/되$/.test(base) && base.length > 1) stems.push(base.replace(/되$/, ''));
+        // Cứu cánh cuối: động từ ghép bị TÁCH ĐÔI trong câu — "준비되다" viết thành
+        // "준비가 됐어요", lúc đó chỉ còn mỗi chữ 되/하 được chia đuôi ở vị ngữ.
+        // Chỉ dùng khi các gốc đầy đủ ở trên không khớp được token nào (kẻo khớp bừa).
+        let lastResort = [];
+        if (base.length > 1 && /하$/.test(base)) lastResort.push('하');
+        if (base.length > 1 && /되$/.test(base)) lastResort.push('되');
 
         const tokens = sent.split(/(\s+)/);   // giữ khoảng trắng để ghép lại y nguyên
-        let best = null;
-        for (let i = 0; i < tokens.length; i++) {
-            const tk = tokens[i];
-            if (!tk || /^\s+$/.test(tk)) continue;
-            const core = tk.replace(/^[^가-힣]+/, '').replace(/[^가-힣]+$/, '');   // bỏ dấu câu
-            if (!core) continue;
-            for (const st of stems) {
-                let sc = clozeConjScore(st, core);
-                if (sc < 0) continue;
-                if (CLOZE_VERB_END.test(core)) sc += 1;
-                if (sc < 2 * [...st].length) continue;            // chưa đủ giống -> bỏ
-                if (!best || sc > best.sc || (sc === best.sc && i > best.i)) best = { sc: sc, i: i };
+        // strict = lượt "cứu cánh" với gốc 1 chữ (하/되): bắt buộc token phải là một VỊ NGỮ
+        // ĐÃ CHIA (từ 2 âm tiết trở lên + có đuôi câu), kẻo khớp bừa vào chữ lẻ như 다 (= "hết").
+        function findBest(stemList, strict) {
+            let found = null;
+            for (let i = 0; i < tokens.length; i++) {
+                const tk = tokens[i];
+                if (!tk || /^\s+$/.test(tk)) continue;
+                const core = tk.replace(/^[^가-힣]+/, '').replace(/[^가-힣]+$/, '');   // bỏ dấu câu
+                if (!core) continue;
+                if (CLOZE_NOUN_PARTICLE.test(core)) continue;   // danh từ + trợ từ -> chắc chắn không phải vị ngữ
+                if (strict && ([...core].length < 2 || !CLOZE_VERB_END.test(core))) continue;
+                for (const st of stemList) {
+                    let sc = clozeConjScore(st, core);
+                    if (sc < 0) continue;
+                    if (CLOZE_VERB_END.test(core)) sc += 1;
+                    if (sc < 2 * [...st].length) continue;            // chưa đủ giống -> bỏ
+                    if (!found || sc > found.sc || (sc === found.sc && i > found.i)) found = { sc: sc, i: i };
+                }
             }
+            return found;
         }
+        let best = findBest(stems, false) || (lastResort.length ? findBest(lastResort, true) : null);
         if (!best) return { ok: false };
         const tk = tokens[best.i];
         const m = tk.match(/[가-힣]+/);
@@ -4271,6 +4296,8 @@
         const panel = document.getElementById('ws-panel');
         if (!panel) return;
         clearFeedback();
+        // 🔊 Tải sẵn tiếng câu đang luyện -> bấm loa là nghe liền
+        try { const _s = wsSentenceAt(ws.indices[ws.current]); if (_s && _s.ko) prefetchKoreanVoice(_s.ko); } catch (_) {}
 
         if (!ws.indices || ws.indices.length === 0) {
             panel.innerHTML = '<div class="ws-card"><div class="ws-empty">Unit này chưa có câu ví dụ để luyện phần "Viết câu".</div></div>';
@@ -4571,7 +4598,10 @@
 
         let actualIndex = state.indices[state.current]; const currentItem = vocabData[actualIndex];
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
-        
+        // 🔊 Trả lời đúng là máy đọc lại từ ngay -> tải sẵn tiếng của từ này + 2 từ kế tiếp,
+        //    nếu không sẽ phải chờ ~2 giây mới nghe được (phải đi mạng lấy tiếng lúc đó).
+        prefetchQuizVoices('visual', 2);
+
         const imgElement = document.getElementById('visual-native-img');
 
         // Ảnh đã được dò tồn tại thật -> gán thẳng, không cần ảnh minh hoạ tạm từ mạng.
