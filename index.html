@@ -215,6 +215,9 @@
         .quiz-subtab-btn { flex: 1; padding: 7px 6px; background: var(--card-color); border: 1px solid rgba(97,76,255,0.12); font-size: 11px; font-weight: 700; color: var(--sub-text); cursor: pointer; border-radius: 20px; white-space: nowrap; outline: none; transition: all 0.2s ease; }
         .quiz-subtab-btn:hover { color: var(--point-color); border-color: rgba(97,76,255,0.35); }
         .quiz-subtab-btn.active { color: var(--point-color); background: var(--point-light); box-shadow: var(--neu-concave); border-color: transparent; font-weight: 800; }
+        /* 🖼️ Dạng quiz bị khoá vì Unit chưa có ảnh minh hoạ trong kho assets */
+        .quiz-subtab-btn.is-off, .sum-toggle.is-off { opacity: .42; cursor: not-allowed; }
+        .quiz-subtab-btn.is-off:hover { color: var(--sub-text); border-color: rgba(97,76,255,0.12); }
         /* Thanh chọn nhỏ (ngôn ngữ đáp án / dạng Từ·Câu) đặt trong từng tab quiz */
         .mode-toggle { display: inline-flex; gap: 4px; background: var(--bg-color); padding: 4px; border-radius: 999px; box-shadow: var(--neu-concave); margin: 0 auto 16px; }
         .mode-toggle-btn { border: none; background: transparent; color: var(--sub-text); font-family: inherit; font-size: 12px; font-weight: 700; padding: 7px 16px; border-radius: 999px; cursor: pointer; outline: none; white-space: nowrap; transition: all 0.18s ease; }
@@ -416,14 +419,30 @@
         .ct-card { background:#fff; border-radius:var(--radius-md); box-shadow:var(--neu-card-shadow); border:1px solid rgba(255,255,255,0.8); padding:22px 24px; margin-bottom:20px; }
         .ct-card-head { display:flex; align-items:center; justify-content:space-between; font-size:11px; font-weight:800; color:var(--sub-text); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px; }
         .ct-type-badge { background:var(--point-light); color:var(--point-color); padding:3px 10px; border-radius:10px; }
-        .ct-prompt { font-size:22px; font-weight:800; color:#1a202c; margin-bottom:6px; }
-        .ct-prompt-sub { font-size:12px; color:var(--sub-text); margin-bottom:14px; }
+        .ct-prompt { font-size:24px; font-weight:800; color:#1a202c; margin-bottom:8px; line-height:1.48; }
+        .ct-prompt.ct-quoted { position:relative; display:block; width:fit-content; max-width:100%; margin:2px auto 10px; padding:10px 34px; border-left:4px solid #2d3748; border-radius:8px; background:rgba(45,55,72,.05); font-size:25px; text-align:center; }
+        /* Ngoặc kép đứng cố định hai phía, không tham gia xuống dòng cùng nội dung */
+        .ct-prompt.ct-quoted::before { content:'“'; position:absolute; left:14px; top:8px; color:#a0aec0; line-height:1; }
+        .ct-prompt.ct-quoted::after { content:'”'; position:absolute; right:14px; bottom:5px; color:#a0aec0; line-height:1; }
+        .ct-prompt.ct-long { font-size:20px; width:100%; }
+        /* Câu Hàn và bản dịch Việt là hai khối riêng — không bao giờ ghép chung một dòng */
+        .ct-prompt.ct-bilingual { display:flex; width:100%; flex-direction:column; align-items:stretch; gap:9px; margin:2px 0 12px; padding:0; border:0; background:transparent; }
+        .ct-prompt.ct-bilingual::before, .ct-prompt.ct-bilingual::after { content:none; }
+        .ct-prompt.ct-bilingual .cloze-sentence { display:block; width:100%; margin:0; padding:8px 14px; border-left:4px solid #2d3748; border-radius:8px; background:rgba(45,55,72,.05); font-size:20px; font-weight:800; line-height:1.5; }
+        .ct-prompt.ct-bilingual .cloze-sentence::before { content:'“'; color:#a0aec0; }
+        .ct-prompt.ct-bilingual .cloze-sentence::after { content:'”'; color:#a0aec0; }
+        .ct-prompt.ct-bilingual .cloze-vi { display:block; width:100%; margin:0; padding:7px 14px; border-radius:8px; background:#f8fafc; color:#64748b; font-size:15px; font-weight:700; font-style:italic; text-align:left; line-height:1.5; }
+        .ct-prompt-sub { font-size:14px; font-weight:650; color:#64748b; margin-bottom:16px; line-height:1.45; }
         .ct-opts { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-        .ct-opt { padding:14px 16px; text-align:left; background:var(--card-color); border:1.5px solid rgba(226,232,240,0.9); border-radius:var(--radius-sm); font-size:15px; font-weight:600; color:var(--text-color); cursor:pointer; outline:none; transition:all .15s; }
+        .ct-opt { padding:15px 17px; text-align:left; background:var(--card-color); border:1.5px solid rgba(226,232,240,0.9); border-radius:var(--radius-sm); font-size:17px; font-weight:650; line-height:1.5; color:var(--text-color); cursor:pointer; outline:none; transition:all .15s; }
         .ct-opt:hover { border-color:var(--point-color); }
         .ct-opt.sel { border-color:var(--point-color); background:var(--point-light); color:var(--point-color); font-weight:800; }
         .ct-opt.correct { background:#e6fffa; border-color:var(--success-color); color:#234e52; font-weight:800; }
         .ct-opt.wrong { background:#fff5f5; border-color:var(--error-color); color:#742a2a; font-weight:800; }
+        /* Đáp án là hội thoại: A và B luôn thành hai dòng riêng, thẳng cột */
+        .ct-dialogue { display:inline-flex; flex-direction:column; gap:5px; vertical-align:top; }
+        .ct-dline { display:grid; grid-template-columns:28px minmax(0,1fr); align-items:start; }
+        .ct-speaker { font-weight:900; color:var(--point-color); }
         .ct-input { width:100%; padding:14px 16px; border:1.5px solid #cbd5e0; border-radius:var(--radius-sm); font-size:16px; outline:none; font-family:inherit; box-shadow:var(--neu-concave); background:#fff; }
         .ct-input.correct { border-color:var(--success-color); background:#f0fff4; }
         .ct-input.wrong { border-color:var(--error-color); background:#fff5f5; }
@@ -431,8 +450,13 @@
         .ct-img-frame { width:100%; max-width:420px; height:220px; margin:0 auto 14px; background:var(--bg-color); border-radius:var(--radius-md); box-shadow:var(--neu-concave); overflow:hidden; display:flex; align-items:center; justify-content:center; }
         .ct-img-frame img { max-width:100%; max-height:100%; object-fit:contain; }
         .ct-correct-hint { font-size:12px; color:var(--success-color); font-weight:700; margin-top:10px; }
+        /* 📄 Nút tải đề (chỉ hiện với tài khoản giáo viên) */
+        .ct-export-btn { background:var(--point-light); color:var(--point-color); border:none; font-family:inherit; font-size:12.5px; font-weight:800; padding:9px 14px; border-radius:12px; cursor:pointer; outline:none; box-shadow:var(--neu-convex); margin-left:8px; }
+        .ct-export-btn:hover { background:var(--point-color); color:#fff; }
+        @media (max-width:600px){ .ct-export-btn { font-size:11px; padding:7px 10px; margin-left:5px; } }
+
         .ct-result-banner { background:#fff; border-radius:var(--radius-lg); box-shadow:var(--neu-card-shadow); padding:24px; margin-bottom:22px; text-align:center; border-top:5px solid var(--point-color); }
-        @media (max-width:600px){ .ct-opts { grid-template-columns:1fr; } .ct-prompt { font-size:19px; } .ct-inner { padding:16px 12px; } }
+        @media (max-width:600px){ .ct-opts { grid-template-columns:1fr; } .ct-prompt, .ct-prompt.ct-quoted, .ct-prompt.ct-long { font-size:19px; } .ct-prompt.ct-bilingual .cloze-sentence { font-size:18px; } .ct-prompt.ct-bilingual .cloze-vi { font-size:13px; } .ct-prompt-sub { font-size:12px; } .ct-opt { font-size:15px; padding:14px 16px; } .ct-inner { padding:16px 12px; } }
 
         .widget-right-profile { background: #ffffff; border-radius: var(--radius-lg); box-shadow: var(--neu-card-shadow); padding: 24px 16px; display: flex; flex-direction: column; gap: 20px; border: 1px solid rgba(255,255,255,0.7); height: 100%; position: relative; }
         .profile-card-box { display: flex; flex-direction: row; align-items: center; gap: 10px; text-align: left; padding-bottom: 9px; padding-left: 22px; border-bottom: 1px solid #edf2f7; }
@@ -1974,7 +1998,13 @@
             <div id="ct-counter" style="font-weight:800; color:#1a202c;">0 / 0</div>
             <div id="ct-subtitle" style="font-size:11px; color:var(--sub-text);">Ôn tập kết hợp nhiều Unit</div>
         </div>
-        <div class="ct-topbar-right"><button class="ct-close-btn" onclick="closeCombinedTest()" aria-label="Thoát">&times;</button></div>
+        <div class="ct-topbar-right">
+            <span id="ct-export-zone" style="display:none; gap:8px; margin-right:10px;">
+                <button class="ct-export-btn" onclick="printCombinedExam()" title="Mở cửa sổ in để lưu thành PDF">📄 In / PDF</button>
+                <button class="ct-export-btn" onclick="downloadCombinedExamDoc()" title="Tải file Word (.doc) để chỉnh sửa">📝 Word</button>
+            </span>
+            <button class="ct-close-btn" onclick="closeCombinedTest()" aria-label="Thoát">&times;</button>
+        </div>
     </div>
     <div class="ct-scroll">
         <div class="ct-inner">
@@ -2130,6 +2160,27 @@
     // Chỉ khoá bài giảng/ngữ pháp khi BACKEND thực sự gửi cột UnlockLesson (đã redeploy).
     // Backend cũ (chưa redeploy) không gửi trường này -> KHÔNG khoá gì để tương thích ngược.
     let lessonGatingActive = false;
+    // 👩‍🏫 Quyền giáo viên (tải đề kiểm tra ra PDF/Word) — do cột "Role" trong sheet Students
+    //     quyết định (GV / TEACHER / ADMIN). Lưu lại theo tài khoản để lần sau mất mạng vẫn nhớ.
+    let isTeacherAccount = false;
+    function teacherRoleKey(user) { return 'teacherRole_' + String(user || '').toLowerCase(); }
+    function setTeacherRole(flag, user) {
+        isTeacherAccount = (flag === true || flag === 'true');
+        try {
+            if (isTeacherAccount) localStorage.setItem(teacherRoleKey(user), '1');
+            else localStorage.removeItem(teacherRoleKey(user));
+        } catch (e) {}
+        syncTeacherUI();
+    }
+    function loadTeacherRole(user) {
+        try { isTeacherAccount = localStorage.getItem(teacherRoleKey(user)) === '1'; } catch (e) { isTeacherAccount = false; }
+        syncTeacherUI();
+    }
+    function syncTeacherUI() {
+        const zone = document.getElementById('ct-export-zone');
+        if (zone) zone.style.display = isTeacherAccount ? 'inline-flex' : 'none';
+    }
+
     // Lưu / nạp theo từng tài khoản (để đăng nhập offline vẫn khoá đúng).
     function lessonUnitsKey(user) { return 'lessonUnits_' + String(user || '').toLowerCase(); }
     function setLessonUnits(raw, user) {
@@ -2615,6 +2666,7 @@
                 localStorage.setItem('studentSession_QuyenClass', user);
                 applyServerProgress(user, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
                 setLessonUnits(data.unlockLesson, user); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
+                setTeacherRole(data.isTeacher, user);     // 👩‍🏫 bật nút tải đề nếu là tài khoản giáo viên
                 startStatusWatch(user, pass); // 🔒 theo dõi nếu tài khoản bị vô hiệu hoá từ xa
                 await parseAndInitApp(data.allowedUnits);
             } else if (data.disabled) {
@@ -2904,10 +2956,13 @@
         let fullIndices = Array.from({length: vocabData.length}, (_, i) => i);
         tabState.flashcard.indices = [...fullIndices];
         tabState.flashcard.current = 0;
-        ["quiz", "typing", "listen", "guess", "visual"].forEach(t => {
+        ["quiz", "typing", "listen", "guess"].forEach(t => {
             tabState[t].indices = shuffleArray([...fullIndices]);
             tabState[t].current = 0;
         });
+        tabState.visual.indices = [];   // chờ dò ảnh thật xong mới có danh sách
+        tabState.visual.current = 0;
+        tabState.visual._loadedFor = null;
         // Reset bảng Viết từ khi đổi Unit
         tabState.typing.status = tabState.typing.indices.map(() => 'none');
         tabState.typing.values = tabState.typing.indices.map(() => '');
@@ -2918,6 +2973,7 @@
         tabState.guess.mode = 'word';
         tabState.quiz.replyLang = 'mix';
         syncQuizModeToggles();
+        ensureVisualPool();   // 🖼️ dò ảnh thật cho dạng "Nhìn hình chọn từ" (chạy ngầm)
     }
 
     // 5 chức năng nằm trong nhóm "4. Quiz"
@@ -2925,6 +2981,11 @@
     function mainGroupOf(tab) { return QUIZ_SUBTABS.includes(tab) ? 'quizgroup' : tab; }
 
     function switchTab(tabName) {
+        // 🖼️ Chưa có ảnh minh hoạ nào -> không mở dạng "Nhìn hình chọn từ"
+        if (tabName === 'visual' && visualPoolReady && visualPoolSet.size === 0) {
+            if (currentTab !== 'visual') { alert('Phần này chưa có ảnh minh hoạ cho từ vựng nên chưa mở được dạng "Nhìn hình chọn từ" nhé!'); return; }
+            tabName = 'listen';   // đang đứng ở tab này mà Unit mới không có ảnh -> chuyển sang dạng khác
+        }
         currentTab = tabName;
         document.querySelectorAll('.tab-click-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.quiz-subtab-btn').forEach(btn => btn.classList.remove('active'));
@@ -3197,64 +3258,105 @@
         return topSimilar.concat(rest).slice(0, n).map(o => o.exVi);
     }
 
-    // Tách chuỗi Hàn thành danh sách "jamo" (phụ âm/nguyên âm) để so khớp
-    // ngay cả khi động/tính từ bị chia đuôi làm biến đổi âm tiết (오다->올, 좋다->좋아요).
-    function toJamo(str) {
-        let out = [];
-        for (const ch of String(str == null ? '' : str)) {
-            let c = ch.codePointAt(0);
-            if (c >= 0xAC00 && c <= 0xD7A3) { // âm tiết Hangul
-                let s = c - 0xAC00;
-                out.push('L' + Math.floor(s / 588), 'V' + (Math.floor(s / 28) % 21));
-                let t = s % 28; if (t > 0) out.push('T' + t); // phụ âm cuối (받침) nếu có
-            } else out.push(ch);
-        }
-        return out;
+    /* ------------------------------------------------------------------
+       ĐỤC LỖ CÂU VÍ DỤ (dùng cho "Nghe câu điền từ" + Quiz tổng hợp)
+       --------------------------------------------------------------------
+       Vì sao cần thuật toán riêng: động/tính từ trong câu LUÔN bị chia đuôi nên
+       không còn nguyên dạng từ điển — 오다 trong câu là 와요, 하다 là 했어요,
+       듣다 là 들어요, 모르다 là 몰라요... Bản cũ so khớp jamo cứng từ đầu nên
+       gặp biến âm (오 + 아요 -> 와요) là KHÔNG tìm ra, trả về nguyên câu
+       "비가 와요" -> học viên thấy đề đã lộ sẵn đáp án, không còn chỗ trống.
+
+       Cách làm mới: so từng ÂM TIẾT của gốc từ với âm tiết tương ứng trong token,
+       chấm điểm khoan dung theo mức độ giống (phụ âm đầu BẮT BUỘC trùng):
+          trùng cả âm tiết = 3đ · chỉ lệch nguyên âm HOẶC 받침 = 2đ · chỉ trùng phụ âm đầu = 1đ
+       cộng 1đ nếu token kết thúc bằng đuôi câu (요/다/까/…) — vị ngữ tiếng Hàn
+       nằm cuối câu nên đây là dấu hiệu rất chắc. Đạt trung bình >= 2đ/âm tiết
+       mới nhận, hoà điểm thì ưu tiên token ĐỨNG SAU.
+       ------------------------------------------------------------------ */
+    const CLOZE_BLANK = '<span class="cloze-blank">______</span>';
+
+    // Tách 1 âm tiết Hangul thành phụ âm đầu / nguyên âm / 받침; không phải Hangul -> null
+    function hangulParts(ch) {
+        const c = String(ch).codePointAt(0);
+        if (c < 0xAC00 || c > 0xD7A3) return null;
+        const s = c - 0xAC00;
+        return { L: Math.floor(s / 588), V: Math.floor(s / 28) % 21, T: s % 28 };
     }
-    function jamoCommonLen(a, b) { let n = 0; while (n < a.length && n < b.length && a[n] === b[n]) n++; return n; }
+    // Điểm giống nhau giữa gốc từ và 1 token trong câu; -1 = chắc chắn không phải
+    function clozeConjScore(stem, token) {
+        const S = [...stem], T = [...token];
+        if (!S.length || !T.length) return -1;
+        let score = 0;
+        for (let i = 0; i < S.length; i++) {
+            const a = hangulParts(S[i]);
+            const b = (i < T.length) ? hangulParts(T[i]) : null;
+            if (!a || !b) { if (S[i] === T[i]) { score += 3; continue; } return -1; }
+            if (a.L !== b.L) return -1;                       // phụ âm đầu khác hẳn -> loại
+            if (a.V === b.V && a.T === b.T) score += 3;       // trùng khít
+            else if (a.V === b.V || a.T === b.T) score += 2;  // biến đổi 받침 (덥->더) hoặc nguyên âm (시->셔)
+            else score += 1;                                  // co nguyên âm (오->와), 하->했
+        }
+        return score;
+    }
+    const CLOZE_VERB_END = /[요다까죠네지고서면음임]$/;   // đuôi câu tiếng Hàn thường gặp
 
-    // Tạo câu "đục lỗ": thay từ khoá trong câu ví dụ bằng chỗ trống ______
-    function makeClozeSentence(ex, ko) {
-        let blank = '<span class="cloze-blank">______</span>';
-        if (!ex) return ex || '';
-        if (!ko) return ex;
+    // Tìm chỗ đục lỗ -> { ok, before, hit, after }. hit = ĐÚNG chữ bị che trong câu.
+    function clozeSplit(ex, ko) {
+        const sent = String(ex == null ? '' : ex);
+        const word = String(ko == null ? '' : ko).trim();
+        if (!sent || !word) return { ok: false };
 
-        // 1) Từ khoá xuất hiện nguyên dạng -> thay trực tiếp (danh từ, cụm cố định).
-        //    Với danh từ vẫn giữ trợ từ đi kèm (호텔에서 -> ______에서).
-        if (ex.indexOf(ko) >= 0) return ex.replace(ko, blank);
+        // 1) Từ khoá còn nguyên dạng (danh từ, cụm cố định) -> che thẳng, giữ trợ từ (호텔에서 -> ______에서)
+        const at = sent.indexOf(word);
+        if (at >= 0) return { ok: true, before: sent.slice(0, at), hit: word, after: sent.slice(at + word.length) };
 
-        // 2) Động/tính từ (đuôi 다): trong câu bị chia đuôi nên không còn nguyên dạng.
-        //    -> Tìm ĐÚNG TỪ (token) chứa động/tính từ đó và đục lỗ TRỌN từ (cả đuôi đã chia):
-        //       날씨가 좋아요  -> 날씨가 ______
-        //       친구가 공부해요 -> 친구가 ______
-        //       내일 비가 올 거예요 -> 내일 비가 ______ 거예요
-        if (/다$/.test(ko)) {
-            let stem = ko.replace(/하다$/, '').replace(/되다$/, '').replace(/다$/, '');
-            if (stem.length >= 1) {
-                let stemJ = toJamo(stem);
-                let tokens = ex.split(/(\s+)/); // giữ khoảng trắng để ghép lại y nguyên
-                let bestIdx = -1, bestLen = 0;
-                for (let i = 0; i < tokens.length; i++) {
-                    if (tokens[i] === '' || /^\s+$/.test(tokens[i])) continue;
-                    // bỏ dấu câu ở đầu/cuối, chỉ so phần chữ Hàn
-                    let core = tokens[i].replace(/^[^가-힣]+/, '').replace(/[^가-힣]+$/, '');
-                    if (!core) continue;
-                    let n = jamoCommonLen(stemJ, toJamo(core));
-                    if (n > bestLen) { bestLen = n; bestIdx = i; }
-                }
-                // cần khớp gần hết gốc (cho phép âm tiết cuối biến đổi khi chia đuôi)
-                let need = Math.max(2, stemJ.length - 2);
-                if (bestIdx >= 0 && bestLen >= need) {
-                    tokens[bestIdx] = tokens[bestIdx].replace(/[가-힣]+/, blank);
-                    return tokens.join('');
-                }
+        // 2) Động/tính từ đuôi 다 -> dò token chứa dạng đã chia, che TRỌN token
+        if (!/다$/.test(word)) return { ok: false };
+        let stems = [];
+        [word.replace(/하다$/, '').replace(/되다$/, ''), word.replace(/다$/, '')]
+            .forEach(st => { if (st && stems.indexOf(st) < 0) stems.push(st); });
+        if (!stems.length) return { ok: false };
+
+        const tokens = sent.split(/(\s+)/);   // giữ khoảng trắng để ghép lại y nguyên
+        let best = null;
+        for (let i = 0; i < tokens.length; i++) {
+            const tk = tokens[i];
+            if (!tk || /^\s+$/.test(tk)) continue;
+            const core = tk.replace(/^[^가-힣]+/, '').replace(/[^가-힣]+$/, '');   // bỏ dấu câu
+            if (!core) continue;
+            for (const st of stems) {
+                let sc = clozeConjScore(st, core);
+                if (sc < 0) continue;
+                if (CLOZE_VERB_END.test(core)) sc += 1;
+                if (sc < 2 * [...st].length) continue;            // chưa đủ giống -> bỏ
+                if (!best || sc > best.sc || (sc === best.sc && i > best.i)) best = { sc: sc, i: i };
             }
         }
+        if (!best) return { ok: false };
+        const tk = tokens[best.i];
+        const m = tk.match(/[가-힣]+/);
+        if (!m) return { ok: false };
+        return {
+            ok: true,
+            before: tokens.slice(0, best.i).join('') + tk.slice(0, m.index),
+            hit: m[0],
+            after: tk.slice(m.index + m[0].length) + tokens.slice(best.i + 1).join('')
+        };
+    }
 
-        // 3) Dự phòng: khớp phần gốc trực tiếp nếu có.
-        let stem2 = ko.replace(/하다$/, '').replace(/되다$/, '').replace(/다$/, '');
-        if (stem2.length >= 1 && ex.indexOf(stem2) >= 0) return ex.replace(stem2, blank);
-        return ex; // không chèn được thì để nguyên câu
+    // Câu có chỗ trống ______ (không đục được thì trả nguyên câu)
+    function makeClozeSentence(ex, ko) {
+        const p = clozeSplit(ex, ko);
+        return p.ok ? (p.before + CLOZE_BLANK + p.after) : String(ex == null ? '' : ex);
+    }
+    // Câu có đục lỗ được không? -> dùng để LOẠI hẳn những từ không tạo được đề "điền từ"
+    function canCloze(ex, ko) { return clozeSplit(ex, ko).ok; }
+    // Câu đầy đủ, tô đậm đúng chữ vừa bị che (dùng khi hiện đáp án)
+    function clozeRevealHtml(ex, ko) {
+        const p = clozeSplit(ex, ko);
+        if (!p.ok) return String(ex == null ? '' : ex);
+        return p.before + '<span class="cloze-blank">' + p.hit + '</span>' + p.after;
     }
 
     // Định nghĩa các dạng (mode) cho từng tab quiz có lựa chọn.
@@ -4111,7 +4213,7 @@
         // Chế độ "Nghe câu" nhưng Unit không có câu ví dụ nào
         if (isSentence && state.indices.length === 0) {
             clozeEl.style.display = 'block';
-            clozeEl.innerHTML = 'Unit này chưa có câu ví dụ để luyện dạng "Nghe câu".';
+            clozeEl.innerHTML = 'Unit này chưa có câu ví dụ đục lỗ được để luyện dạng "Nghe câu".';
             viLine.style.display = 'none';
             document.getElementById('listen-word-pool').innerHTML = '';
             document.getElementById('global-counter').innerText = "0 / 0";
@@ -4167,7 +4269,7 @@
         if (state.mode === 'sentence') {
             // hiện câu đầy đủ (tô đậm từ đúng) + điền nghĩa Việt vào dòng đã chừa sẵn (không đẩy layout)
             document.getElementById('listen-cloze').innerHTML =
-                (item.ex || '').replace(item.ko, '<span class="cloze-blank">' + item.ko + '</span>')
+                clozeRevealHtml(item.ex, item.ko)
                 + '<div class="cloze-vi">' + (item.exVi || '') + '</div>';
         } else {
             document.getElementById('listen-vi-meaning').innerText = item.vi;
@@ -4262,16 +4364,20 @@
         fillVisualHint();
         const vHintBtn = document.getElementById('visual-hint-btn'); if (vHintBtn) vHintBtn.classList.remove('is-on');
 
-        // Unit không có từ nào kèm ảnh -> báo nhẹ thay vì hiện khung ảnh trống / ảnh vỡ.
+        // Đang dò ảnh trong kho assets / hoặc không có từ nào kèm ảnh -> không hiện câu hỏi.
         const vSceneWrap = document.querySelector('#visual-tab .visual-scene-wrap');
         const vPrompt    = document.querySelector('#visual-tab .quiz-question');
-        if (state.indices.length === 0) {
+        if (!visualPoolReady || !state.indices || state.indices.length === 0) {
             const vImg = document.getElementById('visual-native-img');
             if (vImg) { vImg.onerror = null; vImg.removeAttribute('src'); }
             if (vSceneWrap) vSceneWrap.style.display = 'none';   // ẩn cả khung ảnh + nút bóng đèn
             if (vPrompt) vPrompt.style.display = 'none';         // ẩn dòng "Nhìn tình huống ảnh trên..."
             document.getElementById('visual-opts').innerHTML =
-                '<div style="text-align:center;color:var(--sub-text);padding:12px;">Unit này chưa có từ nào kèm hình ảnh để luyện dạng "Nhìn hình chọn từ".</div>';
+                '<div style="text-align:center;color:var(--sub-text);padding:12px;">'
+                + (visualPoolReady
+                    ? 'Phần này chưa có ảnh minh hoạ cho từ vựng nên chưa luyện được dạng "Nhìn hình chọn từ".'
+                    : 'Đang kiểm tra ảnh minh hoạ…')
+                + '</div>';
             document.getElementById('global-counter').innerText = "0 / 0";
             return;
         }
@@ -4285,14 +4391,10 @@
         
         const imgElement = document.getElementById('visual-native-img');
 
-        // Danh sách câu đã lọc sẵn chỉ còn từ CÓ ảnh thật, nên gán thẳng.
-        // Nếu link ảnh chết -> ẩn ảnh và chuyển câu, không dùng ảnh random thay thế.
+        // Ảnh đã được dò tồn tại thật -> gán thẳng, không cần ảnh minh hoạ tạm từ mạng.
         imgElement.style.display = '';
-        imgElement.onerror = function() {
-            imgElement.onerror = null;
-            imgElement.style.display = 'none';
-        };
-        imgElement.src = currentItem.img;
+        imgElement.onerror = null;
+        imgElement.src = wordImgSrc(currentItem);
 
         let correctAnswer = currentItem.ko; let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
         let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
@@ -4885,6 +4987,7 @@
                 if(data.success) {
                     applyServerProgress(savedUser, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
                     setLessonUnits(data.unlockLesson, savedUser); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
+                    setTeacherRole(data.isTeacher, savedUser);   // 👩‍🏫 quyền tải đề
                     startStatusWatch(savedUser, savedPass); // 🔒 theo dõi vô hiệu hoá từ xa
                     await parseAndInitApp(data.allowedUnits);
                 } else if (data.disabled) {
@@ -4895,6 +4998,7 @@
             } catch(e) {
                 // Mất mạng: dùng lại danh sách unit đã lưu của chính tài khoản này (khoá riêng), có fallback khoá chung cũ.
                 loadLessonUnits(sessionUser); // 📘 khôi phục danh sách mở bài giảng đã lưu (offline)
+                loadTeacherRole(sessionUser); // 👩‍🏫 khôi phục quyền tải đề đã lưu (offline)
                 let oldHistory = localStorage.getItem('historyUnits_' + String(sessionUser).toLowerCase())
                               || localStorage.getItem('historyUnits_QuyenClass');
                 if(oldHistory) {
@@ -5010,21 +5114,100 @@
     function saveQuizStateStore(store) {
         try { localStorage.setItem(quizStateStoreKey(), JSON.stringify(store)); } catch (e) {}
     }
-    // 🖼️ THTH1: ảnh từ vựng lấy từ web nên nhiều từ bỏ trống hoặc ghi "-" / "--".
-    // Chỉ coi là CÓ ảnh khi giá trị thật sự là một đường dẫn ảnh (http... hoặc assets/...).
-    function hasUsableImage(item) {
+    /* ===== 🖼️ DÒ ẢNH THẬT TRONG KHO ASSETS =====
+       Sheet có thể ghi sẵn tên file ảnh cho mọi từ, nhưng file .png trong thư mục
+       assets có thể CHƯA được làm. Vì vậy phải tải thử từng ảnh: chỉ từ nào có ảnh
+       TỒN TẠI THẬT mới được đưa vào dạng "Nhìn hình chọn từ" (cả trong Unit lẫn
+       đề Tổng hợp). Không còn ảnh random tải từ mạng để lấp chỗ trống nữa. */
+
+    // Đường dẫn ảnh của 1 từ; "-" / "--" / ô trống = cô đánh dấu chưa có ảnh.
+    function wordImgSrc(item) {
         const raw = ((item && item.img) || '').trim();
-        if (raw === '') return false;
-        if (/^-+$/.test(raw)) return false;               // "-", "--" = đánh dấu chưa có ảnh
-        return /^https?:\/\//i.test(raw) || raw.indexOf('assets/') === 0;
+        if (raw === '' || /^-+$/.test(raw)) return '';
+        return raw;
+    }
+    const imgExistCache = new Map();   // src -> true/false (hoặc Promise trong lúc đang dò)
+    function probeImageExists(src) {
+        const key = String(src || '').trim();
+        if (!key) return Promise.resolve(false);
+        if (imgExistCache.has(key)) {
+            const v = imgExistCache.get(key);
+            return (v && typeof v.then === 'function') ? v : Promise.resolve(v);
+        }
+        const pr = new Promise(resolve => {
+            const im = new Image();
+            let done = false;
+            const finish = ok => { if (done) return; done = true; imgExistCache.set(key, ok); resolve(ok); };
+            im.onload = () => finish((im.naturalWidth || 0) > 0);
+            im.onerror = () => finish(false);
+            setTimeout(() => finish(false), 15000);   // mạng treo -> coi như chưa có ảnh
+            im.src = key;
+        });
+        imgExistCache.set(key, pr);
+        return pr;
+    }
+    // Lọc danh sách TỪ (object) -> chỉ giữ từ có ảnh thật
+    async function itemsWithRealImage(items) {
+        const flags = await Promise.all((items || []).map(it => probeImageExists(wordImgSrc(it))));
+        return (items || []).filter((_, i) => flags[i]);
+    }
+
+    let visualPoolSet = new Set();   // chỉ số (trong vocabData) của các từ CÓ ảnh thật
+    let visualPoolReady = false;     // đã dò xong cho bộ từ hiện tại chưa
+    let visualPoolToken = 0;         // chống race khi học viên đổi Unit liên tục
+    function visualAvailable() { return visualPoolReady && visualPoolSet.size > 0; }
+    function visualHasImage(i) { return visualPoolSet.has(i); }
+    function visualIndicesOf(list) { return (list || []).filter(i => visualHasImage(i)); }
+
+    // Dò toàn bộ ảnh của bộ từ đang mở, rồi cập nhật lại dạng "Nhìn hình chọn từ"
+    async function ensureVisualPool() {
+        const myToken = ++visualPoolToken;
+        visualPoolReady = false;
+        visualPoolSet = new Set();
+        syncVisualTabAvailability();
+        const list = vocabData.slice();
+        const flags = await Promise.all(list.map(it => probeImageExists(wordImgSrc(it))));
+        if (myToken !== visualPoolToken) return;   // đã đổi Unit -> bỏ kết quả cũ
+        const pool = [];
+        list.forEach((_, i) => { if (flags[i]) pool.push(i); });
+        visualPoolSet = new Set(pool);
+        visualPoolReady = true;
+        applyVisualPool(pool);
+    }
+
+    // Áp danh sách từ có ảnh vào tabState + giao diện
+    function applyVisualPool(pool) {
+        const st = tabState.visual;
+        const invalid = !Array.isArray(st.indices) || st.indices.length !== pool.length
+                        || st.indices.some(i => !visualHasImage(i));
+        if (invalid) {
+            st.indices = shuffleArray(pool.slice());
+            st.current = 0;
+            st._loadedFor = null;
+            resetTabScore('visual');
+        }
+        syncVisualTabAvailability();
+        if (currentTab === 'visual') generateVisualQuestion();
+        updateDashboardStats();
+    }
+
+    // Unit không có ảnh nào -> khoá hẳn nút "Nhìn hình chọn từ"
+    function syncVisualTabAvailability() {
+        const btn = document.getElementById('sub-btn-visual');
+        if (!btn) return;
+        const off = visualPoolReady && visualPoolSet.size === 0;
+        btn.classList.toggle('is-off', off);
+        btn.title = off ? 'Phần này chưa có ảnh minh hoạ nên tạm khoá' : '';
+        if (off && currentTab === 'visual') switchTab('listen');
     }
     // Dựng danh sách câu mới (đã xáo) cho 1 dạng — lọc theo yêu cầu của dạng câu.
     function buildFreshIndices(tab, mode) {
         let base = Array.from({ length: vocabData.length }, (_, i) => i);
-        if (tab === 'listen' && mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '');
+        // "Nghe câu điền từ": câu phải đục lỗ được, nếu không đề sẽ hiện nguyên câu kèm sẵn đáp án.
+        if (tab === 'listen' && mode === 'sentence') base = base.filter(i => canCloze(vocabData[i].ex, vocabData[i].ko));
         else if (tab === 'guess' && mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '' && (vocabData[i].exVi || '').trim() !== '');
-        // "Nhìn hình chọn từ": bỏ hẳn những từ chưa có ảnh -> học sinh không gặp ảnh random vô nghĩa.
-        else if (tab === 'visual') base = base.filter(i => hasUsableImage(vocabData[i]));
+        // "Nhìn hình chọn từ": chỉ giữ từ có ảnh TỒN TẠI THẬT trong kho assets.
+        else if (tab === 'visual') base = visualIndicesOf(base);
         return shuffleArray(base);
     }
     // 1 session đã lưu có phải "đã làm xong" không (xong rồi thì lần sau bắt đầu vòng mới).
@@ -5076,7 +5259,9 @@
             const saved = store[currentUnit] && store[currentUnit][tab] ? store[currentUnit][tab][mode] : null;
             // An toàn: bỏ qua nếu order tham chiếu index vượt phạm vi vocabData hiện tại.
             const validOrder = saved && Array.isArray(saved.order) && saved.order.length &&
-                               saved.order.every(i => i >= 0 && i < vocabData.length);
+                               saved.order.every(i => i >= 0 && i < vocabData.length) &&
+                               // dạng "Nhìn hình": mọi từ trong phiên cũ phải còn ảnh thật
+                               (tab !== 'visual' || saved.order.every(i => visualHasImage(i)));
             if (validOrder && !isSessionFinished(tab, saved)) sess = saved;
         }
         if (sess) {
@@ -5893,6 +6078,25 @@
         document.querySelectorAll('#sum-type-row [data-type]').forEach(b => b.classList.toggle('sel', sumTypes.has(b.dataset.type)));
         const allT = document.getElementById('sum-type-all'); if (allT) allT.classList.toggle('sel', sumTypes.size === 5);
         refreshSumMax();
+        syncSumVisualChip();
+    }
+    // 🖼️ Các Unit đang chọn có ảnh minh hoạ thật không? Không có -> khoá chip "Nhìn hình chọn từ"
+    let sumVisualToken = 0;
+    let sumVisualOff = false;
+    async function syncSumVisualChip() {
+        const chip = document.querySelector('#sum-type-row [data-type="visual"]');
+        if (!chip) return;
+        const myToken = ++sumVisualToken;
+        const withImg = await itemsWithRealImage(buildMixedVocab([...sumSelUnits]));
+        if (myToken !== sumVisualToken) return;
+        sumVisualOff = withImg.length === 0;
+        chip.classList.toggle('is-off', sumVisualOff);
+        chip.title = sumVisualOff ? 'Các Unit đã chọn chưa có ảnh minh hoạ cho từ vựng' : '';
+        if (sumVisualOff && sumTypes.has('visual')) {
+            sumTypes.delete('visual');
+            chip.classList.remove('sel');
+            const allBtn = document.getElementById('sum-type-all'); if (allBtn) allBtn.classList.remove('sel');
+        }
     }
     function refreshSumMax() {
         const el = document.getElementById('sum-num-max'); if (!el) return;
@@ -5901,8 +6105,20 @@
         const inp = document.getElementById('sum-num-q'); if (inp) { inp.max = n; if (parseInt(inp.value) > n) inp.value = n; }
     }
     function setSumLang(l) { sumAnswerLang = l; syncSummaryChips(); }
-    function toggleSumType(t) { if (sumTypes.has(t)) sumTypes.delete(t); else sumTypes.add(t); syncSummaryChips(); }
-    function toggleSumAllTypes() { sumTypes = (sumTypes.size === 5) ? new Set() : new Set(['quiz','typing','listen','guess','visual']); syncSummaryChips(); }
+    function toggleSumType(t) {
+        if (t === 'visual' && sumVisualOff && !sumTypes.has('visual')) {
+            alert('Các Unit đã chọn chưa có ảnh minh hoạ cho từ vựng nên chưa dùng được dạng "Nhìn hình chọn từ" nhé!');
+            return;
+        }
+        if (sumTypes.has(t)) sumTypes.delete(t); else sumTypes.add(t);
+        syncSummaryChips();
+    }
+    function toggleSumAllTypes() {
+        // Unit chưa có ảnh thì "Chọn hết" cũng bỏ qua dạng Nhìn hình
+        const full = sumVisualOff ? ['quiz','typing','listen','guess'] : ['quiz','typing','listen','guess','visual'];
+        sumTypes = (sumTypes.size === full.length) ? new Set() : new Set(full);
+        syncSummaryChips();
+    }
 
     // Ôn 1 dạng quiz đơn lẻ trên vốn từ trộn — tái dùng engine sẵn có
     function launchIndividualSummaryQuiz(type) {
@@ -5924,33 +6140,78 @@
     }
 
     /* ---------- QUIZ TỔNG HỢP (đề dọc, chấm sau cùng) ---------- */
-    function startCombinedTest() {
+    // Rải dạng quiz cho cả đề: "Trắc nghiệm" luôn là phần chính.
+    //   + 1 dạng khác  -> Trắc nghiệm ~75%
+    //   + 2 dạng khác  -> ~60%
+    //   + từ 3 dạng khác trở lên -> 50%
+    // Không chọn Trắc nghiệm thì chia đều các dạng còn lại.
+    function buildCombinedTypePlan(types, n) {
+        const hasQuiz = types.indexOf('quiz') >= 0;
+        const others = types.filter(t => t !== 'quiz');
+        let quota = [];
+        if (!hasQuiz || others.length === 0) {
+            quota = types.map(t => ({ t: t, exact: n / types.length }));
+        } else {
+            const share = (others.length === 1) ? 0.75 : (others.length === 2 ? 0.6 : 0.5);
+            quota.push({ t: 'quiz', exact: n * share });
+            others.forEach(t => quota.push({ t: t, exact: n * (1 - share) / others.length }));
+        }
+        // Chia suất nguyên trước, phần lẻ bốc ngẫu nhiên theo đúng phần dư
+        quota.forEach(q => { q.n = Math.floor(q.exact); q.frac = q.exact - q.n; });
+        const left = n - quota.reduce((a, q) => a + q.n, 0);
+        const fracSum = quota.reduce((a, q) => a + q.frac, 0);
+        for (let k = 0; k < left; k++) {
+            let r = Math.random() * (fracSum || 1), pick = quota[quota.length - 1];
+            for (const q of quota) { r -= q.frac; if (r <= 0) { pick = q; break; } }
+            pick.n++;
+        }
+        let bag = [];
+        quota.forEach(q => { for (let i = 0; i < q.n; i++) bag.push(q.t); });
+        while (bag.length < n) bag.push(hasQuiz ? 'quiz' : types[0]);
+        return shuffleArray(bag).slice(0, n);
+    }
+
+    async function startCombinedTest() {
         const units = [...sumSelUnits].sort((a,b) => parseInt(a) - parseInt(b));
         if (units.length === 0) { alert('Hãy chọn ít nhất 1 Unit.'); return; }
-        const types = [...sumTypes];
+        let types = [...sumTypes];
         if (types.length === 0) { alert('Hãy chọn ít nhất 1 dạng quiz.'); return; }
         const pool = buildMixedVocab(units);
         if (pool.length < 4) { alert('Cần ít nhất 4 từ để tạo đề. Hãy chọn thêm Unit.'); return; }
-        let nInput = parseInt(document.getElementById('sum-num-q').value) || 10;
-        // 🖼️ Nếu CHỈ chọn dạng "Nhìn hình chọn từ" thì đề chỉ được rút từ những từ có ảnh thật.
-        const onlyVisual = (types.length === 1 && types[0] === 'visual');
-        const pickPool = onlyVisual ? pool.filter(hasUsableImage) : pool;
-        if (onlyVisual && pickPool.length === 0) {
-            alert('Các Unit đã chọn chưa có từ nào kèm hình ảnh. Hãy chọn thêm Unit hoặc chọn thêm dạng quiz khác nhé!');
-            return;
+
+        // 🖼️ Dạng "Nhìn hình chọn từ": chỉ dùng từ có ảnh THẬT trong kho assets.
+        //     Không có ảnh nào -> LOẠI hẳn dạng này khỏi đề (không lấp bằng ảnh mạng).
+        let visualSet = new Set();
+        if (types.includes('visual')) {
+            visualSet = new Set(await itemsWithRealImage(pool));
+            if (visualSet.size === 0) {
+                if (types.length === 1) {
+                    alert('Các Unit đã chọn chưa có ảnh minh hoạ cho từ vựng nên chưa tạo được đề "Nhìn hình chọn từ".\nHãy chọn thêm dạng quiz khác hoặc Unit khác nhé!');
+                    return;
+                }
+                types = types.filter(t => t !== 'visual');
+            }
         }
-        const n = Math.max(1, Math.min(nInput, pickPool.length));
-        const picked = shuffleArray([...pickPool]).slice(0, n);
+        const onlyVisual = types.length === 1 && types[0] === 'visual';
+        const pickFrom = onlyVisual ? [...visualSet] : pool;
+
+        let nInput = parseInt(document.getElementById('sum-num-q').value) || 10;
+        const n = Math.max(1, Math.min(nInput, pickFrom.length));
+        const picked = shuffleArray([...pickFrom]).slice(0, n);
         sumTest = { answerLang: sumAnswerLang, units: units, questions: [], graded: false };
-        picked.forEach(item => {
-            // Từ không có ảnh thì không bao giờ ra dạng "Nhìn hình chọn từ".
-            const allowed = types.filter(t => t !== 'visual' || hasUsableImage(item));
-            const useTypes = allowed.length ? allowed : types;
-            const type = useTypes[Math.floor(Math.random() * useTypes.length)];
-            sumTest.questions.push(buildCombinedQuestion(item, type, pool));
+        const typePlan = buildCombinedTypePlan(types, picked.length);
+        const altTypes = types.filter(t => t !== 'visual');
+        picked.forEach((item, i) => {
+            let t = typePlan[i] || types[0];
+            // Từ chưa có ảnh thật -> đổi sang dạng quiz khác mà học viên đã chọn
+            if (t === 'visual' && !visualSet.has(item) && altTypes.length > 0) {
+                t = altTypes[Math.floor(Math.random() * altTypes.length)];
+            }
+            sumTest.questions.push(buildCombinedQuestion(item, t, pool));
         });
         document.body.classList.remove('dash-open'); // đóng ngăn kéo thống kê kẻo nền mờ phủ lên đề
         renderCombinedTest();
+        syncTeacherUI();                              // 👩‍🏫 hiện nút tải đề nếu là giáo viên
         document.getElementById('combined-test-overlay').classList.add('active');
     }
 
@@ -5980,7 +6241,8 @@
             else { q.prompt = item.ko; q.answer = item.vi; q.dir = 'ko-to-vi'; q.badge = 'Viết từ · Việt'; }
         } else if (type === 'listen') {
             // trộn: nghe từ / nghe câu (đục lỗ). Câu cần có ví dụ.
-            const sentence = (item.ex && item.ex.trim() !== '') && Math.random() < 0.5;
+            // Câu không đục lỗ được -> KHÔNG ra dạng "nghe câu" (kẻo đề hiện nguyên câu kèm đáp án)
+            const sentence = canCloze(item.ex, item.ko) && Math.random() < 0.5;
             if (sentence) { q.sub = 'sentence'; q.audio = item.ex; q.cloze = makeClozeSentence(item.ex, item.ko); q.answer = item.ko; q.options = optsFrom('ko', item.ko); q.badge = 'Nghe & chọn từ · Câu'; }
             else { q.sub = 'word'; q.audio = item.ko; q.answer = item.ko; q.options = optsFrom('ko', item.ko); q.badge = 'Nghe & chọn từ'; }
         } else if (type === 'guess') {
@@ -5989,7 +6251,7 @@
             if (sentence) { q.sub = 'sentence'; q.audio = item.ex; q.answer = item.exVi; q.options = shuffleArray([item.exVi, ...pickSimilarExViDistractors(item, 3)]); q.badge = 'Nghe & tìm nghĩa · Câu'; }
             else { q.sub = 'word'; q.audio = item.ko; q.answer = item.vi; q.options = optsFrom('vi', item.vi); q.badge = 'Nghe & tìm nghĩa'; }
         } else if (type === 'visual') {
-            q.img = item.img; q.answer = item.ko; q.options = optsFrom('ko', item.ko);
+            q.img = wordImgSrc(item); q.answer = item.ko; q.options = optsFrom('ko', item.ko); q.badge = 'Nhìn hình chọn từ';
         }
         return q;
     }
@@ -6003,6 +6265,24 @@
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
+    // Câu hỏi ngắn -> khung trích dẫn cân giữa; câu dài -> khung rộng; có bản dịch Việt -> 2 khối riêng.
+    function ctPromptClass(raw) {
+        const html = String(raw || '');
+        if (html.indexOf('cloze-vi') >= 0) return 'ct-prompt ct-bilingual';
+        const plain = html.replace(/<[^>]*>/g, '').trim();
+        return 'ct-prompt ct-quoted' + (plain.length >= 34 ? ' ct-long' : '');
+    }
+    // Hội thoại trong đáp án: A và B luôn là hai dòng riêng, thẳng cột.
+    function ctFormatOption(raw) {
+        const text = String(raw == null ? '' : raw).trim();
+        const m = text.match(/^A:\s*([\s\S]*?)\s+B:\s*([\s\S]*)$/);
+        if (!m) return ctEsc(text);
+        return '<span class="ct-dialogue">'
+            + '<span class="ct-dline"><b class="ct-speaker">A:</b><span>' + ctEsc(m[1]) + '</span></span>'
+            + '<span class="ct-dline"><b class="ct-speaker">B:</b><span>' + ctEsc(m[2]) + '</span></span>'
+            + '</span>';
+    }
+
     let _ctDelegated = false;
     function bindCombinedTestEvents() {
         if (_ctDelegated) return;
@@ -6036,7 +6316,7 @@
             if (q.type === 'listen' || q.type === 'guess') {
                 inner += `<button class="ct-audio-btn" data-audio="${ctEsc(q.audio)}"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Nghe</button>`;
                 if (q.type === 'listen' && q.sub === 'sentence') {
-                    inner += `<div class="ct-prompt" style="font-size:17px;">${q.cloze}</div>`;
+                    inner += `<div class="${ctPromptClass(q.cloze)}">${q.cloze}</div>`;
                     inner += `<div class="ct-prompt-sub">Nghe câu và chọn từ điền vào chỗ trống:</div>`;
                 } else if (q.type === 'guess') {
                     inner += `<div class="ct-prompt-sub">${q.sub === 'sentence' ? 'Cụm từ bạn nghe được mang nghĩa gì?' : 'Từ bạn nghe được mang nghĩa gì?'}</div>`;
@@ -6047,13 +6327,13 @@
                 // Câu dạng này chỉ được tạo cho từ đã có ảnh thật; link chết thì ẩn ảnh, không thay ảnh random.
                 inner += `<div class="ct-img-frame"><img src="${ctEsc(q.img)}" alt="Hình minh họa" onerror="this.onerror=null;this.style.display='none';"></div><div class="ct-prompt-sub">Nhìn hình và chọn từ đúng:</div>`;
             } else {
-                inner += `<div class="ct-prompt">${ctEsc(q.prompt)}</div><div class="ct-prompt-sub">${q.type === 'typing' ? 'Gõ đáp án:' : (q.promptLabel || 'Chọn đáp án đúng')}</div>`;
+                inner += `<div class="${ctPromptClass(q.prompt)}">${ctEsc(q.prompt)}</div><div class="ct-prompt-sub">${q.type === 'typing' ? 'Gõ đáp án:' : (q.promptLabel || 'Chọn đáp án đúng')}</div>`;
             }
             if (q.type === 'typing') {
                 inner += `<input type="text" class="ct-input" id="ct-input-${i}" data-q="${i}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Nhập đáp án...">`;
             } else {
                 inner += `<div class="ct-opts" id="ct-opts-${i}">`;
-                q.options.forEach((opt, oi) => { inner += `<button class="ct-opt" data-q="${i}" data-oi="${oi}">${ctEsc(opt)}</button>`; });
+                q.options.forEach((opt, oi) => { inner += `<button class="ct-opt" data-q="${i}" data-oi="${oi}">${ctFormatOption(opt)}</button>`; });
                 inner += `</div>`;
             }
             inner += `<div class="ct-correct-hint" id="ct-hint-${i}" style="display:none;"></div>`;
@@ -6126,6 +6406,483 @@
             saveWrongWords();
         }
     }
+    /* ============================================================
+       📄 TẢI ĐỀ KIỂM TRA TỔNG HỢP RA PDF / WORD — chỉ tài khoản giáo viên
+       • Bỏ các câu NGHE (không làm được trên giấy) rồi ĐÁNH SỐ LẠI từ 1.
+       • ĐÁP ÁN nằm ở TRANG CUỐI riêng -> gửi học sinh thì xoá trang cuối.
+       ============================================================ */
+
+    // Bộ font của đề: Nunito Sans lo tiếng Việt, Noto Serif KR lo chữ Hàn
+    // (Nunito Sans không có chữ Hàn nên trình duyệt tự rơi xuống font kế tiếp cho từng chữ)
+    const EXAM_FONT = "'Nunito Sans','Noto Serif KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif";
+    const EXAM_FONT_LINK = '<link rel="preconnect" href="https://fonts.googleapis.com">'
+        + '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+        + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'
+        + 'family=Nunito+Sans:wght@400;600;700&family=Noto+Serif+KR:wght@400;500;700&display=swap">';
+
+    // Font cho BẢN WORD: chỉ dùng font CÓ SẴN trong máy (Word không tải được font trên mạng).
+    // Muốn đổi font cả đề: sửa đúng 2 dòng dưới đây, hoặc mở Word > Home > Styles > Modify.
+    const EXAM_WORD_FONT = '"Times New Roman",serif';   // chữ Việt / La-tinh
+    const EXAM_WORD_FONT_KO = 'Malgun Gothic';          // chữ Hàn (Mac: đổi thành Apple SD Gothic Neo)
+    // Bật khi đang dựng HTML cho file Word: đổi cách xuất (bỏ bảng, dùng tab thật, <p> thay <div>).
+    let EXAM_FOR_WORD = false;
+    // Một dấu TAB THẬT của Word (không phải khoảng trắng) -> bấm Tab/kéo thước trong Word là chạy đúng.
+    const EXAM_TAB = '<span style=\'mso-tab-count:1\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+
+    function examEsc(x) {
+        return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    // HTML của web -> chữ thuần (mỗi <div>/<br> = 1 dòng).
+    // Cần thiết vì Word BỎ QUA display:inline trên <div>: để nguyên div lồng div là bị bẻ dòng bậy.
+    function examPlainFromHtml(h) {
+        return String(h == null ? '' : h)
+            .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<\/(?:div|p|li)>/gi, '\n')
+            .replace(/<[^>]+>/g, '')
+            .replace(/[ \t]+/g, ' ')
+            .replace(/\n{2,}/g, '\n')
+            .trim();
+    }
+
+    // Tách hội thoại thành từng lượt lời: nhận "A:/B:" (Việt) lẫn "가:/나:" (Hàn),
+    // kể cả khi trong ô dữ liệu 2 vế dính liền nhau.
+    function examSplitDialogue(x) {
+        let t = String(x == null ? '' : x).replace(/\r/g, '').trim();
+        t = t.replace(/([^\s])[ \t]*((?:A|B|가|나)\s*:)/g, '$1\n$2');   // chèn xuống dòng trước vế sau
+        return t.split('\n').map(q => q.trim()).filter(Boolean);
+    }
+    // 1 lượt lời -> "<b>가:</b> nội dung"
+    function examDialogueLine(line) {
+        const m = line.match(/^((?:A|B|가|나)\s*:)\s*([\s\S]*)$/);
+        return m ? '<b>' + examEsc(m[1]) + '</b> ' + examEsc(m[2]) : examEsc(line);
+    }
+    // Một đáp án hoàn chỉnh (kèm chữ cái A/B/C/D)
+    function examOptionHtml(letter, x) {
+        const parts = examSplitDialogue(x);
+        if (EXAM_FOR_WORD) {
+            // Bản Word: KHÔNG dùng bảng. Chữ cái + 1 TAB THẬT, đoạn văn có thụt treo
+            // -> trong Word cô kéo thước / bấm nút thụt lề là cả đáp án chạy theo.
+            if (parts.length < 2) {
+                return '<p class=DeDapAn><b>' + letter + '.</b>' + EXAM_TAB
+                     + examEsc(String(x == null ? '' : x).trim()) + '</p>';
+            }
+            return '<p class=DeDapAn><b>' + letter + '.</b>' + EXAM_TAB + examDialogueLine(parts[0]) + '</p>'
+                 + parts.slice(1).map(t => '<p class=DeDapAnTiep>' + examDialogueLine(t) + '</p>').join('');
+        }
+        if (parts.length < 2) {
+            return '<div class="e-opt"><b>' + letter + '.</b> ' + examEsc(String(x == null ? '' : x).trim()) + '</div>';
+        }
+        return '<table class="e-opt-tb" cellspacing="0" cellpadding="0"><tr>'
+            + '<td class="e-otd-l" width="35"><b>' + letter + '.</b></td>'
+            + '<td class="e-otd-b">' + parts.map(t => '<div class="e-dline">' + examDialogueLine(t) + '</div>').join('') + '</td>'
+            + '</tr></table>';
+    }
+    // Bản rút gọn dùng cho trang đáp án (nằm trong 1 ô hẹp)
+    function examFormatOption(x) {
+        const parts = examSplitDialogue(x);
+        if (parts.length < 2) return examEsc(String(x == null ? '' : x).trim());
+        if (EXAM_FOR_WORD) return parts.map(t => examDialogueLine(t)).join(' / ');
+        return examDialogueLine(parts[0])
+            + parts.slice(1).map(t => '<div class="e-dline e-dline-key">' + examDialogueLine(t) + '</div>').join('');
+    }
+    function examAbsUrl(u) { try { return new URL(u, location.href).href; } catch (e) { return u; } }
+
+    // Lọc bỏ câu Nghe + hỏi ý giáo viên trước khi tải
+    function collectExamQuestions() {
+        if (!sumTest || !sumTest.questions || !sumTest.questions.length) { alert('Chưa có đề nào để tải nhé!'); return null; }
+        const keep = sumTest.questions.filter(q => q.type !== 'listen' && q.type !== 'guess');
+        if (!keep.length) {
+            alert('Đề này toàn câu Nghe nên không in ra giấy được.\nHãy bỏ chọn 2 dạng "Nghe & chọn từ" / "Nghe & tìm nghĩa" khi tạo đề nhé!');
+            return null;
+        }
+        const dropped = sumTest.questions.length - keep.length;
+        if (dropped > 0 && !confirm('Đề có ' + dropped + ' câu Nghe — không làm được trên giấy nên sẽ bị bỏ khỏi bản in '
+            + '(các câu còn lại được đánh số lại từ 1).\n\nTải ' + keep.length + ' câu còn lại chứ?')) return null;
+        return keep;
+    }
+
+    /* --- Mấy khuôn nhỏ: bản Word dùng <p class=...>, bản In dùng <div class="..."> --- */
+    function exStem(text) { return EXAM_FOR_WORD ? '<p class=DeCauHoi>' + text + '</p>'
+                                                 : '<div class="eq-stem"><b>' + text + '</b></div>'; }
+    function exSub(text)  { return EXAM_FOR_WORD ? '<p class=DeChiDan>' + text + '</p>'
+                                                 : '<div class="eq-sub">' + text + '</div>'; }
+    // Dòng để học sinh viết: bản Word dùng TAB CÓ DẤU CHẤM (tab leader) -> gõ chữ vào là
+    // dấu chấm tự co lại, không bị lệch như khi gõ đè lên một chuỗi dấu chấm cứng.
+    function exWriteLine() {
+        return EXAM_FOR_WORD
+            ? '<p class=DeDongKe>&#8594;<span style=\'mso-tab-count:1 dotted\'>&nbsp;</span></p>'
+            : '<div class="e-line">&rarr; ..........................................................................</div>';
+    }
+
+    // Trả về { body: html đề, answer: chuỗi đáp án } cho 1 câu
+    function examQuestionParts(q) {
+        const L = 'ABCDE';
+        // Viết từ: dòng kẻ trống
+        if (q.type === 'typing') {
+            return {
+                body: exStem('&ldquo;' + examEsc(q.prompt) + '&rdquo;') + exSub('Viết đáp án:') + exWriteLine(),
+                answer: q.answer
+            };
+        }
+        // Còn lại đều là trắc nghiệm ABCD (kèm hình nếu là dạng nhìn hình)
+        let head = '';
+        if (q.type === 'visual') {
+            const imgSrc = q._wordImgSrc != null ? q._wordImgSrc : examAbsUrl(q.img || '');
+            const hasImg = q.img && q.img.trim() !== '' && imgSrc;
+            if (hasImg) {
+                // Ảnh bài học đều 1:1 -> khoá 6 × 6 cm (Word hay bỏ qua height:auto).
+                head = EXAM_FOR_WORD
+                    // Ảnh nằm trong 1 đoạn văn căn giữa bình thường: bấm vào ảnh là kéo to/nhỏ được ngay.
+                    ? '<p class=DeAnh><img width=227 height=227 src="' + imgSrc + '" alt=""></p>'
+                    : '<table class="e-img-table" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center">'
+                        + '<img src="' + imgSrc + '" width="227" height="227" style="width:6cm;height:6cm;" alt="">'
+                        + '</td></tr></table>';
+                head += exSub('Nhìn hình và chọn từ đúng:');
+            } else {
+                head = exSub(q.img && q.img.trim() !== ''
+                    ? '(Không thể đóng gói hình minh hoạ vào file Word) Chọn đáp án đúng:'
+                    : '(Thiếu hình minh hoạ) Chọn đáp án đúng:');
+            }
+        } else {
+            const stemPlain = examPlainFromHtml(q.prompt);
+            head = stemPlain ? exStem('&ldquo;' + examEsc(stemPlain) + '&rdquo;') : '';
+            head += exSub(examEsc(q.promptLabel || 'Chọn đáp án đúng:'));
+        }
+        // Không dùng <ol>/<li>: Microsoft Word tự thêm 1,2,3,4 dù CSS đã tắt list-style.
+        const optList = (q.options || []).map((o, i) => examOptionHtml(L[i], o)).join('');
+        const opts = EXAM_FOR_WORD ? optList : '<div class="e-opts">' + optList + '</div>';
+        const pos = (q.options || []).indexOf(q.answer);
+        return { body: head + opts, answer: (pos >= 0 ? L[pos] + '. ' : '') + q.answer };
+    }
+
+    /* ============================================================
+       BẢN IN / PDF  (mở cửa sổ in của trình duyệt)
+       ============================================================ */
+    function buildExamHtml(list) {
+        EXAM_FOR_WORD = false;
+        const units = (sumTest.units || []).join(', ');
+        const today = new Date().toLocaleDateString('vi-VN');
+        let qHtml = '', aHtml = '';
+        list.forEach((q, i) => {
+            const part = examQuestionParts(q);
+            qHtml += '<div class="eq"><div class="eq-no">Câu ' + (i + 1) + '.</div>' + part.body + '</div>';
+            aHtml += '<div class="ea"><b>Câu ' + (i + 1) + ':</b> ' + examFormatOption(part.answer) + '</div>';
+        });
+
+        const css = ''
+            + '@page { size: A4; margin: 1.8cm 1.6cm; }'
+            + 'body { font-family: ' + EXAM_FONT + '; font-size: 13pt; font-style: normal; font-weight: normal; color:#000; line-height:1.5; }'
+            + '.e-head { text-align:center; margin-bottom:14pt; }'
+            + '.e-title { font-size:16pt; font-weight:bold; text-transform:uppercase; }'
+            + '.e-sub { font-size:11pt; margin-top:3pt; }'
+            + '.e-info { margin:12pt 0 14pt; font-size:12pt; border-top:1px solid #000; border-bottom:1px solid #000; padding:7pt 0; }'
+            + '.eq { margin:0 0 20pt; padding-top:9pt; border-top:0.75pt solid #d9d9d9; page-break-inside:avoid; }'
+            + '.eq-no { font-size:10.5pt; font-weight:bold; letter-spacing:0.6pt; text-transform:uppercase; color:#7a7a7a; margin-bottom:3pt; }'
+            + '.eq-stem { font-size:15pt; font-weight:bold; font-style:normal; color:#000; margin:0 0 6pt; line-height:1.45; }'
+            + '.eq-sub { font-size:10.5pt; font-style:italic; font-weight:normal; color:#767676; margin:0 0 7pt; }'
+            + '.e-opts { margin:0; padding:0; }'
+            + '.e-opt { display:block; width:auto; margin:0 0 7pt 26pt; text-indent:-26pt; line-height:1.45; font-size:12.5pt; font-weight:normal; font-style:normal; }'
+            + '.e-opt b { font-weight:bold; color:#000; margin-right:4pt; }'
+            + '.e-opt-tb { width:100%; border-collapse:collapse; margin:0 0 7pt; }'
+            + '.e-opt-tb td { padding:0; vertical-align:top; font-size:12.5pt; line-height:1.45; font-weight:normal; font-style:normal; }'
+            + '.e-otd-l { width:26pt; }'
+            + '.e-otd-l b { font-weight:bold; color:#000; }'
+            + '.e-dline { display:block; margin:0 0 2pt; text-indent:0; }'
+            + '.e-dline-key { margin-left:0; }'
+            + '.e-line { margin-top:5pt; letter-spacing:1px; }'
+            + '.e-img-table { width:100%; margin:5pt auto 7pt; border-collapse:collapse; }'
+            + '.e-img-table td { width:100%; text-align:center; vertical-align:middle; }'
+            + '.e-img-table img { width:6cm; height:6cm; }'
+            + '.e-pagebreak { page-break-before:always; }'
+            + '.eq:first-of-type { border-top:0; padding-top:0; }'
+            + '.e-akey { margin-top:6pt; }'
+            + '.ea { display:inline-block; width:48%; vertical-align:top; padding:2pt 0; font-size:12pt; }'
+            + '.e-note { font-size:10.5pt; font-style:italic; color:#a00; margin-bottom:8pt; }';
+
+        const bodyHtml = ''
+            + '<div class="e-head"><div class="e-title">Bài kiểm tra từ vựng — Tiếng Hàn tổng hợp 1</div>'
+            + '<div class="e-sub">Unit ' + examEsc(units) + ' &nbsp;·&nbsp; ' + list.length + ' câu</div></div>'
+            + '<div class="e-info">Họ và tên: ................................................ &nbsp;&nbsp; Lớp: ................. '
+            + '&nbsp;&nbsp; Ngày: ' + today + ' &nbsp;&nbsp; Điểm: ............</div>'
+            + qHtml
+            + '<div class="e-pagebreak"></div>'
+            + '<div class="e-head"><div class="e-title">Đáp án</div></div>'
+            + '<div class="e-note">⚠️ Trang này dành cho giáo viên — hãy XOÁ TRANG CUỐI trước khi gửi cho học sinh.</div>'
+            + '<div class="e-akey">' + aHtml + '</div>';
+
+        // Bản in: chờ font Google tải xong mới bật hộp thoại in (tối đa 3 giây)
+        return '<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Bài kiểm tra THTH1</title>'
+            + EXAM_FONT_LINK + '<style>' + css + '</style></head><body>' + bodyHtml
+            + '<scr' + 'ipt>(function(){var done=false;function go(){if(done)return;done=true;setTimeout(function(){window.print();},250);}'
+            + 'if(document.fonts&&document.fonts.ready){document.fonts.ready.then(go);}setTimeout(go,3000);})();</scr' + 'ipt>'
+            + '</body></html>';
+    }
+
+    /* ============================================================
+       BẢN WORD (.doc) — viết theo đúng "HTML kiểu Word" để CHỈNH SỬA DỄ:
+       • Mỗi dòng là một ĐOẠN VĂN <p> thật, không phải <div> lồng nhau.
+       • Mọi định dạng nằm trong STYLE CÓ TÊN (Đề Câu hỏi / Đề Đáp án / ...):
+         vào Home > Styles, bấm chuột phải > Modify là ĐỔI ĐƯỢC CẢ BÀI một lượt.
+       • Không dùng bảng cho đáp án, không dùng &nbsp; để căn — dùng TAB THẬT
+         + thụt treo, nên nút Tăng/Giảm thụt lề và thanh thước của Word chạy đúng.
+       • Font dùng font CÓ SẴN trong máy (Word không tải được font trên mạng).
+       ============================================================ */
+    function buildExamWordHtml(list) {
+        EXAM_FOR_WORD = true;
+        const units = (sumTest.units || []).join(', ');
+        const today = new Date().toLocaleDateString('vi-VN');
+        let qHtml = '', aHtml = '';
+        list.forEach((q, i) => {
+            const part = examQuestionParts(q);
+            qHtml += '<p class=DeNhanCau>Câu ' + (i + 1) + '.</p>' + part.body;
+            aHtml += '<p class=DeKey><b>Câu ' + (i + 1) + ':</b> ' + examFormatOption(part.answer) + '</p>';
+        });
+        EXAM_FOR_WORD = false;
+
+        // Khai báo font 1 chỗ duy nhất: đổi 2 hằng số EXAM_WORD_FONT / EXAM_WORD_FONT_KO là xong.
+        const FF = 'font-family:' + EXAM_WORD_FONT + ';'
+                 + 'mso-fareast-font-family:"' + EXAM_WORD_FONT_KO + '";'
+                 + 'mso-bidi-font-family:' + EXAM_WORD_FONT + ';';
+
+        const css = ''
+            /* Khổ giấy + lề: Word đọc được nên vào Layout > Margins sửa tiếp được */
+            + '@page WordSection1 {size:21.0cm 29.7cm; margin:1.8cm 1.6cm 1.8cm 1.6cm;'
+            + ' mso-header-margin:1.0cm; mso-footer-margin:1.0cm; mso-paper-source:0;}'
+            + 'div.WordSection1 {page:WordSection1;}'
+            /* --- Normal: nền tảng của cả bài --- */
+            + 'p.MsoNormal, li.MsoNormal, div.MsoNormal {mso-style-parent:""; margin:0cm; margin-bottom:6.0pt;'
+            + ' mso-pagination:widow-orphan; line-height:normal; font-size:13.0pt; ' + FF + '}'
+            /* --- Các style CÓ TÊN, hiện trong bảng Styles của Word --- */
+            + 'p.DeTieuDe {mso-style-name:"Đề Tiêu đề"; mso-style-qformat:yes; margin:0cm; margin-bottom:3.0pt;'
+            + ' text-align:center; line-height:normal; font-size:16.0pt; font-weight:bold; ' + FF + '}'
+            + 'p.DePhu {mso-style-name:"Đề Phụ đề"; mso-style-qformat:yes; margin:0cm; margin-bottom:12.0pt;'
+            + ' text-align:center; line-height:normal; font-size:11.0pt; ' + FF + '}'
+            + 'p.DeThongTin {mso-style-name:"Đề Thông tin"; mso-style-qformat:yes; margin:0cm; margin-bottom:14.0pt;'
+            + ' padding:6.0pt 0cm; border-top:solid windowtext 1.0pt; border-bottom:solid windowtext 1.0pt;'
+            + ' mso-border-top-alt:solid windowtext .5pt; mso-border-bottom-alt:solid windowtext .5pt;'
+            + ' tab-stops:8.0cm 13.0cm 17.5cm; line-height:normal; font-size:12.0pt; ' + FF + '}'
+            + 'p.DeNhanCau {mso-style-name:"Đề Nhãn câu"; mso-style-qformat:yes; margin:0cm; margin-top:14.0pt;'
+            + ' margin-bottom:3.0pt; padding-top:6.0pt; border-top:solid #D9D9D9 .75pt;'
+            + ' mso-pagination:widow-orphan lines-together; page-break-after:avoid;'
+            + ' line-height:normal; font-size:10.5pt; font-weight:bold; color:#7A7A7A; ' + FF + '}'
+            + 'p.DeCauHoi {mso-style-name:"Đề Câu hỏi"; mso-style-qformat:yes; margin:0cm; margin-bottom:5.0pt;'
+            + ' page-break-after:avoid; line-height:normal; font-size:15.0pt; font-weight:bold; ' + FF + '}'
+            + 'p.DeChiDan {mso-style-name:"Đề Chỉ dẫn"; mso-style-qformat:yes; margin:0cm; margin-bottom:7.0pt;'
+            + ' page-break-after:avoid; line-height:normal; font-size:10.5pt; font-style:italic; color:#767676; ' + FF + '}'
+            /* Thụt treo 1cm + 1 tab stop 1cm: chữ cái A. rồi TAB, dòng tràn tự thẳng hàng */
+            + 'p.DeDapAn {mso-style-name:"Đề Đáp án"; mso-style-qformat:yes; margin:0cm; margin-bottom:6.0pt;'
+            + ' margin-left:1.0cm; text-indent:-1.0cm; mso-para-margin-left:1.0cm; mso-para-margin-right:0cm;'
+            + ' tab-stops:1.0cm; line-height:normal; font-size:12.5pt; ' + FF + '}'
+            + 'p.DeDapAnTiep {mso-style-name:"Đề Đáp án (dòng tiếp)"; mso-style-qformat:yes; margin:0cm;'
+            + ' margin-bottom:6.0pt; margin-left:1.0cm; mso-para-margin-left:1.0cm; text-indent:0cm;'
+            + ' line-height:normal; font-size:12.5pt; ' + FF + '}'
+            /* Tab có dấu chấm chạy tới 16cm: gõ chữ vào là dấu chấm tự ngắn lại */
+            + 'p.DeDongKe {mso-style-name:"Đề Dòng kẻ"; mso-style-qformat:yes; margin:0cm; margin-bottom:10.0pt;'
+            + ' tab-stops:16.0cm; line-height:normal; font-size:12.5pt; ' + FF + '}'
+            + 'p.DeAnh {mso-style-name:"Đề Hình"; mso-style-qformat:yes; margin:0cm; margin-bottom:6.0pt;'
+            + ' text-align:center; line-height:normal; font-size:12.0pt; ' + FF + '}'
+            + 'p.DeKey {mso-style-name:"Đề Đáp án chuẩn"; mso-style-qformat:yes; margin:0cm; margin-bottom:3.0pt;'
+            + ' line-height:normal; font-size:12.0pt; ' + FF + '}'
+            + 'p.DeGhiChu {mso-style-name:"Đề Ghi chú"; mso-style-qformat:yes; margin:0cm; margin-bottom:10.0pt;'
+            + ' line-height:normal; font-size:10.5pt; font-style:italic; color:#AA0000; ' + FF + '}';
+
+        const bodyHtml = '<div class=WordSection1>'
+            + '<p class=DeTieuDe>BÀI KIỂM TRA TỪ VỰNG — TIẾNG HÀN TỔNG HỢP 1</p>'
+            + '<p class=DePhu>Unit ' + examEsc(units) + ' &#183; ' + list.length + ' câu &#183; Ngày ' + today + '</p>'
+            + '<p class=DeThongTin>Họ và tên:<span style=\'mso-tab-count:1 dotted\'>&nbsp;</span>'
+            + 'Lớp:<span style=\'mso-tab-count:1 dotted\'>&nbsp;</span>'
+            + 'Điểm:<span style=\'mso-tab-count:1 dotted\'>&nbsp;</span></p>'
+            + qHtml
+            + '<br clear=all style=\'mso-special-character:line-break; page-break-before:always\'>'
+            + '<p class=DeTieuDe>ĐÁP ÁN</p>'
+            + '<p class=DeGhiChu>Trang này dành cho giáo viên — hãy XOÁ TRANG CUỐI trước khi gửi cho học sinh.</p>'
+            + aHtml
+            + '</div>';
+
+        // 2 thẻ meta ProgId/Generator: nhờ chúng Word mới nhận đây là tài liệu Word thật
+        // và nạp bảng Styles ở trên (thiếu chúng thì Word coi là trang web -> style biến mất).
+        return '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
+            + '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">'
+            + '<meta name=ProgId content=Word.Document>'
+            + '<meta name=Generator content="Microsoft Word 15">'
+            + '<meta name=Originator content="Microsoft Word 15">'
+            + '<title>Bài kiểm tra THTH1</title>'
+            + '<!--[if gte mso 9]><xml><w:WordDocument>'
+            + '<w:View>Print</w:View><w:Zoom>100</w:Zoom>'
+            + '<w:DoNotOptimizeForBrowser/><w:DoNotHyphenateCaps/>'
+            + '</w:WordDocument></xml><![endif]-->'
+            + '<style><!--' + css + '--></style></head><body lang=VI>' + bodyHtml + '</body></html>';
+    }
+
+    // Mở cửa sổ in (chọn "Lưu thành PDF" trong hộp thoại in)
+    function printCombinedExam() {
+        const list = collectExamQuestions();
+        if (!list) return;
+        const w = window.open('', '_blank');
+        if (!w) { alert('Trình duyệt đang chặn cửa sổ bật lên. Hãy cho phép pop-up rồi bấm lại nhé!'); return; }
+        w.document.open();
+        w.document.write(buildExamHtml(list));
+        w.document.close();
+        w.focus();
+    }
+
+    // Chuyển byte sang Base64 theo từng khúc để không tràn call stack với ảnh lớn.
+    function examBytesToBase64(bytes) {
+        let out = '';
+        const step = 0x8000;
+        for (let i = 0; i < bytes.length; i += step) {
+            out += String.fromCharCode.apply(null, bytes.subarray(i, Math.min(i + step, bytes.length)));
+        }
+        return btoa(out);
+    }
+    function examWrapBase64(x) { return String(x || '').match(/.{1,76}/g)?.join('\r\n') || ''; }
+
+    // Fallback cho lúc index.html được mở trực tiếp bằng file://: một số trình duyệt chặn fetch()
+    // nhưng vẫn cho tải ảnh local qua thẻ Image rồi chuyển ảnh sang PNG bằng canvas.
+    function examImageToBlob(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                try {
+                    const maxSide = 900;
+                    const scale = Math.min(1, maxSide / Math.max(img.naturalWidth || 1, img.naturalHeight || 1));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+                    canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Không chuyển được ảnh sang PNG')), 'image/png', .92);
+                } catch (e) { reject(e); }
+            };
+            img.onerror = () => reject(new Error('Không đọc được ảnh local'));
+            img.src = url;
+        });
+    }
+
+    // Kho ảnh thu nhỏ dựng sẵn (assets/word_images.js) — chỉ tải khi giáo viên bấm Word.
+    // THTH1 chưa có file này; thiếu thì tự động quay về cách tải ảnh trực tiếp bên dưới.
+    let wordImagePackPromise = null;
+    function ensureWordImagePack() {
+        if (window.THTH1_WORD_IMAGES) return Promise.resolve(true);
+        if (wordImagePackPromise) return wordImagePackPromise;
+        wordImagePackPromise = new Promise(resolve => {
+            const script = document.createElement('script');
+            script.src = 'assets/word_images.js';
+            script.onload = () => resolve(!!window.THTH1_WORD_IMAGES);
+            script.onerror = () => resolve(false);
+            document.head.appendChild(script);
+        });
+        return wordImagePackPromise;
+    }
+
+    function normalizeWordImageKey(raw) {
+        let x = String(raw || '').trim().replace(/\\/g, '/').split(/[?#]/)[0];
+        try { x = decodeURIComponent(x); } catch (e) {}
+        x = x.normalize('NFC').toLowerCase().replace(/^\.\//, '');
+        const at = x.lastIndexOf('assets/');
+        if (at >= 0) x = x.slice(at);
+        if (x && !/\.[a-z0-9]+$/i.test(x)) x += '.png';
+        return x;
+    }
+
+    function findPackedWordImage(raw) {
+        const pack = window.THTH1_WORD_IMAGES || {};
+        const wanted = normalizeWordImageKey(raw);
+        if (pack[wanted]) return pack[wanted];
+        const wantedFile = wanted.split('/').pop();
+        const wantedStem = String(wantedFile || '').replace(/\.[^.]+$/, '');
+        for (const originalKey of Object.keys(pack)) {
+            const normalized = normalizeWordImageKey(originalKey);
+            const file = normalized.split('/').pop();
+            const stem = String(file || '').replace(/\.[^.]+$/, '');
+            if (file === wantedFile || stem === wantedStem) return pack[originalKey];
+        }
+        return null;
+    }
+
+    // Tải từng ảnh rồi đóng gói vào chính file Word (MHTML multipart).
+    // Nếu chỉ để src="assets/...", Word sẽ mất ảnh ngay khi file rời khỏi website.
+    async function prepareWordImages(list) {
+        await ensureWordImagePack();
+        const attachments = [];
+        const visuals = list.filter(q => q.type === 'visual' && q.img && q.img.trim() !== '');
+        await Promise.all(visuals.map(async (q, i) => {
+            try {
+                const packed = findPackedWordImage(q.img);
+                const cid = 'exam-image-' + (i + 1) + '@thth1';
+                // Ưu tiên kho ảnh đã đóng gói sẵn: hoạt động chắc chắn cả khi mở bằng file://.
+                if (packed) {
+                    const comma = packed.indexOf(',');
+                    const mimeMatch = packed.slice(0, comma).match(/^data:([^;]+)/);
+                    q._wordImgSrc = 'cid:' + cid;
+                    attachments.push({
+                        cid: cid,
+                        name: 'exam-image-' + (i + 1) + '.jpg',
+                        mime: mimeMatch ? mimeMatch[1] : 'image/jpeg',
+                        base64: packed.slice(comma + 1)
+                    });
+                    return;
+                }
+                const imageUrl = examAbsUrl(q.img);
+                let blob;
+                try {
+                    const res = await fetch(imageUrl, { cache: 'force-cache' });
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    blob = await res.blob();
+                } catch (fetchError) {
+                    blob = await examImageToBlob(imageUrl);
+                }
+                const mime = blob.type || 'image/png';
+                const ext = mime.indexOf('jpeg') >= 0 ? 'jpg' : (mime.indexOf('webp') >= 0 ? 'webp' : 'png');
+                const bytes = new Uint8Array(await blob.arrayBuffer());
+                q._wordImgSrc = 'cid:' + cid;
+                attachments.push({ cid: cid, name: 'exam-image-' + (i + 1) + '.' + ext, mime: mime, base64: examBytesToBase64(bytes) });
+            } catch (e) {
+                q._wordImgSrc = '';
+                console.warn('Không thể đóng gói ảnh vào Word:', q.img, e);
+            }
+        }));
+        return attachments;
+    }
+
+    function buildWordMhtml(html, attachments) {
+        const boundary = '----=_NextPart_THTH1_' + Date.now();
+        const html64 = examBytesToBase64(new TextEncoder().encode(html));
+        let out = 'MIME-Version: 1.0\r\n'
+            + 'Content-Type: multipart/related; type="text/html"; boundary="' + boundary + '"\r\n\r\n'
+            + '--' + boundary + '\r\n'
+            + 'Content-Type: text/html; charset="utf-8"\r\n'
+            + 'Content-Transfer-Encoding: base64\r\n'
+            + 'Content-Location: exam.htm\r\n\r\n'
+            + examWrapBase64(html64) + '\r\n';
+        attachments.forEach(att => {
+            out += '--' + boundary + '\r\n'
+                + 'Content-Type: ' + att.mime + '\r\n'
+                + 'Content-Transfer-Encoding: base64\r\n'
+                + 'Content-Location: ' + att.name + '\r\n'
+                + 'Content-ID: <' + att.cid + '>\r\n\r\n'
+                + examWrapBase64(att.base64) + '\r\n';
+        });
+        return out + '--' + boundary + '--\r\n';
+    }
+
+    // Tải file .doc (mở bằng Word / Google Docs để chỉnh sửa)
+    async function downloadCombinedExamDoc() {
+        const list = collectExamQuestions();
+        if (!list) return;
+        const attachments = await prepareWordImages(list);
+        const html = buildExamWordHtml(list);
+        const mhtml = buildWordMhtml(html, attachments);
+        // Dọn thuộc tính tạm để lần In/PDF sau vẫn dùng URL ảnh bình thường.
+        list.forEach(q => { if (q._wordImgSrc != null) delete q._wordImgSrc; });
+        const blob = new Blob([mhtml], { type: 'application/msword' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'De_kiem_tra_THTH1_Unit_' + (sumTest.units || []).join('-') + '.doc';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    }
+
     function closeCombinedTest() {
         document.getElementById('combined-test-overlay').classList.remove('active');
         sumTest = null;
