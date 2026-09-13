@@ -14,10 +14,19 @@
     <meta name="apple-mobile-web-app-title" content="NQ Korean 1">
     <link rel="apple-touch-icon" href="assets/icon-180.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+    <!-- ⚡ TỐC ĐỘ TẢI TRANG
+         • "https://vocabTable" trước đây là địa chỉ GÕ NHẦM: trình duyệt vẫn cố phân giải tên miền
+           không có thật ở mỗi lần mở trang -> tốn thời gian vô ích. Đúng ra phải là fonts.gstatic.com
+           (nơi chứa file font thật).
+         • 2 thẻ font gộp thành 1: trước đây phải đi 2 vòng mạng mới vẽ được chữ.
+         • preconnect tới script.google.com + responsivevoice: bắt tay (DNS + TLS) NGAY lúc mở trang,
+           nên lúc đăng nhập / bấm loa không phải chờ bắt tay nữa (nhanh hơn ~0,2-0,4 giây mỗi lần). -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://vocabTable" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Chiron+Sung+HK:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://script.google.com" crossorigin>
+    <link rel="preconnect" href="https://texttospeech.responsivevoice.org" crossorigin>
+    <link rel="dns-prefetch" href="https://script.googleusercontent.com">
+    <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&family=Chiron+Sung+HK:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #f0f4f8;
@@ -455,7 +464,55 @@
         .ct-export-btn:hover { background:var(--point-color); color:#fff; }
         @media (max-width:600px){ .ct-export-btn { font-size:11px; padding:7px 10px; margin-left:5px; } }
 
-        .ct-result-banner { background:#fff; border-radius:var(--radius-lg); box-shadow:var(--neu-card-shadow); padding:24px; margin-bottom:22px; text-align:center; border-top:5px solid var(--point-color); }
+        /* 📋 Báo cáo Tổng hợp — mỗi lần làm bài là 1 thẻ */
+        .sr-top { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+        .sr-stats { display:flex; gap:10px; flex-wrap:wrap; }
+        .sr-stat { background:var(--card-color); border-radius:var(--radius-sm); box-shadow:var(--neu-convex); padding:10px 15px; min-width:104px; }
+        .sr-stat .l { font-size:10px; font-weight:700; color:var(--sub-text); text-transform:uppercase; letter-spacing:.5px; }
+        .sr-stat .v { font-size:19px; font-weight:800; color:var(--point-color); line-height:1.25; }
+        .sr-row { display:flex; align-items:center; gap:14px; background:#fff; border-radius:var(--radius-md); box-shadow:var(--neu-card-shadow); border:1px solid rgba(255,255,255,.8); padding:13px 16px; margin-bottom:10px; }
+        .sr-rank { flex:0 0 auto; width:34px; height:34px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; background:var(--point-light); color:var(--point-color); }
+        .sr-row.best .sr-rank { background:#fffaf0; color:#dd6b20; }
+        .sr-body { flex:1; min-width:0; }
+        .sr-when { font-size:12.5px; font-weight:800; color:#1a202c; }
+        .sr-meta { font-size:11px; color:var(--sub-text); font-weight:600; margin-top:3px; line-height:1.55; }
+        .sr-tag { display:inline-block; background:var(--bg-color); border-radius:8px; padding:1px 7px; margin:2px 4px 0 0; font-size:10.5px; font-weight:700; color:#4a5568; }
+        .sr-score { flex:0 0 auto; text-align:right; }
+        .sr-score .n { font-size:18px; font-weight:800; color:#1a202c; line-height:1.2; }
+        .sr-score .p { font-size:11px; font-weight:800; margin-top:1px; }
+        .sr-more { display:block; margin:4px auto 0; background:transparent; border:none; color:var(--point-color); font-family:inherit; font-size:12px; font-weight:800; padding:8px 16px; border-radius:10px; cursor:pointer; outline:none; }
+        .sr-more:hover { background:var(--point-light); }
+        .sr-empty { text-align:center; color:var(--sub-text); font-size:13px; padding:30px 14px; line-height:1.6; }
+        @media (max-width:600px){ .sr-row { gap:10px; padding:11px 12px; } .sr-when { font-size:12px; } .sr-score .n { font-size:16px; } }
+
+        /* 📋 BÁO CÁO TỔNG HỢP — mỗi lần làm Quiz tổng hợp là 1 dòng trong sidebar */
+        .sr-row { display:flex; align-items:center; gap:9px; background:var(--card-color); border-radius:12px; box-shadow:var(--neu-convex); padding:8px 10px; }
+        .sr-rank { flex:0 0 auto; width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; background:var(--point-light); color:var(--point-color); }
+        .sr-row.best .sr-rank { background:#fffaf0; color:#dd6b20; }
+        .sr-body { flex:1; min-width:0; }
+        .sr-when { font-size:11px; font-weight:800; color:#1a202c; line-height:1.3; }
+        .sr-meta { font-size:9.5px; color:var(--sub-text); font-weight:600; margin-top:2px; line-height:1.45; word-break:break-word; }
+        .sr-score { flex:0 0 auto; text-align:right; line-height:1.25; }
+        .sr-score .n { font-size:13px; font-weight:800; color:#1a202c; }
+        .sr-score .p { font-size:9.5px; font-weight:800; }
+        .sr-more { display:block; width:100%; margin-top:7px; background:var(--card-color); border:none; color:var(--point-color); font-family:inherit; font-size:10.5px; font-weight:800; padding:7px 10px; border-radius:10px; cursor:pointer; outline:none; box-shadow:var(--neu-convex); }
+        .sr-more:hover { background:var(--point-light); }
+        .sr-empty { font-size:10.5px; color:var(--sub-text); padding:10px 4px; line-height:1.65; }
+
+        /* Câu chưa làm: nháy viền cam để học viên thấy ngay khi web tự cuộn tới */
+        .ct-card.ct-missing { animation: ctMissFlash 1.7s ease-out 1; }
+        @keyframes ctMissFlash {
+            0%, 100% { box-shadow:var(--neu-card-shadow); }
+            15%, 55% { box-shadow:0 0 0 3px #ed8936, 0 10px 26px rgba(237,137,54,.22); }
+        }
+        /* Pháo giấy chúc mừng — phủ lên trên đề, không chặn thao tác */
+        #ct-confetti { position:fixed; inset:0; z-index:2400; pointer-events:none; display:none; }
+        #ct-confetti.on { display:block; }
+
+        .ct-result-banner { background:#fff; border-radius:var(--radius-lg); box-shadow:var(--neu-card-shadow); padding:30px 24px 34px; margin-bottom:22px; text-align:center; border-top:5px solid var(--point-color); }
+        .ct-score-big { font-size:88px; font-weight:800; color:var(--point-color); margin:10px 0 4px; line-height:1; letter-spacing:-2px; animation:ctScorePop .62s cubic-bezier(.2,1.5,.4,1) 1; }
+        @keyframes ctScorePop { 0% { transform:scale(.3); opacity:0; } 60% { transform:scale(1.12); opacity:1; } 100% { transform:scale(1); } }
+        @media (max-width:600px){ .ct-score-big { font-size:62px; } }
         @media (max-width:600px){ .ct-opts { grid-template-columns:1fr; } .ct-prompt, .ct-prompt.ct-quoted, .ct-prompt.ct-long { font-size:19px; } .ct-prompt.ct-bilingual .cloze-sentence { font-size:18px; } .ct-prompt.ct-bilingual .cloze-vi { font-size:13px; } .ct-prompt-sub { font-size:12px; } .ct-opt { font-size:15px; padding:14px 16px; } .ct-inner { padding:16px 12px; } }
 
         .widget-right-profile { background: #ffffff; border-radius: var(--radius-lg); box-shadow: var(--neu-card-shadow); padding: 24px 16px; display: flex; flex-direction: column; gap: 20px; border: 1px solid rgba(255,255,255,0.7); height: 100%; position: relative; }
@@ -1833,7 +1890,7 @@
         </div>
 
         <!-- Chú thích màu (dòng nhỏ) -->
-        <div class="ur-legend">
+        <div class="ur-legend" id="unit-report-legend">
             <span><span class="dot" style="background:#22C55E"></span>Hoàn thành</span>
             <span><span class="dot" style="background:#614CFF"></span>Đang làm</span>
             <span><span class="dot" style="background:#cbd5e1"></span>Chưa bắt đầu</span>
@@ -1849,7 +1906,7 @@
         <div id="unit-report-list" class="ur-lessons"></div>
 
         <!-- Ngôi sao tích luỹ -->
-        <div class="ur-starbox">
+        <div class="ur-starbox" id="unit-report-starbox">
             <div class="big"><img src="assets/star_icon.png" alt="star" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"><span class="fallback" style="display:none;">★</span></div>
             <div style="line-height:1.3;">
                 <div class="st-title">Ngôi sao tích luỹ của <span id="unit-report-stars-unit">Unit</span></div>
@@ -2006,6 +2063,7 @@
             <button class="ct-close-btn" onclick="closeCombinedTest()" aria-label="Thoát">&times;</button>
         </div>
     </div>
+    <canvas id="ct-confetti"></canvas>
     <div class="ct-scroll">
         <div class="ct-inner">
             <div id="ct-result-banner" style="display:none;"></div>
@@ -2054,7 +2112,8 @@
             'wrongWords_' + key, 'unitQuiz_' + key, 'unitSecs_' + key,
             'completed_units_' + key, 'today_secs_' + key, 'total_secs_' + key,
             'study_date_' + key, 'starred_' + key + '_QuyenClass', 'notes_' + key + '_QuyenClass',
-            'quizState_' + key, 'writeSentenceState_' + key
+            'quizState_' + key, 'writeSentenceState_' + key,
+            'sumHistory_' + key   // 📋 lịch sử làm Quiz tổng hợp -> đổi máy vẫn còn Báo cáo
         ];
     }
     function snapshotProgress(sess) {
@@ -2121,20 +2180,67 @@
     window.addEventListener('pagehide', flushProgressNow);
 
 
-    // --- 🔊 CẤU HÌNH ÂM THANH ĐÚNG / SAI CHO QUIZ (THTH1) ---
-    // Đổi tên file cho khớp file audio bạn bỏ vào folder assets nếu cần.
+    /* --- 🔊 ÂM THANH ĐÚNG / SAI CHO QUIZ (THTH1) ---
+       Vì sao trước đây "có câu làm đúng mà không nghe thấy tiếng":
+       cả web dùng CHUNG đúng 1 đối tượng Audio cho tiếng đúng và 1 cho tiếng sai. Khi học viên
+       trả lời nhanh liên tiếp, lệnh play() của câu trước CHƯA chạy xong đã bị câu sau gán
+       currentTime = 0 -> trình duyệt huỷ luôn lượt phát đó (AbortError) và ta nuốt lỗi im lặng.
+
+       Nay: giải mã sẵn 2 file thành dữ liệu âm thanh trong bộ nhớ (Web Audio), mỗi lần phát tạo
+       một nguồn phát riêng -> phát TỨC THÌ, chồng bao nhiêu lượt cũng không nuốt tiếng.
+       Trình duyệt quá cũ không có Web Audio thì quay về cách nhân bản thẻ Audio (cũng không đụng nhau). */
     const SND_CORRECT = "assets/right.mp3";
     const SND_WRONG   = "assets/wrong.mp3";
-    // Tạo sẵn 2 đối tượng Audio để phát cho nhanh, không phải tải lại mỗi lần.
-    const _sndCorrect = new Audio(SND_CORRECT);
-    const _sndWrong   = new Audio(SND_WRONG);
-    _sndCorrect.preload = "auto";
-    _sndWrong.preload   = "auto";
+
+    let _sfxCtx = null;                 // "phòng thu" Web Audio dùng chung
+    const _sfxBuf = {};                 // url -> dữ liệu âm thanh đã giải mã
+    const _sfxTag = {};                 // url -> thẻ Audio dự phòng
+    function _sfxContext() {
+        if (_sfxCtx) return _sfxCtx;
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        try { _sfxCtx = new AC(); } catch (_) { _sfxCtx = null; }
+        return _sfxCtx;
+    }
+    // Tải + giải mã sẵn 2 file (chạy ngầm, không chặn gì cả)
+    function _sfxPreload(url) {
+        if (_sfxBuf[url] || _sfxTag[url]) return;
+        _sfxTag[url] = new Audio(url);           // bản dự phòng, cũng giúp trình duyệt lưu sẵn file
+        _sfxTag[url].preload = 'auto';
+        const ctx = _sfxContext();
+        if (!ctx) return;
+        fetch(url).then(r => r.arrayBuffer())
+            .then(b => new Promise((ok, no) => { const d = ctx.decodeAudioData(b, ok, no); if (d && d.then) d.then(ok, no); }))
+            .then(buf => { _sfxBuf[url] = buf; })
+            .catch(function () { /* thiếu file cũng không làm hỏng quiz */ });
+    }
+    _sfxPreload(SND_CORRECT);
+    _sfxPreload(SND_WRONG);
+
+    // iOS/Chrome khoá âm thanh cho tới khi người dùng chạm màn hình lần đầu -> mở khoá ngay lúc đó.
+    function _sfxUnlock() {
+        const ctx = _sfxContext();
+        if (ctx && ctx.state === 'suspended') { try { ctx.resume(); } catch (_) {} }
+    }
+    ['pointerdown', 'keydown', 'touchstart'].forEach(ev =>
+        document.addEventListener(ev, _sfxUnlock, { passive: true }));
+
     function playFeedbackSound(isCorrect) {
+        const url = isCorrect ? SND_CORRECT : SND_WRONG;
         try {
-            const a = isCorrect ? _sndCorrect : _sndWrong;
-            a.currentTime = 0;
-            a.play().catch(function(e){ /* trình duyệt chặn autoplay lần đầu — bỏ qua */ });
+            const ctx = _sfxContext();
+            if (ctx && _sfxBuf[url]) {
+                if (ctx.state === 'suspended') { try { ctx.resume(); } catch (_) {} }
+                const src = ctx.createBufferSource();
+                src.buffer = _sfxBuf[url];
+                src.connect(ctx.destination);
+                src.start(0);
+                return;
+            }
+            // Dự phòng: nhân bản thẻ Audio -> mỗi lượt phát một thẻ riêng, không giẫm chân nhau
+            const base = _sfxTag[url] || (_sfxTag[url] = new Audio(url));
+            const a = base.cloneNode();
+            a.play().catch(function () {});
         } catch (e) { /* thiếu file audio cũng không làm hỏng quiz */ }
     }
 
@@ -2548,14 +2654,74 @@
         setTimeout(clear, 6000); // phòng khi không bắt được sự kiện kết thúc
     }
 
+    /* ---------------------------------------------------------------
+       GIỌNG NỮ — TẢI SẴN ĐỂ BẤM LÀ NGHE LIỀN
+       -----------------------------------------------------------------
+       Vì sao trước đây bấm loa phải đợi 5 giây (và càng làm về sau càng lâu):
+       MỖI lần bấm đều tạo `new Audio(url)` MỚI trỏ tới máy chủ responsivevoice,
+       tức là mỗi lần bấm là một lần đi mạng từ đầu — tải xong mới có tiếng.
+       Làm tới câu 5-10 thì máy chủ TTS bắt đầu hạn chế tốc độ nên càng ì ạch.
+
+       Nay có 2 lớp xử lý:
+         1) KHO TẠM: mỗi câu chỉ tải đúng 1 lần, bấm lại lần sau phát ngay tức thì.
+         2) TẢI TRƯỚC: vừa hiện câu hỏi là đã âm thầm tải sẵn tiếng của câu đó
+            (và câu kế tiếp), nên tới lúc học viên bấm thì file đã nằm sẵn trong máy.
+       --------------------------------------------------------------- */
+    const _femaleCache = new Map();       // text -> thẻ Audio đã tải sẵn
+    const FEMALE_CACHE_MAX = 60;          // giữ 60 câu gần nhất, tránh phình bộ nhớ
+    let _femaleQueue = [];                // hàng đợi tải trước
+    let _femaleLoading = 0;
+    const FEMALE_MAX_PARALLEL = 2;        // tải trước tối đa 2 câu cùng lúc, nhường đường cho thao tác của học viên
+
+    function _femaleUrl(clean) {
+        return "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" +
+               encodeURIComponent(clean) +
+               "&lang=ko&engine=g3&name=Korean%20Female&pitch=0.5&rate=0.45&volume=1";
+    }
+    // Lấy (hoặc tạo) thẻ Audio của 1 câu — KHÔNG phát, chỉ chuẩn bị sẵn
+    function _femaleAudioFor(clean) {
+        let a = _femaleCache.get(clean);
+        if (a) {
+            _femaleCache.delete(clean); _femaleCache.set(clean, a);   // đánh dấu "vừa dùng" (LRU)
+            return a;
+        }
+        a = new Audio(_femaleUrl(clean));
+        a.preload = 'auto';
+        _femaleCache.set(clean, a);
+        while (_femaleCache.size > FEMALE_CACHE_MAX) _femaleCache.delete(_femaleCache.keys().next().value);
+        return a;
+    }
+    // Tải trước tiếng của một hoặc nhiều câu (chạy ngầm, có hàng đợi để không làm nghẽn mạng)
+    function prefetchKoreanVoice(text) {
+        const clean = _cleanKoreanText(text);
+        if (!clean || _femaleCache.has(clean)) return;
+        if (_femaleQueue.indexOf(clean) >= 0) return;
+        _femaleQueue.push(clean);
+        _femalePumpQueue();
+    }
+    function _femalePumpQueue() {
+        while (_femaleLoading < FEMALE_MAX_PARALLEL && _femaleQueue.length) {
+            const clean = _femaleQueue.shift();
+            if (_femaleCache.has(clean)) continue;
+            const a = _femaleAudioFor(clean);
+            _femaleLoading++;
+            let done = false;
+            const finish = () => { if (done) return; done = true; _femaleLoading--; _femalePumpQueue(); };
+            a.addEventListener('canplaythrough', finish, { once: true });
+            a.addEventListener('error', finish, { once: true });
+            setTimeout(finish, 8000);       // mạng treo -> nhả chỗ cho câu khác
+            try { a.load(); } catch (_) { finish(); }
+        }
+    }
+
     function _playFemaleVoice(clean) {
-        let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" +
-                  encodeURIComponent(clean) +
-                  "&lang=ko&engine=g3&name=Korean%20Female&pitch=0.5&rate=0.45&volume=1";
-        let audio = new Audio(url);
+        const audio = _femaleAudioFor(clean);
         _voiceAudio = audio;
-        audio.load();
+        try { audio.currentTime = 0; } catch (_) {}
         audio.play().catch(function () {
+            // Máy chủ TTS lỗi/chặn -> bỏ khỏi kho tạm (kẻo lần sau lại phát file hỏng)
+            // rồi dùng giọng đọc sẵn có của hệ điều hành.
+            _femaleCache.delete(clean);
             try {
                 if ('speechSynthesis' in window) {
                     let u = new SpeechSynthesisUtterance(clean);
@@ -2589,6 +2755,20 @@
                 .catch(function () {})
                 .then(function () { _ttsInFlight--; });
         }, 1200);
+    }
+
+    // Tải sẵn tiếng cho câu ĐANG hiện + vài câu KẾ TIẾP của một tab quiz
+    // -> học viên bấm "Nghe" là có tiếng ngay, kể cả khi bấm "Tiếp theo" liên tục.
+    function prefetchQuizVoices(tab, lookahead) {
+        const st = tabState[tab];
+        if (!st || !st.indices || !st.indices.length) return;
+        const isSentence = (st.mode === 'sentence');
+        const upto = Math.min(st.indices.length, st.current + 1 + (lookahead == null ? 2 : lookahead));
+        for (let i = st.current; i < upto; i++) {
+            const it = vocabData[st.indices[i]];
+            if (!it) continue;
+            prefetchKoreanVoice(isSentence ? it.ex : it.ko);
+        }
     }
 
     function triggerKoreanVoice(text, isMale, speakerBtn) {
@@ -2893,6 +3073,7 @@
         currentUnit = unitNum;
         renderUnitGrid([]);
         updateLessonLockUI(); // 📘 bật/tắt ổ khoá Bài giảng + Ngữ pháp theo unit này
+        renderUnitReport();   // 📋 sidebar trả về Báo cáo của Unit vừa chọn
 
         if(allVocabCache[unitNum]) {
             vocabData = allVocabCache[unitNum];
@@ -4228,6 +4409,7 @@
         const speakText = isSentence ? currentItem.ex : currentItem.ko;
         const listenPlayBtn = document.getElementById('btn-listen-play');
         if (listenPlayBtn) listenPlayBtn.onclick = function(e) { e.stopPropagation(); triggerKoreanVoice(speakText, false); };
+        prefetchQuizVoices('listen', 2);   // 🔊 tải sẵn câu này + 2 câu tới -> bấm loa là nghe liền
 
         // Gợi ý (bóng đèn): dạng câu -> hiện câu; dạng từ -> nghĩa tiếng Việt
         document.getElementById('listen-hint-text').innerText = isSentence ? currentItem.ex : currentItem.vi;
@@ -4309,6 +4491,7 @@
         const speakText = isSentence ? currentItem.ex : currentItem.ko;
         const guessPlayBtn = document.getElementById('btn-guess-play');
         if (guessPlayBtn) guessPlayBtn.onclick = function(e) { e.stopPropagation(); triggerKoreanVoice(speakText, false); };
+        prefetchQuizVoices('guess', 2);    // 🔊 tải sẵn câu này + 2 câu tới
 
         let correctAnswer, wrong;
         if (isSentence) {
@@ -5399,6 +5582,106 @@
         return `<div class="ur-lc-ring" style="--p:${p}; --c:${color};"><span class="arc"></span><span class="v" style="color:${color}; font-size:${fs}px; letter-spacing:-0.4px;">${pct}%</span></div>`;
     }
 
+    /* ============================================================
+       📋 LỊCH SỬ LÀM QUIZ TỔNG HỢP
+       Mỗi lần nộp bài lưu lại: thời điểm, Unit đã chọn, dạng quiz, ngôn ngữ trả lời,
+       số câu và kết quả. Hiện 6 lần gần nhất trong khối Báo cáo ở sidebar,
+       bấm "Xem thêm" để xem toàn bộ. Lưu riêng theo từng tài khoản.
+       ============================================================ */
+    const SUM_HISTORY_MAX = 60;        // giữ 60 lần gần nhất, đủ xem lại cả khoá
+    const SUM_HISTORY_PREVIEW = 6;     // hiện sẵn 6 lần, còn lại nằm sau nút "Xem thêm"
+    let sumReportShowAll = false;
+    function sumHistoryKey() { return `sumHistory_${getStudentKey()}`; }
+    function loadSumHistory() {
+        try { const a = JSON.parse(localStorage.getItem(sumHistoryKey())); return Array.isArray(a) ? a : []; }
+        catch (e) { return []; }
+    }
+    function saveSumHistory(list) {
+        try { localStorage.setItem(sumHistoryKey(), JSON.stringify(list.slice(0, SUM_HISTORY_MAX))); } catch (e) {}
+    }
+    const SUM_LANG_LABEL = { ko: 'Trả lời tiếng Hàn', vi: 'Trả lời tiếng Việt', both: 'Trả lời cả hai' };
+    function recordSummaryAttempt(correct, total, pct) {
+        if (!sumTest) return;
+        // Dạng quiz thật sự XUẤT HIỆN trong đề (không phải dạng đã chọn nhưng bị loại vì thiếu ảnh)
+        const types = [...new Set(sumTest.questions.map(q => q.type))];
+        const list = loadSumHistory();
+        list.unshift({
+            at: Date.now(),
+            units: (sumTest.units || []).slice(),
+            types: types,
+            lang: sumTest.answerLang || 'both',
+            total: total, correct: correct, pct: pct
+        });
+        saveSumHistory(list);
+        if (typeof scheduleProgressPush === 'function') { try { scheduleProgressPush(); } catch (e) {} }
+    }
+    // "14:05 · 13/09" cho gọn sidebar
+    function sumWhenLabel(ts) {
+        const d = new Date(ts);
+        const two = n => String(n).padStart(2, '0');
+        return `${two(d.getHours())}:${two(d.getMinutes())} · ${two(d.getDate())}/${two(d.getMonth() + 1)}`;
+    }
+    function toggleSumReportMore() { sumReportShowAll = !sumReportShowAll; renderUnitReport(); }
+
+    // Khối Báo cáo khi đang ở chế độ Tổng hợp: danh sách các lần làm Quiz tổng hợp
+    function renderSummaryReportInto(listEl) {
+        const hist = loadSumHistory();
+        const ringEl = document.getElementById('unit-report-ring');
+        const pctEl = document.getElementById('unit-report-pct');
+        const barEl = document.getElementById('unit-report-bar');
+        const sumEl = document.getElementById('unit-report-summary');
+        const capEl = document.querySelector('#unit-report-ring') ? document.querySelector('.ur-caprow .ur-cap') : null;
+
+        document.getElementById('unit-report-title').innerText = 'Báo cáo Tổng hợp';
+        // Khối sao & chú thích màu chỉ đúng với từng Unit -> ẩn ở chế độ Tổng hợp
+        const legend = document.getElementById('unit-report-legend');
+        const starbox = document.getElementById('unit-report-starbox');
+        if (legend) legend.style.display = 'none';
+        if (starbox) starbox.style.display = 'none';
+        const secB = document.querySelector('#unit-report-sec b');
+        if (secB) secB.innerText = 'Các lần làm bài';
+
+        // Vòng % = điểm CAO NHẤT từ trước tới nay; dòng chữ = kết quả lần gần nhất
+        const best = hist.length ? Math.max(...hist.map(h => h.pct || 0)) : 0;
+        const last = hist[0];
+        const color = best >= 80 ? '#22C55E' : (best > 0 ? 'var(--point-color)' : '#cbd5e1');
+        if (capEl) capEl.innerText = 'Điểm cao nhất';
+        if (pctEl) { pctEl.innerText = best + '%'; pctEl.style.color = color; }
+        if (ringEl) { ringEl.style.setProperty('--p', best); ringEl.style.setProperty('--c', color); }
+        if (barEl) { barEl.style.width = best + '%'; barEl.style.background = color; }
+        if (sumEl) { sumEl.innerText = last ? `${last.correct}/${last.total}` : '0/0'; sumEl.style.color = color; }
+
+        if (!hist.length) {
+            listEl.innerHTML = '<div class="sr-empty">Chưa có lần làm bài nào.<br>Vào <b>2. Quiz</b> → chọn Unit và dạng quiz → <b>Bắt đầu làm bài</b>, kết quả sẽ được ghi lại ở đây nhé!</div>';
+            return;
+        }
+
+        const shown = sumReportShowAll ? hist : hist.slice(0, SUM_HISTORY_PREVIEW);
+        let html = '';
+        shown.forEach((h, i) => {
+            const isBest = (h.pct || 0) === best && best > 0;
+            const sc = (h.pct >= 80) ? 'var(--success-color)' : (h.pct >= 50 ? '#dd6b20' : 'var(--error-color)');
+            const typeTxt = (h.types || []).map(t => SUM_TYPE_LABEL[t] || t).join(', ') || '—';
+            html += `<div class="sr-row${isBest ? ' best' : ''}" title="${ctEsc(typeTxt)}">`
+                + `<div class="sr-rank">${isBest ? '★' : (i + 1)}</div>`
+                + `<div class="sr-body">`
+                +   `<div class="sr-when">${sumWhenLabel(h.at)}</div>`
+                +   `<div class="sr-meta">Unit ${ctEsc((h.units || []).join(', ')) || '—'} · ${h.total} câu`
+                +     `<br>${ctEsc(typeTxt)}`
+                +     `<br>${SUM_LANG_LABEL[h.lang] || 'Trả lời cả hai'}</div>`
+                + `</div>`
+                + `<div class="sr-score"><div class="n">${h.correct}/${h.total}</div>`
+                +   `<div class="p" style="color:${sc};">${h.pct}%</div></div>`
+                + `</div>`;
+        });
+        if (hist.length > SUM_HISTORY_PREVIEW) {
+            html += `<button class="sr-more" onclick="toggleSumReportMore()">`
+                + (sumReportShowAll ? '▲ Thu gọn' : `▼ Xem thêm ${hist.length - SUM_HISTORY_PREVIEW} lần trước`)
+                + `</button>`;
+        }
+        listEl.innerHTML = html;
+    }
+
     // Vẽ khối "Báo cáo Unit" từ dữ liệu đã lưu, ưu tiên số liệu live của tab đang mở
     function renderUnitReport() {
         const listEl = document.getElementById('unit-report-list');
@@ -5407,23 +5690,21 @@
         const ringEl = document.getElementById('unit-report-ring');
         const pctEl = document.getElementById('unit-report-pct');
 
-        // Chế độ Tổng hợp không gắn với 1 Unit -> hiện thông báo trung tính
-        if (currentUnit === 'SUM') {
-            document.getElementById('unit-report-title').innerText = 'Ôn tập Tổng hợp';
-            document.getElementById('unit-report-stars-unit').innerText = 'Tổng hợp';
-            const sumEl0 = document.getElementById('unit-report-summary');
-            sumEl0.innerText = 'Đang kết hợp từ vựng nhiều Unit';
-            sumEl0.style.color = 'var(--point-color)';
-            const barEl0 = document.getElementById('unit-report-bar');
-            barEl0.style.width = '0%';
-            barEl0.style.background = 'var(--point-color)';
-            if (pctEl) { pctEl.innerText = '0%'; pctEl.style.color = 'var(--point-color)'; }
-            if (ringEl) ringEl.style.setProperty('--p', 0);
-            if (secEl) secEl.style.display = 'none';
-            listEl.innerHTML = '<div style="font-size:11px; color:var(--sub-text); padding:8px 4px;">Sao & tiến độ chỉ ghi nhận khi ôn theo từng Unit riêng.</div>';
-            document.getElementById('unit-report-stars-icons').innerHTML = starIconsHtml(0);
+        // Chế độ Tổng hợp -> khối Báo cáo đổi thành LỊCH SỬ các lần làm Quiz tổng hợp
+        if (summaryActive || currentUnit === 'SUM') {
+            if (secEl) secEl.style.display = 'flex';
+            renderSummaryReportInto(listEl);
             return;
         }
+        // Quay về Unit thường -> trả khối Báo cáo về hình dạng gốc
+        const legendEl = document.getElementById('unit-report-legend');
+        const starboxEl = document.getElementById('unit-report-starbox');
+        if (legendEl) legendEl.style.display = '';
+        if (starboxEl) starboxEl.style.display = '';
+        const secBEl = document.querySelector('#unit-report-sec b');
+        if (secBEl) secBEl.innerText = 'Chi tiết theo bài';
+        const capEl0 = document.querySelector('.ur-caprow .ur-cap');
+        if (capEl0) capEl0.innerText = 'Từ đã đúng';
         if (secEl) secEl.style.display = 'flex';
 
         const data = getUnitQuizData(currentUnit);
@@ -5878,7 +6159,9 @@
         hideAllModeSections();
         document.getElementById('mode-summary-section').style.display = 'flex';
         summaryActive = true;
+        sumReportShowAll = false;
         renderUnitGrid([]);
+        renderUnitReport();     // 📋 sidebar đổi sang Báo cáo Tổng hợp
         // Mặc định KHÔNG chọn sẵn Unit nào — user tự chọn Unit muốn ôn.
         switchSummaryMain('list');
     }
@@ -5890,7 +6173,9 @@
         hideAllModeSections();
         document.getElementById('mode-grammar-summary-section').style.display = 'flex';
         summaryActive = true;
+        sumReportShowAll = false;
         renderUnitGrid([]);
+        renderUnitReport();     // 📋 sidebar đổi sang Báo cáo Tổng hợp
         switchGrammarSummaryMain('list');
     }
 
@@ -6341,6 +6626,9 @@
             wrap.appendChild(card);
         });
         const sc = document.querySelector('.ct-scroll'); if (sc) sc.scrollTop = 0;
+        // 🔊 Tải sẵn tiếng cho MỌI câu có nút "Nghe" trong đề (có hàng đợi, tối đa 2 câu một lúc)
+        // -> làm tới câu nào bấm loa cũng ra tiếng ngay, không còn cảnh đợi 5 giây ở câu 5-10.
+        sumTest.questions.forEach(q => { if (q.audio) prefetchKoreanVoice(q.audio); });
     }
 
     function selectCombinedOption(i, btn) {
@@ -6359,10 +6647,36 @@
         document.getElementById('ct-counter').innerText = done + ' / ' + sumTest.questions.length;
     }
 
+    // Cuộn tới câu chưa làm đầu tiên (kể từ vị trí i0) và nháy viền cho dễ thấy
+    function jumpToUnansweredCombined(i0) {
+        if (!sumTest) return -1;
+        const from = (i0 == null ? 0 : i0);
+        let idx = -1;
+        for (let i = from; i < sumTest.questions.length; i++) {
+            const q = sumTest.questions[i];
+            if (q.userAnswer == null || String(q.userAnswer).trim() === '') { idx = i; break; }
+        }
+        if (idx < 0) return -1;
+        const card = document.getElementById('ct-card-' + idx);
+        if (!card) return idx;
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.remove('ct-missing');
+        void card.offsetWidth;              // ép trình duyệt chạy lại hiệu ứng nếu nháy liên tiếp
+        card.classList.add('ct-missing');
+        setTimeout(() => card.classList.remove('ct-missing'), 2000);
+        const inp = card.querySelector('.ct-input');
+        if (inp) setTimeout(() => { try { inp.focus({ preventScroll: true }); } catch (_) { inp.focus(); } }, 420);
+        return idx;
+    }
+
     function submitCombinedTest() {
         if (!sumTest || sumTest.graded) return;
         const unanswered = sumTest.questions.filter(q => q.userAnswer == null || String(q.userAnswer).trim() === '').length;
-        if (unanswered > 0 && !confirm(`Bạn còn ${unanswered} câu chưa làm. Vẫn nộp bài chứ?`)) return;
+        if (unanswered > 0 && !confirm(`Bạn còn ${unanswered} câu chưa làm.\n\nBấm HUỶ để web đưa bạn tới câu chưa làm, hoặc ĐỒNG Ý để nộp luôn.`)) {
+            // Học viên chọn quay lại làm tiếp -> đưa thẳng tới câu còn bỏ trống
+            jumpToUnansweredCombined(0);
+            return;
+        }
         sumTest.graded = true;
         let correct = 0;
         sumTest.questions.forEach((q, i) => {
@@ -6386,17 +6700,129 @@
             }
         });
         const pct = Math.round(correct / sumTest.questions.length * 100);
+        // 📋 Ghi vào Báo cáo Tổng hợp để xem lại lịch sử các lần làm bài
+        recordSummaryAttempt(correct, sumTest.questions.length, pct);
         const banner = document.getElementById('ct-result-banner');
         banner.className = 'ct-result-banner'; banner.style.display = 'block';
+        const praise = pct === 100 ? 'Tuyệt đối! Không sai câu nào 🎉'
+                     : pct >= 80 ? `Chính xác ${pct}% — giỏi lắm! 🎉`
+                     : pct >= 50 ? `Chính xác ${pct}% — cố thêm chút nữa nhé!`
+                                 : `Chính xác ${pct}% — ôn lại rồi làm lại nha!`;
         banner.innerHTML =
             `<div style="font-size:13px;font-weight:800;color:var(--sub-text);text-transform:uppercase;letter-spacing:1px;">Kết quả bài kiểm tra tổng hợp</div>` +
-            `<div style="font-size:44px;font-weight:800;color:var(--point-color);margin:6px 0;">${correct}/${sumTest.questions.length}</div>` +
-            `<div style="font-size:16px;font-weight:700;color:#1a202c;">Chính xác ${pct}% 🎉</div>` +
-            `<div style="font-size:12px;color:var(--sub-text);margin-top:8px;">Các câu sai đã được lưu vào Sổ tay từ vựng để bạn ôn lại. Kéo xuống xem chi tiết từng câu nhé.</div>` +
-            `<button class="btn" style="margin-top:14px;padding:10px 22px;font-size:13px;" onclick="closeCombinedTest()">Thoát ra</button>`;
+            `<div class="ct-score-big">${correct}/${sumTest.questions.length}</div>` +
+            `<div style="font-size:17px;font-weight:800;color:#1a202c;">${praise}</div>` +
+            `<div style="font-size:12px;color:var(--sub-text);margin-top:10px;">Các câu sai đã được lưu vào Sổ tay từ vựng để bạn ôn lại. Kéo xuống xem chi tiết từng câu nhé.</div>`;
         document.getElementById('ct-submit-zone').style.display = 'none';
         const sc = document.querySelector('.ct-scroll'); if (sc) sc.scrollTop = 0;
+        fireConfetti(pct);          // 🎊 tung bông chúc mừng
         updateDashboardStats();
+    }
+
+    /* ============================================================
+       🎊 PHÁO GIẤY CHÚC MỪNG (tự vẽ bằng canvas — không cần thư viện ngoài)
+       Làm đúng càng nhiều thì bắn càng nhiều giấy; dưới 50% chỉ bắn nhẹ.
+       ============================================================ */
+    let _confettiRAF = null, _confettiStop = null;
+    function fireConfetti(pct) {
+        const cv = document.getElementById('ct-confetti');
+        if (!cv || !cv.getContext) return;
+        // Học viên đã bật "giảm chuyển động" trong máy -> tôn trọng, không bắn
+        try { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; } catch (_) {}
+
+        const ctx = cv.getContext('2d');
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const W = cv.clientWidth || window.innerWidth;
+        const H = cv.clientHeight || window.innerHeight;
+        cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        cv.classList.add('on');
+
+        // Mọi tốc độ/kích thước quy theo chiều cao màn hình -> điện thoại hay máy tính đều đẹp như nhau
+        const U = H / 800;
+        const COLORS = ['#614CFF', '#8f7cff', '#ed8936', '#f6ad55', '#48bb78', '#38b2ac', '#f56565', '#ecc94b'];
+        const pick = () => COLORS[(Math.random() * COLORS.length) | 0];
+        const rand = (a, b) => a + Math.random() * (b - a);
+        const bits = [];
+        const many = pct >= 80 ? 1 : (pct >= 50 ? 0.65 : 0.4);
+
+        function addBit(x, y, vx, vy) {
+            bits.push({
+                x: x, y: y, vx: vx, vy: vy,
+                w: rand(7, 13) * Math.max(0.75, U), h: rand(9, 16) * Math.max(0.75, U),
+                rot: Math.random() * Math.PI * 2, vr: rand(-0.28, 0.28),
+                sway: rand(0.02, 0.06), phase: Math.random() * Math.PI * 2,
+                col: pick(), life: 0, max: rand(190, 300)
+            });
+        }
+
+        // 1) MƯA GIẤY từ trên rơi xuống — trải đều cả bề ngang nên màn hình nào cũng thấy rõ
+        const rainN = Math.round(150 * many);
+        for (let i = 0; i < rainN; i++) {
+            addBit(rand(0, W), rand(-H * 0.55, -10), rand(-1.1, 1.1) * U, rand(2.6, 6.2) * U);
+        }
+        // 2) HAI CHÙM PHÁO bắn lên từ hai góc dưới (trái: chếch lên phải, phải: chếch lên trái)
+        const burstN = Math.round(45 * many);
+        for (let i = 0; i < burstN; i++) {
+            const sp = rand(12, 21) * U;
+            const aL = rand(-1.27, -0.61);                 // ≈ -73° … -35°  -> cos > 0 (bay sang phải)
+            addBit(rand(-8, W * 0.06), H + rand(0, 14), Math.cos(aL) * sp, Math.sin(aL) * sp);
+            const sp2 = rand(12, 21) * U;
+            const aR = rand(-2.53, -1.87);                 // ≈ -145° … -107° -> cos < 0 (bay sang trái)
+            addBit(rand(W * 0.94, W + 8), H + rand(0, 14), Math.cos(aR) * sp2, Math.sin(aR) * sp2);
+        }
+
+        const G = 0.19 * U;        // trọng lực
+        if (_confettiRAF) cancelAnimationFrame(_confettiRAF);
+        if (_confettiStop) clearTimeout(_confettiStop);
+        // Chốt chặn: dù máy có treo hay học viên chuyển sang app khác giữa chừng
+        // thì lớp pháo hoa vẫn được dọn, không nằm lại trên màn hình.
+        _confettiStop = setTimeout(stopConfetti, 9000);
+
+        // Tính theo THỜI GIAN trôi qua, không theo số khung hình: màn hình 120Hz (iPhone Pro,
+        // máy chơi game) sẽ không bị chạy nhanh gấp đôi so với màn hình 60Hz.
+        let _last = 0;
+        function frame(ts) {
+            if (!_last) _last = ts;
+            // Tạm dừng lâu (chuyển tab) -> chặn dt để pháo không "nhảy cóc" hết màn hình
+            const dt = Math.min(3, Math.max(0.2, (ts - _last) / 16.6667));
+            _last = ts;
+
+            ctx.clearRect(0, 0, W, H);
+            let alive = 0;
+            for (const b of bits) {
+                if (b.life > b.max) continue;
+                b.life += dt;
+                b.vy += G * dt;
+                b.vx *= Math.pow(0.995, dt);
+                b.phase += b.sway * dt;
+                b.x += (b.vx + Math.cos(b.phase) * 0.9 * U) * dt;   // đung đưa như giấy thật
+                b.y += b.vy * dt;
+                b.rot += b.vr * dt;
+                if (b.y > H + 40) { b.life = b.max + 1; continue; }   // rơi khỏi màn hình -> thôi vẽ
+                alive++;
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, Math.min(1, 1 - (b.life - b.max * 0.72) / (b.max * 0.28)));
+                ctx.translate(b.x, b.y);
+                ctx.rotate(b.rot);
+                ctx.fillStyle = b.col;
+                // Bề ngang co lại theo góc xoay -> trông như mảnh giấy đang lật
+                ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h * (0.35 + 0.65 * Math.abs(Math.cos(b.rot))));
+                ctx.restore();
+            }
+            if (alive > 0) _confettiRAF = requestAnimationFrame(frame);
+            else stopConfetti();
+        }
+        _confettiRAF = requestAnimationFrame(frame);
+    }
+    function stopConfetti() {
+        if (_confettiRAF) { cancelAnimationFrame(_confettiRAF); _confettiRAF = null; }
+        if (_confettiStop) { clearTimeout(_confettiStop); _confettiStop = null; }
+        const cv = document.getElementById('ct-confetti');
+        if (cv) {
+            cv.classList.remove('on');
+            if (cv.getContext) cv.getContext('2d').clearRect(0, 0, cv.width, cv.height);
+        }
     }
 
     function recordSummaryWrong(item) {
@@ -6884,8 +7310,11 @@
     }
 
     function closeCombinedTest() {
+        stopConfetti();
         document.getElementById('combined-test-overlay').classList.remove('active');
         sumTest = null;
+        sumReportShowAll = false;
+        try { renderUnitReport(); } catch (e) {}   // 📋 lần làm bài vừa xong hiện ngay trong Báo cáo
     }
 
     /* ============================================================
