@@ -258,6 +258,29 @@
         .pool-btn.selected-correct::after { content: ' ✓'; font-weight: 800; }
         .pool-btn.selected-wrong::after { content: ' ✕'; font-weight: 800; }
 
+        /* 🧩 GHÉP CHỮ VÀO HÌNH (kéo thả từ vựng lên ô trống trong ảnh) */
+        #scenematch-tab { max-width: 1100px; margin-left: auto; margin-right: auto; width: 100%; }
+        .sm-guide { font-size: 13px; font-weight: 600; color: var(--sub-text); text-align: center; margin: 0 0 10px; line-height: 1.5; }
+        .sm-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius-md); box-shadow: var(--neu-concave); }
+        .sm-frame { position: relative; width: 100%; min-width: 720px; container-type: inline-size; line-height: 0; }
+        .sm-frame > img { width: 100%; height: auto; display: block; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+        .sm-slot { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 0.9cqw; border: 2px dashed transparent; line-height: 1; font-size: 1.55cqw; font-weight: 800; color: #1a202c; cursor: pointer; transition: background .15s, border-color .15s, transform .15s; box-sizing: border-box; }
+        .sm-slot:not(.filled):hover, .sm-slot.hover { border-color: var(--point-color); background: rgba(97,76,255,0.14); }
+        .sm-slot.hover { transform: scale(1.06); }
+        .sm-slot.filled { background: #fffdf7; border: 2px solid var(--success-color); cursor: pointer; animation: smPop .28s cubic-bezier(0.34,1.56,0.64,1); }
+        .sm-slot.filled.was-missed { border-color: #ed8936; }
+        .sm-slot.shake { border-color: var(--error-color) !important; background: rgba(245,101,101,0.18) !important; animation: smShake .4s; }
+        @keyframes smPop { 0% { transform: scale(.6); } 100% { transform: scale(1); } }
+        @keyframes smShake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-5px); } 40%,80% { transform: translateX(5px); } }
+        .sm-bank { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 16px auto 0; padding: 14px; border-radius: var(--radius-md); background: var(--bg-color); box-shadow: var(--neu-concave); min-height: 54px; }
+        .sm-chip { padding: 9px 16px; border-radius: 999px; background: var(--card-color, #fff); box-shadow: var(--neu-convex); font-size: 16px; font-weight: 800; color: #1a202c; cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none; border: 2px solid transparent; transition: transform .12s, border-color .12s, opacity .12s; }
+        .sm-chip:hover { color: var(--point-color); }
+        .sm-chip.selected { border-color: var(--point-color); color: var(--point-color); transform: translateY(-2px); }
+        .sm-chip.dragging { opacity: .3; }
+        .sm-ghost { position: fixed; z-index: 99999; pointer-events: none; transform: translate(-50%, -50%) rotate(-3deg); box-shadow: 0 10px 24px rgba(0,0,0,.18); cursor: grabbing; }
+        .sm-bank-done { font-size: 14px; font-weight: 700; color: var(--success-color); }
+        @media (max-width: 768px) { .sm-chip { font-size: 14px; padding: 8px 13px; } .sm-bank { gap: 8px; padding: 10px; } }
+
         /* Thanh công cụ trên cùng khu quiz (nút Trộn bài góc phải như Hình 4) */
         .quiz-tools { display: none; justify-content: space-between; align-items: center; gap: 10px; max-width: 900px; margin: 0 auto 12px; }
         /* Nút xổ chọn dạng/ngôn ngữ quiz (góc trái, ngang nút Ngẫu nhiên) */
@@ -1335,6 +1358,7 @@
                         <button id="sub-btn-listen" class="quiz-subtab-btn active" onclick="switchTab('listen')">Nghe &amp; chọn từ</button>
                         <button id="sub-btn-quiz" class="quiz-subtab-btn" onclick="switchTab('quiz')">Trắc nghiệm</button>
                         <button id="sub-btn-visual" class="quiz-subtab-btn" onclick="switchTab('visual')">Nhìn hình chọn từ</button>
+                        <button id="sub-btn-scenematch" class="quiz-subtab-btn" onclick="switchTab('scenematch')" style="display:none;">Ghép chữ</button>
                         <button id="sub-btn-guess" class="quiz-subtab-btn" onclick="switchTab('guess')">Nghe &amp; tìm nghĩa</button>
                         <button id="sub-btn-typing" class="quiz-subtab-btn" onclick="switchTab('typing')">Viết từ</button>
                         <button id="sub-btn-writesentence" class="quiz-subtab-btn" onclick="switchTab('writesentence')">Viết câu<span class="ws-new-badge" id="ws-new-badge" style="display:none;">Mới</span></button>
@@ -1587,6 +1611,13 @@
                     </div>
                     <div class="quiz-question">Nhìn tình huống ảnh trên và lựa chọn đáp án đúng:</div>
                     <div class="quiz-options" id="visual-opts"></div>
+                </div>
+
+                <!-- 9. GHÉP CHỮ VÀO HÌNH -->
+                <div id="scenematch-tab" class="tab-render-view">
+                    <p class="sm-guide">Kéo từ vựng bên dưới thả vào đúng ô trống trong hình <span style="opacity:.75;">(hoặc chạm vào từ rồi chạm vào ô)</span>.</p>
+                    <div class="sm-scroll"><div class="sm-frame" id="sm-frame"></div></div>
+                    <div class="sm-bank" id="sm-bank"></div>
                 </div>
 
                 <div class="feedback-reserved-space">
@@ -2345,7 +2376,8 @@
         writesentence: { indices: [], current: 0, mode: 'vi2ko', seen: [], right: 0, wrong: 0, results: {}, checked: false, match: null, inputValue: '', showAnswer: false, showGrammar: false },
         listen: { indices: [], current: 0, answered: false },
         guess: { indices: [], current: 0, answered: false },
-        visual: { indices: [], current: 0, answered: false }
+        visual: { indices: [], current: 0, answered: false },
+        scenematch: { indices: [], current: 0, right: 0, wrong: 0, seen: [], placed: {}, missed: {}, order: [], _unit: null }
     };
 
     /* ============================================================
@@ -2354,7 +2386,7 @@
 
     const TAB_DONE_LABELS = {
         flashcard: "Flashcard", quiz: "Trắc nghiệm", typing: "Viết từ", writesentence: "Viết câu",
-        listen: "Nghe & chọn từ", guess: "Nghe & tìm nghĩa", visual: "Nhìn hình chọn từ"
+        listen: "Nghe & chọn từ", guess: "Nghe & tìm nghĩa", visual: "Nhìn hình chọn từ", scenematch: "Ghép chữ"
     };
 
     function resetTabScore(tabName) {
@@ -2427,6 +2459,7 @@
         let state = tabState[tab];
         if (!state) return;
         if (tab === 'writesentence') { wsPrepare(currentModeOf('writesentence'), true); wsRender(); updateDashboardStats(); return; }
+        if (tab === 'scenematch') { smReset(); renderSceneMatch(); updateDashboardStats(); return; }
         prepareTabForMode(tab, currentModeOf(tab), { forceFresh: true });
         if (tab === 'typing') renderTypingSheet(true);
         else if (tabRenderMap[tab]) tabRenderMap[tab]();
@@ -3155,10 +3188,11 @@
         tabState.quiz.replyLang = 'mix';
         syncQuizModeToggles();
         ensureVisualPool();   // 🖼️ dò ảnh thật cho dạng "Nhìn hình chọn từ" (chạy ngầm)
+        syncSceneMatchTab();  // 🧩 bật/tắt dạng "Ghép chữ" theo Unit có ảnh ghép hay không
     }
 
     // 5 chức năng nằm trong nhóm "4. Quiz"
-    const QUIZ_SUBTABS = ['quiz', 'typing', 'writesentence', 'listen', 'guess', 'visual'];
+    const QUIZ_SUBTABS = ['quiz', 'typing', 'writesentence', 'listen', 'guess', 'visual', 'scenematch'];
     function mainGroupOf(tab) { return QUIZ_SUBTABS.includes(tab) ? 'quizgroup' : tab; }
 
     function switchTab(tabName) {
@@ -3167,6 +3201,8 @@
             if (currentTab !== 'visual') { alert('Phần này chưa có ảnh minh hoạ cho từ vựng nên chưa mở được dạng "Nhìn hình chọn từ" nhé!'); return; }
             tabName = 'listen';   // đang đứng ở tab này mà Unit mới không có ảnh -> chuyển sang dạng khác
         }
+        // 🧩 Unit không có ảnh ghép chữ -> không mở dạng "Ghép chữ"
+        if (tabName === 'scenematch' && !smConfig()) tabName = 'listen';
         currentTab = tabName;
         document.querySelectorAll('.tab-click-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.quiz-subtab-btn').forEach(btn => btn.classList.remove('active'));
@@ -3225,13 +3261,13 @@
         const typingProgressWrap = document.getElementById('typing-progress-wrap');
         if (typingProgressWrap) typingProgressWrap.style.display = (tabName === 'typing') ? 'flex' : 'none';
         // Viết từ & Viết câu có nút điều hướng riêng trong khung -> ẩn nút "Tiếp theo" ở footer
-        document.getElementById('ctrl-next-btn').style.display = (tabName === 'typing' || tabName === 'writesentence') ? 'none' : 'inline-block';
+        document.getElementById('ctrl-next-btn').style.display = (tabName === 'typing' || tabName === 'writesentence' || tabName === 'scenematch') ? 'none' : 'inline-block';
 
         if (vocabData.length === 0 && tabName !== 'lecture') return;
 
         // Khôi phục tiến độ đã lưu của dạng đang mở (làm tiếp thay vì làm mới).
         // Chỉ nạp lại khi chưa nạp cho đúng unit+mode này trong phiên hiện tại.
-        if (QUIZ_SUBTABS.includes(tabName) && tabName !== 'writesentence') {
+        if (QUIZ_SUBTABS.includes(tabName) && tabName !== 'writesentence' && tabName !== 'scenematch') {
             const _mode = currentModeOf(tabName);
             const _st = tabState[tabName];
             if (!_st._loadedFor || _st._loadedFor !== (currentUnit + ':' + _mode)) prepareTabForMode(tabName, _mode);
@@ -3246,6 +3282,7 @@
         else if (tabName === 'listen') generateListenQuestion();
         else if (tabName === 'guess') generateGuessQuestion();
         else if (tabName === 'visual') generateVisualQuestion();
+        else if (tabName === 'scenematch') renderSceneMatch();
 
         // Cập nhật chỉ số thống kê Dashboard
         updateDashboardStats();
@@ -3259,11 +3296,13 @@
         writesentence: () => wsRender(),
         listen: generateListenQuestion,
         guess: generateGuessQuestion,
-        visual: generateVisualQuestion
+        visual: generateVisualQuestion,
+        scenematch: () => renderSceneMatch()
     };
 
     function handleNextAction() {
         if (currentTab === 'writesentence') { wsNext(); return; }
+        if (currentTab === 'scenematch') return;
         let state = tabState[currentTab];
         if (!state || !state.indices || state.indices.length === 0) return;
 
@@ -5402,6 +5441,220 @@
         syncVisualTabAvailability();
         if (currentTab === 'visual') generateVisualQuestion();
         updateDashboardStats();
+    }
+
+    /* ============================================================
+       🧩 GHÉP CHỮ VÀO HÌNH — kéo từ vựng thả vào ô trống trong ảnh.
+       Toạ độ ô (r) tính theo pixel của ảnh gốc [x0, y0, x1, y1].
+       Muốn thêm Unit khác: bỏ ảnh không chữ vào assets rồi khai báo thêm 1 mục ở đây.
+       ============================================================ */
+    const SCENE_MATCH = {
+        9: {
+            img: 'assets/unit9-house.webp', w: 2000, h: 1125,
+            slots: [
+                { ko: '아파트',   r: [175, 98, 322, 148] },
+                { ko: '연립주택', r: [370, 237, 524, 286] },
+                { ko: '주택',     r: [1770, 117, 1883, 163] },
+                { ko: '공부방',   r: [757, 145, 883, 194] },
+                { ko: '안방',     r: [1098, 155, 1222, 204] },
+                { ko: '침실',     r: [1482, 160, 1605, 209] },
+                { ko: '책장',     r: [873, 277, 966, 324] },
+                { ko: '침대',     r: [1102, 322, 1214, 370] },
+                { ko: '옷장',     r: [1310, 277, 1392, 321] },
+                { ko: '거실',     r: [705, 450, 830, 498] },
+                { ko: '소파',     r: [718, 558, 828, 605] },
+                { ko: '탁자',     r: [773, 637, 883, 685] },
+                { ko: '식탁',     r: [1033, 612, 1143, 660] },
+                { ko: '부엌',     r: [1327, 461, 1437, 510] },
+                { ko: '세탁실',   r: [1580, 468, 1700, 516] },
+                { ko: '화장실',   r: [1609, 666, 1737, 714] },
+                { ko: '현관',     r: [588, 770, 698, 819] },
+                { ko: '베란다',   r: [970, 820, 1098, 868] },
+                { ko: '화장대',   r: [1302, 747, 1433, 796] },
+                { ko: '다정자',   r: [1565, 838, 1697, 886] }
+            ]
+        }
+    };
+    let smSelectedChip = null;
+
+    function smConfig() {
+        if (summaryActive || currentUnit == null || currentUnit === 'SUM') return null;
+        return SCENE_MATCH[currentUnit] || null;
+    }
+    // Chỉ hiện nút "Ghép chữ" cho Unit có ảnh ghép
+    function syncSceneMatchTab() {
+        const btn = document.getElementById('sub-btn-scenematch');
+        const cfg = smConfig();
+        if (btn) btn.style.display = cfg ? '' : 'none';
+        if (!cfg && currentTab === 'scenematch') switchTab('listen');
+    }
+    function smReset() {
+        const st = tabState.scenematch, cfg = smConfig();
+        st.indices = cfg ? cfg.slots.map((_, i) => i) : [];
+        st.order = shuffleArray(st.indices.slice());
+        st.current = 0; st.right = 0; st.wrong = 0; st.seen = [];
+        st.placed = {}; st.missed = {};
+        st._unit = currentUnit;
+        smSelectedChip = null;
+        clearFeedback();
+    }
+    function smVocabIndex(ko) {
+        const norm = t => String(t || '').replace(/\s+/g, '');
+        return (vocabData || []).findIndex(w => norm(w.ko) === norm(ko));
+    }
+    function smUpdateCounter() {
+        const st = tabState.scenematch;
+        const c = document.getElementById('global-counter');
+        if (c) c.innerText = st.seen.length + ' / ' + st.indices.length;
+    }
+    function renderSceneMatch() {
+        const cfg = smConfig();
+        const frame = document.getElementById('sm-frame');
+        const bank = document.getElementById('sm-bank');
+        if (!cfg || !frame || !bank) return;
+        const st = tabState.scenematch;
+        if (st._unit !== currentUnit || st.indices.length !== cfg.slots.length) smReset();
+
+        frame.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = cfg.img; img.alt = 'Hình ghép chữ Unit ' + currentUnit; img.draggable = false;
+        frame.appendChild(img);
+        cfg.slots.forEach((slot, i) => {
+            const [x0, y0, x1, y1] = slot.r;
+            const el = document.createElement('div');
+            el.className = 'sm-slot';
+            el.dataset.slot = i;
+            el.style.left = (x0 / cfg.w * 100) + '%';
+            el.style.top = (y0 / cfg.h * 100) + '%';
+            el.style.width = ((x1 - x0) / cfg.w * 100) + '%';
+            el.style.height = ((y1 - y0) / cfg.h * 100) + '%';
+            if (st.placed[i]) smFillSlot(el, i, false);
+            el.addEventListener('click', () => {
+                if (st.placed[i]) { triggerKoreanVoice(slot.ko, false); return; }
+                if (smSelectedChip) smTryPlace(i, +smSelectedChip.dataset.word);
+            });
+            frame.appendChild(el);
+        });
+        smRenderBank();
+        smUpdateCounter();
+    }
+    function smFillSlot(el, i, animate) {
+        const cfg = smConfig(), st = tabState.scenematch;
+        const ko = cfg.slots[i].ko;
+        el.classList.add('filled');
+        if (st.missed[i]) el.classList.add('was-missed');
+        if (!animate) el.style.animation = 'none';
+        el.textContent = ko;
+        const vi = smVocabIndex(ko);
+        el.title = (vi >= 0 ? vocabData[vi].vi + ' — ' : '') + 'bấm để nghe';
+    }
+    function smRenderBank() {
+        const bank = document.getElementById('sm-bank');
+        const cfg = smConfig(), st = tabState.scenematch;
+        bank.innerHTML = '';
+        const left = st.order.filter(i => !st.placed[i]);
+        if (left.length === 0) {
+            bank.innerHTML = '<span class="sm-bank-done">🎉 Bạn đã ghép xong toàn bộ từ vựng!</span>';
+            return;
+        }
+        left.forEach(i => {
+            const chip = document.createElement('div');
+            chip.className = 'sm-chip';
+            chip.dataset.word = i;
+            chip.textContent = cfg.slots[i].ko;
+            smBindDrag(chip);
+            bank.appendChild(chip);
+        });
+    }
+    function smSelectChip(chip) {
+        if (smSelectedChip) smSelectedChip.classList.remove('selected');
+        smSelectedChip = (smSelectedChip === chip) ? null : chip;
+        if (smSelectedChip) smSelectedChip.classList.add('selected');
+    }
+    // Kéo bằng Pointer Events: chạy chung cho chuột, bút và cảm ứng.
+    function smBindDrag(chip) {
+        chip.addEventListener('pointerdown', e => {
+            if (e.button > 0) return;
+            e.preventDefault();
+            const sx = e.clientX, sy = e.clientY;
+            let ghost = null, hoverSlot = null;
+            try { chip.setPointerCapture(e.pointerId); } catch (_) {}
+            const slotAt = (x, y) => {
+                const t = document.elementFromPoint(x, y);
+                const s = t && t.closest ? t.closest('.sm-slot') : null;
+                return (s && !s.classList.contains('filled')) ? s : null;
+            };
+            const onMove = ev => {
+                if (!ghost) {
+                    if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return;
+                    ghost = chip.cloneNode(true);
+                    ghost.classList.remove('selected');
+                    ghost.classList.add('sm-ghost');
+                    document.body.appendChild(ghost);
+                    chip.classList.add('dragging');
+                }
+                ghost.style.left = ev.clientX + 'px';
+                ghost.style.top = ev.clientY + 'px';
+                const s = slotAt(ev.clientX, ev.clientY);
+                if (s !== hoverSlot) {
+                    if (hoverSlot) hoverSlot.classList.remove('hover');
+                    hoverSlot = s;
+                    if (hoverSlot) hoverSlot.classList.add('hover');
+                }
+            };
+            const onUp = ev => {
+                chip.removeEventListener('pointermove', onMove);
+                chip.removeEventListener('pointerup', onUp);
+                chip.removeEventListener('pointercancel', onUp);
+                if (hoverSlot) hoverSlot.classList.remove('hover');
+                if (!ghost) { if (ev.type === 'pointerup') smSelectChip(chip); return; }
+                ghost.remove();
+                chip.classList.remove('dragging');
+                const s = ev.type === 'pointerup' ? slotAt(ev.clientX, ev.clientY) : null;
+                if (s) smTryPlace(+s.dataset.slot, +chip.dataset.word);
+            };
+            chip.addEventListener('pointermove', onMove);
+            chip.addEventListener('pointerup', onUp);
+            chip.addEventListener('pointercancel', onUp);
+        });
+    }
+    function smTryPlace(slotIdx, wordIdx) {
+        const cfg = smConfig(), st = tabState.scenematch;
+        if (!cfg || st.placed[slotIdx]) return;
+        const frame = document.getElementById('sm-frame');
+        const slotEl = frame.querySelector(`.sm-slot[data-slot="${slotIdx}"]`);
+        const ko = cfg.slots[wordIdx].ko;
+        const vIdx = smVocabIndex(ko);
+        smSelectedChip = null;
+        if (slotIdx === wordIdx) {
+            st.placed[slotIdx] = true;
+            st.seen.push(slotIdx);
+            if (!st.missed[wordIdx]) { st.right++; if (vIdx >= 0) recordVocabMastered(vocabData[vIdx].ko); }
+            playFeedbackSound(true);
+            const fb = document.getElementById('global-feedback');
+            if (fb) {
+                fb.className = 'feedback success compact';
+                fb.innerHTML = '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Chính xác! <b>' + ko + '</b>' + (vIdx >= 0 ? ' — ' + vocabData[vIdx].vi : '');
+            }
+            if (slotEl) smFillSlot(slotEl, slotIdx, true);
+            smRenderBank();
+            smUpdateCounter();
+            if (isTabFinished('scenematch')) setTimeout(() => showTabDonePopup('scenematch'), 700);
+        } else {
+            // Sai: tính 1 lỗi cho TỪ đang kéo (mỗi từ chỉ trừ điểm 1 lần), từ quay về khay
+            if (!st.missed[wordIdx]) { st.missed[wordIdx] = true; st.wrong++; if (vIdx >= 0) recordWrongWord(vIdx); }
+            playFeedbackSound(false);
+            const fb = document.getElementById('global-feedback');
+            if (fb) {
+                fb.className = 'feedback error compact';
+                fb.innerHTML = '<span style="color:var(--error-color);font-size:17px;line-height:1;">✗</span> <b>' + ko + '</b> chưa đúng chỗ này, thử ô khác nhé!';
+            }
+            if (slotEl) {
+                slotEl.classList.remove('shake'); void slotEl.offsetWidth; slotEl.classList.add('shake');
+                setTimeout(() => slotEl.classList.remove('shake'), 450);
+            }
+            smRenderBank();
+        }
     }
 
     // Unit không có ảnh nào -> khoá hẳn nút "Nhìn hình chọn từ"
