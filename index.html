@@ -1360,6 +1360,38 @@
         .xm-wait .ic { font-size:48px; }
         .xm-wait h3 { font-size:20px; margin:8px 0; }
         .xm-wait p { color:var(--sub-text); line-height:1.7; }
+
+        /* ⌨️ Bàn phím tiếng Hàn trên màn hình */
+        #xm-kb { display:none; position:fixed; left:0; right:0; bottom:0; z-index:1000; background:#d5dae3; padding:6px 4px calc(8px + env(safe-area-inset-bottom)); box-shadow:0 -6px 20px rgba(0,0,0,.14); user-select:none; -webkit-user-select:none; touch-action:manipulation; }
+        .xm-kb-hint { text-align:center; font-size:12px; color:#4a5568; margin:0 0 5px; font-weight:700; }
+        .xm-kb-row { display:flex; gap:5px; justify-content:center; margin:0 auto 6px; max-width:720px; }
+        .xm-kb-key { flex:1 1 0; min-width:0; max-width:64px; height:44px; border:none; border-radius:8px; background:#fff; font-size:21px; font-family:inherit; color:#1a202c; box-shadow:0 1px 0 rgba(0,0,0,.25); cursor:pointer; padding:0; }
+        .xm-kb-key:active { background:#c9c2ff; }
+        .xm-kb-key.fn { background:#aeb6c4; font-size:18px; flex:1.4 1 0; max-width:84px; }
+        .xm-kb-key.on { background:var(--point-color); color:#fff; }
+        .xm-kb-key.wide { flex:4 1 0; max-width:none; font-size:14px; color:#718096; }
+        #xm-kb-toggle.on { background:var(--point-color); color:#fff; }
+        body.xm-kb-open .xm-root { padding-bottom:calc(var(--xm-kb-h, 0px) + 40px); }
+        .xm-kb-cta { margin:0 0 12px; }
+        @media (max-width:768px){
+            /* Điện thoại: thanh đồng hồ + Nộp bài DÍNH Ở ĐÁY màn hình (cuộn tới đâu cũng thấy) */
+            .xm-bar { position:fixed; left:8px; right:8px; top:auto; bottom:calc(8px + var(--xm-kb-h, 0px)); z-index:950; margin:0; padding:8px 10px; flex-wrap:nowrap; gap:8px; }
+            .xm-bar .prog { font-size:11px; line-height:1.3; }
+            .xm-bar .xm-btn.sm { padding:9px 11px; font-size:13px; white-space:nowrap; }
+            .xm-timer { font-size:18px; }
+            .xm-root { padding-bottom:90px; }
+            body.xm-kb-open .xm-root { padding-bottom:calc(var(--xm-kb-h, 0px) + 100px); }
+            .xm-nav { flex-wrap:nowrap; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch; }
+            .xm-nav button { flex:0 0 34px; height:32px; }
+            .xm-panel { padding:14px 10px; border-radius:18px; }
+            .xm-q { padding:12px 10px; }
+            .xm-opts { gap:7px; }
+            .xm-tabs { padding:4px 2px 10px; }
+            .xm-audio { padding:10px 12px; }
+            .xm-kb-key { height:42px; font-size:19px; }
+            .xm-kb-key.fn { font-size:16px; }
+            .xm-suffix { font-size:16px; } .xm-blank { gap:8px; } .xm-blank input { min-width:0; padding:11px 10px; }
+        }
         @media (max-width:768px){
             .xm-panel { padding:16px 12px; }
             .xm-facts { grid-template-columns:repeat(2,1fr); }
@@ -2247,7 +2279,8 @@
     </div>
 </div>
 
-<script src="assets/exam/exam-data.js"></script>
+<!-- ⚠️ Mỗi lần sửa đề (exam-data.js) thì ĐỔI số ?v= để máy học viên tải bản mới, không dùng bản cũ trong bộ nhớ đệm -->
+<script src="assets/exam/exam-data.js?v=20261108-3"></script>
 <script>
     // ============================================================================
     // 🔒 CÔ LẬP localStorage THEO TỪNG WEB (THTH1 vs THTH2)
@@ -2755,6 +2788,7 @@
         const unitPanel = document.querySelector('.unit-panel-box');
         if (unitPanel) unitPanel.style.display = (modeName === 'review' || modeName === 'exercise') ? 'none' : 'block';
         if (modeName === 'exercise') enterExerciseMode();
+        else if (typeof xmKbClose === 'function') xmKbClose();
 
         if (modeName === 'grammar') renderGrammarMode();
         if (modeName === 'review') renderReviewTable();
@@ -3019,6 +3053,12 @@
                 if(rememberMe) {
                     localStorage.setItem('saved_user_QuyenClass', user);
                     localStorage.setItem('saved_pass_QuyenClass', pass);
+                } else {
+                    // 🐞 Không ghi nhớ -> XOÁ thông tin ghi nhớ cũ (có thể của tài khoản KHÁC).
+                    // Trước đây còn sót lại -> lần sau web tự đăng nhập bằng tài khoản cũ
+                    // nhưng lại hiện tên tài khoản mới, unit/tiến độ bị lẫn giữa 2 tài khoản.
+                    localStorage.removeItem('saved_user_QuyenClass');
+                    localStorage.removeItem('saved_pass_QuyenClass');
                 }
                 localStorage.setItem('studentSession_QuyenClass', user);
                 applyServerProgress(user, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
@@ -5366,7 +5406,16 @@
 
         const savedUser = localStorage.getItem('saved_user_QuyenClass');
         const savedPass = localStorage.getItem('saved_pass_QuyenClass');
-        const sessionUser = localStorage.getItem('studentSession_QuyenClass');
+        let sessionUser = localStorage.getItem('studentSession_QuyenClass');
+
+        // 🐞 Phiên đăng nhập và tài khoản ghi nhớ phải là CÙNG MỘT người.
+        //    Lệch nhau (do bản cũ để sót) -> bỏ phiên lỗi, bắt đăng nhập lại cho sạch.
+        if (sessionUser && savedUser && String(sessionUser).toLowerCase() !== String(savedUser).toLowerCase()) {
+            localStorage.removeItem('studentSession_QuyenClass');
+            localStorage.removeItem('saved_user_QuyenClass');
+            localStorage.removeItem('saved_pass_QuyenClass');
+            sessionUser = null;
+        }
 
         if (sessionUser && savedUser && savedPass) {
             document.getElementById('login-panel-screen').style.display = 'none';
@@ -7948,6 +7997,7 @@
         }
         xmStopTimer();
         xmStopAudio();
+        xmKbClose();
         xmState = null;
         xmCurrentTab = tab;
         renderXmTabs();
@@ -8043,7 +8093,7 @@
               <div class="xm-fact"><div class="v">${ex.totalPoints}</div><div class="l">Tổng điểm</div></div>
             </div>
             <table class="xm-skill-table"><thead><tr><th>Kỹ năng</th><th>Số câu</th><th>Điểm</th><th>Ghi chú</th></tr></thead><tbody>${rows}</tbody></table>
-            <ul class="xm-rules">${ex.rules.map(r => `<li>${r}</li>`).join('')}</ul>
+            <ul class="xm-rules">${ex.rules.map(r => `<li>${r}</li>`).join('')}<li>Máy chưa có bàn phím tiếng Hàn? Trong lúc làm bài, bấm nút <b>⌨️ 한글</b> để mở bàn phím tiếng Hàn ngay trên màn hình.</li></ul>
             <div class="xm-center"><button class="xm-btn" id="xm-start-btn" onclick="xmStart()" ${waiting ? 'disabled' : ''}>${waiting ? '⏳ Đang kiểm tra bài làm của bạn…' : '▶ ' + (isRetake ? 'Bắt đầu làm lại' : 'Bắt đầu')}</button></div>
         </div>`);
     }
@@ -8105,6 +8155,7 @@
 
     function xmTimeUp() {
         xmState.timeUp = true;
+        xmKbClose();
         xmStopTimer();
         xmStopAudio();
         xmSaveLocal();
@@ -8178,6 +8229,7 @@
 
     function xmPaperHtml(mode, att) {
         return xmState.exam.sections.map(s => `<div class="xm-sec"><div class="xm-sec-title">${s.title}<small>${s.meta}</small></div>` +
+            (mode === 'doing' && s.key === 'write' ? `<div class="xm-kb-cta"><button class="xm-btn ghost sm" onclick="xmKbToggle(true)">⌨️ Chưa có bàn phím tiếng Hàn? Bấm để mở bàn phím trên màn hình</button></div>` : '') +
             s.groups.map(g => `<div class="xm-group"><div class="xm-instr">${g.instr}</div>${g.example ? `<div class="xm-example">${g.example}</div>` : ''}${g.context || ''}` +
                 g.questions.map(q => xmQuestionHtml(q, mode, att)).join('') + '</div>').join('') + '</div>').join('');
     }
@@ -8212,6 +8264,7 @@
                 <div class="xm-timer" id="xm-timer">⏱ <span>--:--</span></div>
                 <div class="prog" id="xm-prog"></div>
                 <div class="sp"></div>
+                <button class="xm-btn ghost sm" id="xm-kb-toggle" onclick="xmKbToggle()" title="Bàn phím tiếng Hàn trên màn hình">⌨️ 한글</button>
                 <button class="xm-btn sm" onclick="xmSubmit(false)">📤 Nộp bài</button>
             </div>
             <div class="xm-timeup" id="xm-timeup" style="display:none;">⏰ Đã hết giờ làm bài! Khu vực làm bài đã bị khoá.<br>Hãy bấm “Nộp bài” để gửi bài cho giáo viên.<br><button class="xm-btn warn" onclick="xmSubmit(true)">📤 Nộp bài ngay</button></div>
@@ -8315,7 +8368,7 @@
                 meta: { tabSwitches: xmState.tabSwitches || 0, awayMs: xmState.awayMs || 0, autoSubmit: !!fromTimeUp, audioPlays: (xmState.audio || {}).plays || 0 }
             });
             if (!d.success) throw new Error(d.message || 'Nộp không thành công');
-            xmStopTimer(); xmStopAudio();
+            xmStopTimer(); xmStopAudio(); xmKbClose();
             xmClearLocal(xmState.examId);
             xmInvalidateStatus(xmState.examId);
             if (!d.attempt.answers) d.attempt.answers = xmState.answers;
@@ -8390,6 +8443,138 @@
         if (!confirm('Làm lại bài kiểm tra từ đầu? Kết quả lần này vẫn được lưu lại.')) return;
         xmState.phase = 'intro';
         xmRenderIntro(true);
+    }
+
+    /* ============================================================
+       ⌨️ BÀN PHÍM TIẾNG HÀN TRÊN MÀN HÌNH (cho học viên chưa cài bàn phím Hàn)
+       - Kiểu 2 hàng (두벌식) giống bàn phím Hàn trên điện thoại; tự ghép chữ: ㅎ+ㅏ+ㄴ -> 한
+       - Khi bật: các ô viết trong bài thi KHÔNG bật bàn phím của máy (inputmode="none").
+       ============================================================ */
+    const HK_CHO = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+    const HK_JUNG = 'ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ';
+    const HK_JONG = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+    const HK_DJ = { 'ㄱㅅ': 'ㄳ', 'ㄴㅈ': 'ㄵ', 'ㄴㅎ': 'ㄶ', 'ㄹㄱ': 'ㄺ', 'ㄹㅁ': 'ㄻ', 'ㄹㅂ': 'ㄼ', 'ㄹㅅ': 'ㄽ', 'ㄹㅌ': 'ㄾ', 'ㄹㅍ': 'ㄿ', 'ㄹㅎ': 'ㅀ', 'ㅂㅅ': 'ㅄ' };
+    const HK_DV = { 'ㅗㅏ': 'ㅘ', 'ㅗㅐ': 'ㅙ', 'ㅗㅣ': 'ㅚ', 'ㅜㅓ': 'ㅝ', 'ㅜㅔ': 'ㅞ', 'ㅜㅣ': 'ㅟ', 'ㅡㅣ': 'ㅢ' };
+    const HK_SPLIT = {}; Object.keys(HK_DJ).forEach(k => HK_SPLIT[HK_DJ[k]] = [k[0], k[1]]); Object.keys(HK_DV).forEach(k => HK_SPLIT[HK_DV[k]] = [k[0], k[1]]);
+    function hkDe(ch) { const c = (ch || '').charCodeAt(0) - 0xAC00; if (!(c >= 0 && c <= 11171)) return null; return { i: Math.floor(c / 588), m: Math.floor((c % 588) / 28), f: c % 28 }; }
+    function hkCo(i, m, f) { return String.fromCharCode(0xAC00 + (i * 21 + m) * 28 + (f || 0)); }
+    // Ghép jamo j vào ký tự đứng trước (prev). Trả chuỗi thay thế cho prev, hoặc null = chỉ gõ thêm j.
+    function hkCombine(prev, j) {
+        const isV = HK_JUNG.includes(j), d = hkDe(prev);
+        if (!isV) {
+            if (d && d.f === 0 && HK_JONG.indexOf(j) > 0) return hkCo(d.i, d.m, HK_JONG.indexOf(j));
+            if (d && d.f > 0 && HK_DJ[HK_JONG[d.f] + j]) return hkCo(d.i, d.m, HK_JONG.indexOf(HK_DJ[HK_JONG[d.f] + j]));
+            return null;
+        }
+        if (prev && HK_CHO.includes(prev)) return hkCo(HK_CHO.indexOf(prev), HK_JUNG.indexOf(j), 0);
+        if (d && d.f === 0) { const cv = HK_DV[HK_JUNG[d.m] + j]; return cv ? hkCo(d.i, HK_JUNG.indexOf(cv), 0) : null; }
+        if (d && d.f > 0) {   // 한 + ㅏ -> 하나 (phụ âm cuối nhảy sang âm tiết mới)
+            const fin = HK_JONG[d.f], sp = HK_SPLIT[fin];
+            if (sp) return hkCo(d.i, d.m, HK_JONG.indexOf(sp[0])) + hkCo(HK_CHO.indexOf(sp[1]), HK_JUNG.indexOf(j), 0);
+            if (HK_CHO.includes(fin)) return hkCo(d.i, d.m, 0) + hkCo(HK_CHO.indexOf(fin), HK_JUNG.indexOf(j), 0);
+        }
+        if (prev && HK_JUNG.includes(prev) && HK_DV[prev + j]) return HK_DV[prev + j];
+        return null;
+    }
+    // Xoá lùi từng nét khi đang ghép chữ: 한 -> 하 -> ㅎ -> (xoá)
+    function hkBack(prev) {
+        const d = hkDe(prev);
+        if (d) {
+            if (d.f > 0) { const sp = HK_SPLIT[HK_JONG[d.f]]; return hkCo(d.i, d.m, sp ? HK_JONG.indexOf(sp[0]) : 0); }
+            const vs = HK_SPLIT[HK_JUNG[d.m]];
+            return vs ? hkCo(d.i, HK_JUNG.indexOf(vs[0]), 0) : HK_CHO[d.i];
+        }
+        if (HK_SPLIT[prev] && HK_JUNG.includes(prev)) return HK_SPLIT[prev][0];
+        return '';
+    }
+
+    let xmKb = { open: false, shift: false, target: null, composePos: -1 };
+    const XM_KB_ROWS = [
+        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+        ['ㅂ', 'ㅈ', 'ㄷ', 'ㄱ', 'ㅅ', 'ㅛ', 'ㅕ', 'ㅑ', 'ㅐ', 'ㅔ'],
+        ['ㅁ', 'ㄴ', 'ㅇ', 'ㄹ', 'ㅎ', 'ㅗ', 'ㅓ', 'ㅏ', 'ㅣ'],
+        ['⇧', 'ㅋ', 'ㅌ', 'ㅊ', 'ㅍ', 'ㅠ', 'ㅜ', 'ㅡ', '⌫'],
+        ['▼', ',', 'SPACE', '.', '?', '↵']
+    ];
+    const XM_KB_SHIFT = { 'ㅂ': 'ㅃ', 'ㅈ': 'ㅉ', 'ㄷ': 'ㄸ', 'ㄱ': 'ㄲ', 'ㅅ': 'ㅆ', 'ㅐ': 'ㅒ', 'ㅔ': 'ㅖ' };
+
+    function xmKbRender() {
+        let box = document.getElementById('xm-kb');
+        if (!box) {
+            box = document.createElement('div'); box.id = 'xm-kb';
+            // pointerdown + preventDefault: bấm phím KHÔNG làm mất con trỏ trong ô đang viết
+            box.addEventListener('pointerdown', e => { const k = e.target.closest('[data-key]'); e.preventDefault(); if (k) xmKbPress(k.dataset.key); });
+            document.body.appendChild(box);
+        }
+        const tgt = xmKb.target && document.body.contains(xmKb.target);
+        box.innerHTML = `<div class="xm-kb-hint">${tgt ? '✍️ Đang viết vào ô đã chọn' : '👆 Chạm vào ô cần viết (câu 27–29) rồi bấm phím'}</div>` +
+            XM_KB_ROWS.map(r => '<div class="xm-kb-row">' + r.map(k => {
+                const label = k === 'SPACE' ? 'cách' : (xmKb.shift && XM_KB_SHIFT[k] ? XM_KB_SHIFT[k] : k);
+                const cls = k === 'SPACE' ? 'wide' : (['⇧', '⌫', '▼', '↵'].includes(k) ? 'fn' : '') + (k === '⇧' && xmKb.shift ? ' on' : '');
+                return `<button type="button" class="xm-kb-key ${cls}" data-key="${k}">${label}</button>`;
+            }).join('') + '</div>').join('');
+        document.body.classList.toggle('xm-kb-open', xmKb.open);
+        box.style.display = xmKb.open ? 'block' : 'none';
+        document.documentElement.style.setProperty('--xm-kb-h', xmKb.open ? box.offsetHeight + 'px' : '0px');
+        const tb = document.getElementById('xm-kb-toggle'); if (tb) tb.classList.toggle('on', xmKb.open);
+    }
+    function xmKbFields() { return document.querySelectorAll('#xm-paper input[data-k], #xm-paper textarea[data-k]'); }
+    function xmKbToggle(force) {
+        xmKb.open = (typeof force === 'boolean') ? force : !xmKb.open;
+        xmKb.composePos = -1;
+        xmKbFields().forEach(el => { if (xmKb.open) el.setAttribute('inputmode', 'none'); else el.removeAttribute('inputmode'); });
+        if (xmKb.open) {
+            if (!xmKb.target || !document.body.contains(xmKb.target)) xmKb.target = null;
+            // Bàn phím máy đang mở -> đóng lại cho khỏi chồng 2 bàn phím
+            if (document.activeElement && document.activeElement.blur && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+                const a = document.activeElement; a.blur(); if (a.matches('[data-k]')) { xmKb.target = a; setTimeout(() => a.focus({ preventScroll: true }), 50); }
+            }
+        }
+        xmKbRender();
+        if (xmKb.open && xmKb.target) setTimeout(() => xmKb.target.scrollIntoView({ block: 'center', behavior: 'smooth' }), 80);
+    }
+    function xmKbClose() { if (xmKb.open) xmKbToggle(false); xmKb.target = null; }
+    document.addEventListener('focusin', e => {
+        const el = e.target;
+        if (el && el.matches && el.matches('#xm-paper input[data-k], #xm-paper textarea[data-k]')) {
+            if (xmKb.target !== el) xmKb.composePos = -1;
+            xmKb.target = el;
+            if (xmKb.open) { el.setAttribute('inputmode', 'none'); xmKbRender(); setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 80); }
+        }
+    });
+    // Bấm chuột / chạm vào ô để dời con trỏ -> ngắt việc ghép chữ
+    document.addEventListener('pointerup', e => { if (e.target && e.target.matches && e.target.matches('[data-k]')) xmKb.composePos = -1; });
+
+    function xmKbPress(k) {
+        if (k === '▼') return xmKbToggle(false);
+        if (k === '⇧') { xmKb.shift = !xmKb.shift; return xmKbRender(); }
+        const el = xmKb.target;
+        if (!el || !document.body.contains(el) || el.disabled) { xmKbRender(); return; }
+        if (document.activeElement !== el) el.focus({ preventScroll: true });
+        const v = el.value, s = el.selectionStart != null ? el.selectionStart : v.length, e2 = el.selectionEnd != null ? el.selectionEnd : s;
+        let before = v.slice(0, s), after = v.slice(e2), composing = (xmKb.composePos === s && s === e2);
+        if (k === '⌫') {
+            if (s !== e2) { /* xoá vùng chọn */ }
+            else if (composing && before) { const r = hkBack(before.slice(-1)); before = before.slice(0, -1) + r; if (!r) composing = false; }
+            else before = [...before].slice(0, -1).join('');
+            xmKbSet(el, before, after, composing && before.length > 0);
+            return;
+        }
+        let ch = k === 'SPACE' ? ' ' : (k === '↵' ? (el.tagName === 'TEXTAREA' ? '\n' : '') : (xmKb.shift && XM_KB_SHIFT[k] ? XM_KB_SHIFT[k] : k));
+        if (xmKb.shift && XM_KB_SHIFT[k]) { xmKb.shift = false; xmKbRender(); }
+        const isJamo = HK_CHO.includes(ch) || HK_JUNG.includes(ch);
+        if (isJamo && composing && before) {
+            const r = hkCombine(before.slice(-1), ch);
+            before = r != null ? before.slice(0, -1) + r : before + ch;
+        } else before += ch;
+        xmKbSet(el, before, after, isJamo);
+    }
+    function xmKbSet(el, before, after, composing) {
+        el.value = before + after;
+        const pos = before.length;
+        try { el.setSelectionRange(pos, pos); } catch (e) {}
+        xmKb.composePos = composing ? pos : -1;
+        el.dispatchEvent(new Event('input', { bubbles: true }));   // để tự lưu bài + cập nhật số ký tự
     }
 </script>
 </body>
