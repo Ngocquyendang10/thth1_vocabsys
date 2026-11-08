@@ -12,7 +12,7 @@ window.EXAMS = {
     id: 'mid',
     title: 'KIỂM TRA GIỮA KỲ',
     subtitle: 'Tiếng Hàn Tổng hợp – Sơ cấp 1 (Bài 1 – Bài 8) · 중간고사',
-    durationMin: 40,
+    durationMin: 45,           // 40 phút làm bài + 5 phút ổn định (phải TRÙNG backend EXAM_CONFIG)
     totalPoints: 100,
     audio: 'assets/exam/thth1_mid_listening.m4a',
     audioMaxPlays: 1,          // số lần được bấm phát file nghe (file đã đọc sẵn mỗi câu 2 lần)
@@ -22,10 +22,11 @@ window.EXAMS = {
       { skill: 'Viết (쓰기)', questions: '3 câu (27–29)', points: 30, note: 'Tự luận · gợi ý 15 phút' }
     ],
     rules: [
-      'Thời gian làm bài <b>40 phút</b>, tính từ lúc bấm <b>“Bắt đầu”</b>. Đồng hồ vẫn chạy kể cả khi tải lại trang hoặc thoát ra.',
+      'Thời gian làm bài <b>45 phút</b> (40 phút làm bài + 5 phút ổn định, đọc đề), tính từ lúc bấm <b>“Bắt đầu”</b>. Đồng hồ vẫn chạy kể cả khi tải lại trang hoặc thoát ra.',
       'File nghe chỉ được phát <b>1 lần</b> (mỗi câu đã được đọc 2 lần trong file). Hãy đeo tai nghe và kiểm tra âm lượng trước khi bắt đầu.',
       'Bài làm được tự lưu trên máy. Hết giờ, khu vực làm bài sẽ bị khoá — bấm <b>“Nộp bài”</b> để gửi cho giáo viên.',
       'Hệ thống ghi lại số lần bạn rời khỏi trang làm bài (chuyển tab / ứng dụng).',
+      'Sau khi nộp, bạn được xem lại bài đã nộp nhưng không sửa được.',
       'Phần Viết do giáo viên chấm. Kết quả sẽ hiện ở tab này sau khi giáo viên gửi điểm.'
     ],
     sections: [
@@ -162,13 +163,13 @@ window.EXAMS = {
         key: 'write', title: 'III. VIẾT (쓰기)', meta: '30 điểm · tự luận (giáo viên chấm)',
         groups: [
           {
-            instr: '※ [27~28] Viết vào ㉠, ㉡ mỗi chỗ MỘT câu phù hợp. (mỗi chỗ trống 3 điểm)',
+            instr: '※ [27~28] Điền vào ㉠, ㉡ cho phù hợp. Câu 27 và câu 28 ㉡: viết MỘT câu. Câu 28 ㉠: viết phần còn thiếu trước “-고”. (mỗi chỗ trống 3 điểm)',
             questions: [
               { n: 27, pts: 6, type: 'blanks', blanks: [{ id: '27a', label: '㉠', pts: 3 }, { id: '27b', label: '㉡', pts: 3 }],
                 context: '<div class="ex-passage ex-letter">수빈 씨, 안녕하세요?<br>이번 주 토요일에 시간이 있어요? 저는 토요일 오후에 백화점에 가겠어요.<br>백화점에서 가방을 ( ㉠ ). 수빈 씨도 시간이 있어요?<br>그럼 우리 같이 ( ㉡ ). 오후 두 시에 백화점에서 만나요.<div class="sign">— 유나 —</div></div>',
                 prompt: '(6 điểm)' },
-              { n: 28, pts: 6, type: 'blanks', blanks: [{ id: '28a', label: '㉠', pts: 3 }, { id: '28b', label: '㉡', pts: 3 }],
-                context: '<div class="ex-passage">어제는 일요일이었습니다. 저는 아침 열 시에 ( ㉠ ).<br>그리고 친구하고 식당에서 점심을 먹었습니다. 불고기가 아주 ( ㉡ ).<br>오후에는 집에서 쉬었습니다.</div>',
+              { n: 28, pts: 6, type: 'blanks', blanks: [{ id: '28a', label: '㉠', pts: 3, suffix: '고 세수했습니다.', placeholder: 'Viết phần đứng trước -고…' }, { id: '28b', label: '㉡', pts: 3 }],
+                context: '<div class="ex-passage">어제는 일요일이었습니다. 저는 아침 열 시에 ( ㉠ )고 세수했습니다.<br>그리고 친구하고 식당에서 점심을 먹었습니다. 불고기가 아주 ( ㉡ ).<br>오후에는 집에서 쉬었습니다.</div>',
                 prompt: '(6 điểm)' }
             ]
           },
@@ -187,7 +188,7 @@ window.EXAMS = {
     rubric: {
       '27a': '사고 싶어요 / 사겠어요 (chấp nhận: 사고 싶습니다, 보고 싶어요 …)',
       '27b': '갑시다 / 백화점에 갑시다 / 쇼핑합시다 — bắt buộc -(으)ㅂ시다 vì có “우리 같이”',
-      '28a': '일어났습니다 (chấp nhận: 일어났어요, 아침을 먹었습니다 …) — phải thì quá khứ',
+      '28a': '일어나 (→ 일어나고 세수했습니다). Chấp nhận: 운동하 / 아침을 먹 … (động từ hợp ngữ cảnh). Không cần thì quá khứ ở ô này vì đuôi -었습니다 đã ở cuối câu; viết 일어났 (일어났고) vẫn đúng ngữ pháp → có thể cho 2–3đ. Viết cả câu “일어났습니다” (thừa đuôi, không nối được với -고) → tối đa 1đ.',
       '28b': '맛있었습니다 (chấp nhận: 맛있었어요) — phải thì quá khứ',
       '27_28': '3đ đúng nội dung + ngữ pháp + đuôi câu · 2đ đúng ý, 1 lỗi nhỏ · 1đ đúng ý nhưng sai ngữ pháp trọng tâm · 0đ không phù hợp/bỏ trống',
       '29': 'Nội dung & nhiệm vụ 6đ · Từ vựng & ngữ pháp 8đ · Tổ chức & chính tả 4đ. 16–18 rất tốt · 12–15 tốt · 8–11 đạt · <8 chưa đạt. Dưới 3 câu: tối đa 6đ.'
