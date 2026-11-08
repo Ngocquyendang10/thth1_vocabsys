@@ -1304,27 +1304,27 @@
 
         /* Đề */
         .xm-sec { margin-bottom:26px; }
-        .xm-sec-title { font-size:18px; font-weight:900; color:var(--point-color); border-bottom:2px solid var(--point-light); padding-bottom:6px; margin-bottom:12px; }
+        .xm-sec-title { font-size:20px; font-weight:900; color:var(--point-color); border-bottom:2px solid var(--point-light); padding-bottom:6px; margin-bottom:12px; }
         .xm-sec-title small { font-size:12px; color:var(--sub-text); font-weight:700; margin-left:8px; }
         .xm-group { margin-bottom:18px; }
-        .xm-instr { font-weight:800; font-size:14px; color:var(--text-color); margin-bottom:8px; line-height:1.5; }
-        .xm-example { border:1px dashed #cbd5e0; border-radius:12px; padding:10px 14px; font-size:13.5px; margin-bottom:10px; background:#fafbfd; }
+        .xm-instr { font-weight:800; font-size:16px; color:var(--text-color); margin-bottom:8px; line-height:1.5; }
+        .xm-example { border:1px dashed #cbd5e0; border-radius:12px; padding:12px 16px; font-size:16px; margin-bottom:10px; background:#fafbfd; }
         .xm-example::before { content:'〈보기〉'; font-weight:800; color:var(--sub-text); font-size:12px; display:block; margin-bottom:4px; }
         .xm-root .ex-row { display:flex; gap:24px; flex-wrap:wrap; }
         .xm-root .ex-opts { display:flex; gap:16px; flex-wrap:wrap; margin-top:4px; color:var(--sub-text); }
         .xm-root .ex-opts .ok { color:var(--point-color); font-weight:800; }
-        .xm-root .ex-passage { background:var(--bg-color); border-radius:12px; padding:12px 16px; line-height:1.9; font-size:15px; margin-bottom:10px; }
+        .xm-root .ex-passage { background:var(--bg-color); border-radius:12px; padding:12px 16px; line-height:1.9; font-size:18px; margin-bottom:10px; }
         .xm-root .ex-letter .sign { text-align:right; margin-top:4px; }
-        .xm-root .ex-table { border-collapse:collapse; margin:0 auto 10px; min-width:260px; font-size:14px; }
+        .xm-root .ex-table { border-collapse:collapse; margin:0 auto 10px; min-width:280px; font-size:17px; }
         .xm-root .ex-table caption { font-weight:900; padding:6px; }
         .xm-root .ex-table td { border:1px solid #cbd5e0; padding:6px 14px; }
         .xm-root .ex-table td.foot { text-align:center; font-size:13px; color:var(--sub-text); }
         .xm-q { background:var(--card-color); border:1px solid #edf2f7; border-radius:16px; padding:14px 16px; margin-bottom:10px; scroll-margin-top:90px; }
-        .xm-q-head { display:flex; gap:8px; font-size:15px; line-height:1.6; margin-bottom:8px; }
+        .xm-q-head { display:flex; gap:8px; font-size:19px; line-height:1.6; margin-bottom:8px; }
         .xm-q-head .n { font-weight:900; color:var(--point-color); flex:0 0 auto; }
         .xm-q-head .pts { margin-left:auto; flex:0 0 auto; font-size:11px; color:var(--sub-text); font-weight:700; }
         .xm-opts { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-        .xm-opt { text-align:left; border:2px solid #edf2f7; background:#fff; border-radius:12px; padding:10px 12px; font-size:15px; cursor:pointer; font-family:inherit; color:var(--text-color); display:flex; gap:8px; align-items:flex-start; }
+        .xm-opt { text-align:left; border:2px solid #edf2f7; background:#fff; border-radius:12px; padding:12px 14px; font-size:18px; cursor:pointer; font-family:inherit; color:var(--text-color); display:flex; gap:8px; align-items:flex-start; }
         .xm-opt .c { font-weight:900; color:var(--sub-text); }
         .xm-opt:hover:not(:disabled) { border-color:#c3bbff; }
         .xm-opt.sel { border-color:var(--point-color); background:var(--point-light); }
@@ -1333,8 +1333,10 @@
         .xm-opt.key { border-color:#38a169; background:#e4f8ec; }
         .xm-opt.wrong { border-color:#e53e3e; background:#fde8e8; }
         .xm-blank { display:flex; align-items:center; gap:10px; margin-top:8px; }
-        .xm-blank label { font-weight:900; color:var(--point-color); font-size:17px; }
-        .xm-blank input, .xm-essay textarea { flex:1; width:100%; border:2px solid #e2e8f0; border-radius:12px; padding:10px 12px; font-size:15px; font-family:inherit; outline:none; background:#fff; }
+        .xm-blank label { font-weight:900; color:var(--point-color); font-size:19px; }
+        .xm-suffix { font-size:18px; white-space:nowrap; font-weight:700; }
+        @media (max-width:600px){ .xm-blank { flex-wrap:wrap; } }
+        .xm-blank input, .xm-essay textarea { flex:1; width:100%; border:2px solid #e2e8f0; border-radius:12px; padding:12px 14px; font-size:18px; font-family:inherit; outline:none; background:#fff; }
         .xm-blank input:focus, .xm-essay textarea:focus { border-color:var(--point-color); }
         .xm-essay textarea { min-height:170px; resize:vertical; line-height:1.7; }
         .xm-count { font-size:12px; color:var(--sub-text); text-align:right; margin-top:4px; }
@@ -1365,6 +1367,7 @@
             .xm-parts { grid-template-columns:repeat(3,1fr); }
             .xm-score .big { font-size:46px; }
             .xm-timer { font-size:19px; }
+            .xm-q-head { font-size:17px; } .xm-opt, .xm-blank input, .xm-essay textarea { font-size:17px; } .xm-root .ex-passage { font-size:17px; }
         }
     </style>
 </head>
@@ -3023,6 +3026,7 @@
                 setTeacherRole(data.isTeacher, user);     // 👩‍🏫 bật nút tải đề nếu là tài khoản giáo viên
                 setTestUnlock(data.unlockTest == null ? '' : data.unlockTest, user); // 📝 mở Bài tập / Giữa kỳ / Cuối kỳ
                 startStatusWatch(user, pass); // 🔒 theo dõi nếu tài khoản bị vô hiệu hoá từ xa
+                xmPrefetch();                 // ⚡ tải sẵn trạng thái bài kiểm tra
                 await parseAndInitApp(data.allowedUnits);
             } else if (data.disabled) {
                 forceAccountDisabled(); // tài khoản có nhưng đã bị khoá (Status = OUT)
@@ -5384,6 +5388,7 @@
                     setTeacherRole(data.isTeacher, savedUser);   // 👩‍🏫 quyền tải đề
                     setTestUnlock(data.unlockTest == null ? '' : data.unlockTest, savedUser); // 📝 mở Bài tập / Giữa kỳ / Cuối kỳ
                     startStatusWatch(savedUser, savedPass); // 🔒 theo dõi vô hiệu hoá từ xa
+                    xmPrefetch();                           // ⚡ tải sẵn trạng thái bài kiểm tra
                     await parseAndInitApp(data.allowedUnits);
                 } else if (data.disabled) {
                     forceAccountDisabled(); // tài khoản đã bị khoá (Status = OUT)
@@ -7982,12 +7987,34 @@
         return res.json();
     }
 
+    // ⚡ Tải sẵn trạng thái bài thi ngay sau khi đăng nhập (máy chủ Apps Script phản hồi chậm 1–3 giây),
+    //    để lúc học viên bấm vào tab Giữa kỳ là hiện ngay.
+    const xmStatusCache = {};   // examId -> { at, promise }
+    function xmFetchStatus(examId, force) {
+        const c = xmStatusCache[examId];
+        if (!force && c && Date.now() - c.at < 120000) return c.promise;
+        const promise = xmGet({ action: 'examStatus', user: xmUser(), pass: xmPass(), exam: examId });
+        xmStatusCache[examId] = { at: Date.now(), promise };
+        promise.catch(() => { delete xmStatusCache[examId]; });
+        return promise;
+    }
+    function xmInvalidateStatus(examId) { delete xmStatusCache[examId]; }
+    function xmPrefetch() {
+        ['mid', 'final'].forEach(k => { if (xmIsUnlocked(k) && (window.EXAMS || {})[k]) xmFetchStatus(k).catch(() => {}); });
+    }
+
     async function xmLoadExam(examId) {
-        xmPanel('<div class="xm-empty"><div class="ic">⏳</div><p>Đang tải thông tin bài kiểm tra…</p></div>');
+        const cached = xmStatusCache[examId];
+        if (!cached) {
+            // Chưa có dữ liệu: hiện ngay màn giới thiệu, nút Bắt đầu chờ máy chủ xác nhận
+            xmState = { examId, exam: window.EXAMS[examId], attempts: [], phase: 'loading' };
+            xmRenderIntro(false, true);
+        }
         let d;
         try {
-            d = await xmGet({ action: 'examStatus', user: xmUser(), pass: xmPass(), exam: examId });
+            d = await xmFetchStatus(examId);
         } catch (e) {
+            if (xmCurrentTab !== examId) return;
             return xmPanel(`<div class="xm-empty"><div class="ic">📡</div><h3>Không kết nối được máy chủ</h3><p>Kiểm tra mạng rồi thử lại.</p><br><button class="xm-btn sm" onclick="xmOpenTab('${examId}')">Thử lại</button></div>`);
         }
         if (xmCurrentTab !== examId) return;
@@ -8003,7 +8030,7 @@
     }
 
     /* ---------- 1. Màn hình giới thiệu ---------- */
-    function xmRenderIntro(isRetake) {
+    function xmRenderIntro(isRetake, waiting) {
         const ex = xmState.exam;
         const nQ = ex.sections.reduce((a, s) => a + s.groups.reduce((b, g) => b + g.questions.length, 0), 0);
         const rows = ex.info.map(i => `<tr><td><b>${i.skill}</b></td><td>${i.questions}</td><td><b>${i.points}</b> điểm</td><td>${i.note}</td></tr>`).join('');
@@ -8017,7 +8044,7 @@
             </div>
             <table class="xm-skill-table"><thead><tr><th>Kỹ năng</th><th>Số câu</th><th>Điểm</th><th>Ghi chú</th></tr></thead><tbody>${rows}</tbody></table>
             <ul class="xm-rules">${ex.rules.map(r => `<li>${r}</li>`).join('')}</ul>
-            <div class="xm-center"><button class="xm-btn" id="xm-start-btn" onclick="xmStart()">▶ ${isRetake ? 'Bắt đầu làm lại' : 'Bắt đầu'}</button></div>
+            <div class="xm-center"><button class="xm-btn" id="xm-start-btn" onclick="xmStart()" ${waiting ? 'disabled' : ''}>${waiting ? '⏳ Đang kiểm tra bài làm của bạn…' : '▶ ' + (isRetake ? 'Bắt đầu làm lại' : 'Bắt đầu')}</button></div>
         </div>`);
     }
 
@@ -8029,6 +8056,7 @@
             const d = await xmPost({ action: 'startExam', user: xmUser(), pass: xmPass(), exam: xmState.examId });
             if (!d.success) { alert(d.message || 'Không bắt đầu được.'); if (btn) { btn.disabled = false; btn.textContent = '▶ Bắt đầu'; } return; }
             if (d.serverNow) xmClockSkew = d.serverNow - Date.now();
+            xmInvalidateStatus(xmState.examId);
             xmClearLocal(xmState.examId);
             xmBeginDoing(d.attempt);
         } catch (e) {
@@ -8107,9 +8135,9 @@
     }
 
     function xmQuestionHtml(q, mode, att) {
-        // mode: 'doing' | 'review'
-        const a = mode === 'review' ? (att.answers || {}) : xmState.answers;
-        const dis = (mode === 'review' || xmState.timeUp) ? 'disabled' : '';
+        // mode: 'doing' (đang làm) | 'view' (xem lại bài đã nộp, chỉ đọc) | 'review' (đã chấm, có đáp án)
+        const a = (mode === 'review' || mode === 'view') ? (att.answers || {}) : xmState.answers;
+        const dis = (mode !== 'doing' || xmState.timeUp) ? 'disabled' : '';
         let body = '';
         if (q.type === 'blanks') {
             body = q.blanks.map(b => {
@@ -8119,7 +8147,8 @@
                     extra = `<span class="xm-wscore">${w.score != null ? w.score : '–'}/${b.pts}đ</span>`;
                     if (w.note) extra += `</div><div class="xm-wnote">💬 ${xmEsc(w.note)}`;
                 }
-                return `<div class="xm-blank"><label>${b.label}</label><input type="text" data-k="${b.id}" value="${xmEsc(a[b.id] || '')}" ${dis} placeholder="Viết 1 câu…" autocomplete="off">${extra}</div>`;
+                const suf = b.suffix ? `<span class="xm-suffix">${b.suffix}</span>` : '';
+                return `<div class="xm-blank"><label>${b.label}</label><input type="text" data-k="${b.id}" value="${xmEsc(a[b.id] || '')}" ${dis} placeholder="${b.placeholder || 'Viết 1 câu…'}" autocomplete="off">${suf}${extra}</div>`;
             }).join('');
         } else if (q.type === 'essay') {
             const v = a[q.id] || '';
@@ -8209,6 +8238,7 @@
             xmSaveLocal(); xmRefreshNav();
         });
         if (xmRemainingMs() <= 0) xmTimeUp();
+        else if (!(xmState.audio.ended && xmState.audio.plays >= ex.audioMaxPlays)) xmEnsureAudio();
     }
 
     /* ---------- Audio: phát 1 lần, không tua, nhớ vị trí nếu tải lại trang ---------- */
@@ -8217,7 +8247,28 @@
         if (xmState.timeUp) return;
         if (au.ended && au.plays >= ex.audioMaxPlays) return;
         const btn = document.getElementById('xm-audio-btn');
-        if (!xmAudioEl) {
+        xmEnsureAudio();
+        if (au.pos > 0 && !au.ended) {
+            // Tiếp tục sau khi tải lại trang (không tính thêm lượt)
+            const seek = () => { try { xmAudioEl.currentTime = au.pos; } catch (e) {} };
+            if (xmAudioEl.readyState >= 1) seek(); else xmAudioEl.addEventListener('loadedmetadata', seek, { once: true });
+        } else {
+            au.plays += 1; au.ended = false; au.pos = 0;
+        }
+        xmSaveLocal();
+        xmAudioEl.play().then(() => {
+            if (btn) { btn.disabled = true; btn.textContent = '🔊 Đang phát…'; }
+        }).catch(() => {
+            alert('Không phát được file nghe. Hãy kiểm tra loa/tai nghe và bấm lại.');
+            if (au.pos === 0) au.plays = Math.max(0, au.plays - 1);
+            xmSaveLocal();
+        });
+    }
+    // ⚡ Tạo sẵn & tải trước file nghe ngay khi vào bài (bấm Phát là chạy liền, không phải chờ tải 3MB)
+    function xmEnsureAudio() {
+        const ex = xmState.exam;
+        if (!ex.audio || xmAudioEl) return;
+        {
             xmAudioEl = new Audio(ex.audio);
             xmAudioEl.preload = 'auto';
             xmAudioEl.addEventListener('timeupdate', () => {
@@ -8234,22 +8285,8 @@
                 const b = document.getElementById('xm-audio-btn');
                 if (b) { const done = xmState.audio.plays >= ex.audioMaxPlays; b.disabled = done; b.textContent = done ? '✔ Đã nghe xong' : '▶ Phát lại'; }
             });
+            try { xmAudioEl.load(); } catch (e) {}
         }
-        if (au.pos > 0 && !au.ended) {
-            // Tiếp tục sau khi tải lại trang (không tính thêm lượt)
-            const seek = () => { try { xmAudioEl.currentTime = au.pos; } catch (e) {} };
-            if (xmAudioEl.readyState >= 1) seek(); else xmAudioEl.addEventListener('loadedmetadata', seek, { once: true });
-        } else {
-            au.plays += 1; au.ended = false; au.pos = 0;
-        }
-        xmSaveLocal();
-        xmAudioEl.play().then(() => {
-            if (btn) { btn.disabled = true; btn.textContent = '🔊 Đang phát…'; }
-        }).catch(() => {
-            alert('Không phát được file nghe. Hãy kiểm tra loa/tai nghe và bấm lại.');
-            if (au.pos === 0) au.plays = Math.max(0, au.plays - 1);
-            xmSaveLocal();
-        });
     }
     function xmStopAudio() { if (xmAudioEl) { try { xmAudioEl.pause(); } catch (e) {} xmAudioEl = null; } }
 
@@ -8280,6 +8317,8 @@
             if (!d.success) throw new Error(d.message || 'Nộp không thành công');
             xmStopTimer(); xmStopAudio();
             xmClearLocal(xmState.examId);
+            xmInvalidateStatus(xmState.examId);
+            if (!d.attempt.answers) d.attempt.answers = xmState.answers;
             xmState.phase = 'waiting';
             xmRenderWaiting(d.attempt, true);
         } catch (e) {
@@ -8297,10 +8336,27 @@
     }
     function xmRenderWaiting(att, justNow) {
         xmState.phase = 'waiting';
+        xmState.submitted = att;
+        const canView = att.answers && Object.keys(att.answers).length;
         xmPanel(`<div class="xm-wait"><div class="ic">${justNow ? '🎉' : '📨'}</div>
             <h3>${justNow ? 'Nộp bài thành công!' : 'Bạn đã nộp bài'}</h3>
             <p>Lần làm thứ ${att.attempt} · nộp lúc ${xmFmtDate(att.submittedAt)}.<br>Giáo viên đang chấm phần Viết. Khi có kết quả, điểm và bài chữa sẽ hiện ngay tại tab <b>Giữa kỳ</b> này.</p>
-            <br><button class="xm-btn ghost sm" onclick="xmOpenTab('${xmState.examId}')">🔄 Kiểm tra kết quả</button></div>`);
+            <br><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+              ${canView ? '<button class="xm-btn sm" onclick="xmRenderView()">👀 Xem lại bài đã nộp</button>' : ''}
+              <button class="xm-btn ghost sm" onclick="xmInvalidateStatus('${xmState.examId}');xmOpenTab('${xmState.examId}')">🔄 Kiểm tra kết quả</button>
+            </div></div>`);
+    }
+    // 👀 Xem lại bài đã nộp: CHỈ ĐỌC — không sửa, không nộp lại, chưa có đáp án
+    function xmRenderView() {
+        const att = xmState.submitted; if (!att) return;
+        xmState.phase = 'view';
+        xmState.answers = att.answers || {}; xmState.timeUp = false;
+        xmPanel(`<div class="xm-root">
+            <div class="xm-bar"><button class="xm-btn ghost sm" onclick="xmRenderWaiting(xmState.submitted)">← Quay lại</button>
+              <div class="prog">🔒 Bài đã nộp lần ${att.attempt} (${xmFmtDate(att.submittedAt)}) — chỉ xem, không sửa được</div></div>
+            <div class="xm-nav">${xmNavHtml('doing')}</div>
+            <div class="xm-locked">${xmPaperHtml('view', att)}</div>
+        </div>`);
     }
 
     /* ---------- 4. Kết quả đã chấm + Làm lại ---------- */
