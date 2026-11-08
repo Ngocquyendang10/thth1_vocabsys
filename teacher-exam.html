@@ -163,21 +163,41 @@
     const chips = [['SUBMITTED','Chờ chấm'],['GRADED','Đã chấm (chưa gửi)'],['RETURNED','Đã gửi'],['STARTED','Đang làm'],['ALL','Tất cả']];
     document.getElementById('filters').innerHTML = chips.map(([k,l])=>`<button class="chip ${filter===k?'on':''}" onclick="filter='${k}';renderList()">${l} (${k==='ALL'?attempts.length:(counts[k]||0)})</button>`).join('') +
       `<input type="search" placeholder="Tìm học viên…" value="${esc(search)}" oninput="search=this.value;renderList()">`;
+    // Lần làm MỚI NHẤT của mỗi học viên (mỗi bài thi)
+    const latest = {}; attempts.forEach(a=>{ const k=a.username.toLowerCase()+'|'+a.exam; if(!latest[k]||a.attempt>latest[k].attempt) latest[k]=a; });
     const rows = attempts.filter(a=>(filter==='ALL'||a.status===filter) && (!search || a.username.toLowerCase().includes(search.toLowerCase())));
     if (!rows.length){ document.getElementById('list').innerHTML = '<div class="empty">Không có bài nào.</div>'; return; }
     document.getElementById('list').innerHTML = `<table class="list"><thead><tr><th>Học viên</th><th>Bài</th><th>Lần</th><th>Trạng thái</th><th>Nộp lúc</th><th>Thời gian làm</th><th>Rời trang</th><th>Trắc nghiệm</th><th>Tổng</th><th></th></tr></thead><tbody>` +
       rows.map(a=>{
         const m = a.meta||{};
         const cfg = examsCfg[a.exam]||{};
-        return `<tr><td><b>${esc(a.username)}</b></td><td>${esc(cfg.title||a.exam)}</td><td>${a.attempt}</td>
+        return `<tr><td><b>${esc(a.username)}</b></td><td>${esc(cfg.title||a.exam)}</td><td>${a.attempt}${latest[a.username.toLowerCase()+'|'+a.exam]===a?' <span class="badge b-RETURNED" title="Lần làm mới nhất">mới nhất</span>':''}</td>
           <td><span class="badge b-${a.status}">${STATUS_LABEL[a.status]||a.status}</span></td>
           <td>${fmtDate(a.submittedAt)}</td>
           <td>${a.submittedAt?fmtDur(m.durationMs):'—'}${m.overtime?' <span class="warn">⚠ quá giờ</span>':''}</td>
           <td class="${m.tabSwitches?'warn':''}">${a.submittedAt?(m.tabSwitches||0)+' lần':'—'}</td>
           <td>${a.mcqScore!=null?f1(a.mcqScore)+'/70':'—'}</td>
           <td>${a.totalScore!=null?'<b>'+f1(a.totalScore)+'</b>/100':'—'}</td>
-          <td>${a.status!=='STARTED'?`<button class="btn btn-primary" style="padding:7px 12px" onclick="openGrade('${a.id}')">Xem &amp; chấm</button>`:''}</td></tr>`;
+          <td style="white-space:nowrap">${a.status!=='STARTED'?`<button class="btn btn-primary" style="padding:7px 12px" onclick="openGrade('${a.id}')">Xem &amp; chấm</button>`:''}
+            <button class="btn btn-warn" style="padding:7px 10px" title="Xoá lần làm này" onclick="deleteAttempt('${a.id}')">🗑</button></td></tr>`;
       }).join('') + '</tbody></table>';
+  }
+
+  // 🗑 Xoá hẳn 1 lần làm (xoá dòng trong tab ExamResults) — không khôi phục được
+  async function deleteAttempt(id){
+    const a = attempts.find(x=>x.id===id); if (!a) return;
+    let msg = `Xoá VĨNH VIỄN lần làm thứ ${a.attempt} của ${a.username}? Không khôi phục được.`;
+    if (a.status==='STARTED') msg += '\n⚠️ Học viên đang làm dở bài này — xoá thì học viên sẽ KHÔNG nộp được lần này.';
+    if (a.status==='RETURNED') msg += '\n⚠️ Lần này đã gửi điểm — học viên sẽ không thấy điểm này nữa.';
+    if (!confirm(msg)) return;
+    try{
+      const r = await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify({ action:'deleteExam', key:teacherKey, id }) });
+      const d = await r.json();
+      if (!d.success) throw new Error(d.message||'Lỗi');
+      if (current && current.id===id) backToList();
+      await loadData();
+    }catch(e){ alert('Không xoá được: '+e.message+'\n(Đã cập nhật Apps Script bản mới chưa?)'); }
   }
 
   function backToList(){ current=null; document.getElementById('grade-view').style.display='none'; document.getElementById('list-view').style.display='block'; renderList(); }
@@ -241,6 +261,7 @@
           <button class="btn btn-ok" onclick="saveGrade(true)">📤 Lưu &amp; gửi kết quả cho học viên</button>
           <button class="btn btn-ghost" onclick="saveGrade(false)">💾 Lưu nháp (học viên chưa thấy)</button>
           ${a.status==='RETURNED'?'<button class="btn btn-warn" onclick="saveGrade(false,true)">↩ Thu hồi kết quả</button>':''}
+          <button class="btn btn-warn" onclick="deleteAttempt('${a.id}')">🗑 Xoá lần làm này</button>
         </div>
         <div class="rub" id="g-msg"></div>
       </div></div>`;

@@ -8372,6 +8372,7 @@
             xmClearLocal(xmState.examId);
             xmInvalidateStatus(xmState.examId);
             if (!d.attempt.answers) d.attempt.answers = xmState.answers;
+            xmState.attempts = (xmState.attempts || []).filter(x => x.id !== d.attempt.id).concat([d.attempt]);
             xmState.phase = 'waiting';
             xmRenderWaiting(d.attempt, true);
         } catch (e) {
@@ -8397,7 +8398,8 @@
             <br><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
               ${canView ? '<button class="xm-btn sm" onclick="xmRenderView()">👀 Xem lại bài đã nộp</button>' : ''}
               <button class="xm-btn ghost sm" onclick="xmInvalidateStatus('${xmState.examId}');xmOpenTab('${xmState.examId}')">🔄 Kiểm tra kết quả</button>
-            </div></div>`);
+              <button class="xm-btn ghost sm" onclick="xmRetake()">🔁 Làm lại bài</button>
+            </div>${xmHistHtml()}</div>`);
     }
     // 👀 Xem lại bài đã nộp: CHỈ ĐỌC — không sửa, không nộp lại, chưa có đáp án
     function xmRenderView() {
@@ -8406,7 +8408,7 @@
         xmState.answers = att.answers || {}; xmState.timeUp = false;
         xmPanel(`<div class="xm-root">
             <div class="xm-bar"><button class="xm-btn ghost sm" onclick="xmRenderWaiting(xmState.submitted)">← Quay lại</button>
-              <div class="prog">🔒 Bài đã nộp lần ${att.attempt} (${xmFmtDate(att.submittedAt)}) — chỉ xem, không sửa được</div></div>
+              <div class="prog">🔒 Bài đã nộp lần ${att.attempt} (${xmFmtDate(att.submittedAt)})</div></div>
             <div class="xm-nav">${xmNavHtml('doing')}</div>
             <div class="xm-locked">${xmPaperHtml('view', att)}</div>
         </div>`);
@@ -8438,6 +8440,13 @@
             <div>${xmPaperHtml('review', att)}</div>
             ${hist}
         </div>`);
+    }
+    // Danh sách các lần làm trước (điểm nếu cô đã gửi kết quả)
+    function xmHistHtml() {
+        const list = (xmState.attempts || []).filter(a => a.status !== 'STARTED');
+        if (list.length < 2) return '';
+        const f = v => String(Math.round((v || 0) * 10) / 10).replace('.', ',');
+        return `<div class="xm-hist" style="text-align:left;max-width:420px;margin:18px auto 0;"><b>Các lần làm:</b><ul>${list.map(a => `<li>Lần ${a.attempt}: ${a.status === 'RETURNED' ? `<b>${f(a.totalScore)}</b>/100 điểm` : 'đang chờ chấm'} · ${xmFmtDate(a.submittedAt)}</li>`).join('')}</ul></div>`;
     }
     function xmRetake() {
         if (!confirm('Làm lại bài kiểm tra từ đầu? Kết quả lần này vẫn được lưu lại.')) return;
