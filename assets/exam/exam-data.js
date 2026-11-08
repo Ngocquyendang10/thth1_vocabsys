@@ -168,7 +168,7 @@ window.EXAMS = {
               { n: 27, pts: 6, type: 'blanks', blanks: [{ id: '27a', label: '㉠', pts: 3 }, { id: '27b', label: '㉡', pts: 3 }],
                 context: '<div class="ex-passage ex-letter">수빈 씨, 안녕하세요?<br>이번 주 토요일에 시간이 있어요? 저는 토요일 오후에 백화점에 가겠어요.<br>백화점에서 가방을 ( ㉠ ). 수빈 씨도 시간이 있어요?<br>그럼 우리 같이 ( ㉡ ). 오후 두 시에 백화점에서 만나요.<div class="sign">— 유나 —</div></div>',
                 prompt: '(6 điểm)' },
-              { n: 28, pts: 6, type: 'blanks', blanks: [{ id: '28a', label: '㉠', pts: 3, suffix: '고 세수했습니다.', placeholder: 'Viết phần đứng trước -고…' }, { id: '28b', label: '㉡', pts: 3 }],
+              { n: 28, pts: 6, type: 'blanks', blanks: [{ id: '28a', label: '㉠', pts: 3, suffix: '고 세수했습니다.', placeholder: 'Điền vào đây…' }, { id: '28b', label: '㉡', pts: 3 }],
                 context: '<div class="ex-passage">어제는 일요일이었습니다. 저는 아침 열 시에 ( ㉠ )고 세수했습니다.<br>그리고 친구하고 식당에서 점심을 먹었습니다. 불고기가 아주 ( ㉡ ).<br>오후에는 집에서 쉬었습니다.</div>',
                 prompt: '(6 điểm)' }
             ]
