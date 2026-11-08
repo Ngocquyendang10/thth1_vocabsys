@@ -1243,6 +1243,129 @@
                 margin-top: 8px; padding-top: 10px !important; border-top: 1px dashed #edf2f7 !important;
             }
         }
+
+        /* ============================================================
+           📝 MENU "BÀI TẬP" + BÀI KIỂM TRA GIỮA KỲ / CUỐI KỲ (tiền tố xm-)
+           ============================================================ */
+        #mode-exercise-section { width:100%; }
+        .xm-tabs { display:flex; gap:8px; overflow-x:auto; padding:6px 4px 12px; scrollbar-width:thin; }
+        .xm-tab { flex:0 0 auto; border:none; cursor:pointer; padding:9px 14px; border-radius:12px; font-size:13px; font-weight:800; color:var(--sub-text); background:var(--card-color); box-shadow:var(--neu-convex); font-family:inherit; display:inline-flex; align-items:center; gap:5px; }
+        .xm-tab.active { background:var(--point-color); color:#fff; box-shadow:0 6px 16px rgba(97,76,255,.28); }
+        .xm-tab.locked { opacity:.55; }
+        .xm-tab.exam { color:var(--point-color); }
+        .xm-tab.exam.active { color:#fff; }
+        .xm-tab-sep { flex:0 0 1px; background:#d7dbe6; margin:4px 4px; }
+        .xm-panel { background:var(--card-color); border-radius:var(--radius-lg); box-shadow:var(--neu-card-shadow); padding:24px; min-height:300px; }
+        .xm-empty { text-align:center; padding:50px 20px; color:var(--sub-text); }
+        .xm-empty .ic { font-size:42px; margin-bottom:10px; }
+        .xm-empty h3 { color:var(--text-color); font-size:18px; margin-bottom:6px; }
+        .xm-empty p { font-size:14px; line-height:1.6; }
+        .xm-btn { border:none; cursor:pointer; font-family:inherit; font-weight:800; font-size:15px; padding:13px 26px; border-radius:14px; background:var(--point-color); color:#fff; box-shadow:0 6px 16px rgba(97,76,255,.28); display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+        .xm-btn:hover { background:var(--point-hover); }
+        .xm-btn:disabled { opacity:.55; cursor:default; }
+        .xm-btn.ghost { background:var(--card-color); color:var(--point-color); box-shadow:var(--neu-convex); }
+        .xm-btn.warn { background:#e53e3e; box-shadow:0 6px 16px rgba(229,62,62,.28); }
+        .xm-btn.sm { font-size:13px; padding:9px 16px; border-radius:11px; }
+
+        /* Giới thiệu bài thi */
+        .xm-intro h2 { font-size:22px; color:var(--text-color); }
+        .xm-intro .sub { color:var(--sub-text); font-size:14px; margin-top:4px; }
+        .xm-facts { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:20px 0; }
+        .xm-fact { background:var(--bg-color); border-radius:16px; padding:14px; text-align:center; }
+        .xm-fact .v { font-size:24px; font-weight:900; color:var(--point-color); }
+        .xm-fact .l { font-size:12px; color:var(--sub-text); font-weight:700; margin-top:2px; }
+        .xm-skill-table { width:100%; border-collapse:collapse; font-size:14px; margin-bottom:18px; }
+        .xm-skill-table th, .xm-skill-table td { padding:10px 12px; border-bottom:1px solid #edf2f7; text-align:left; }
+        .xm-skill-table th { font-size:12px; color:var(--sub-text); text-transform:uppercase; }
+        .xm-skill-table td b { color:var(--text-color); }
+        .xm-rules { background:#fffaf0; border:1px solid #fbd38d; border-radius:14px; padding:14px 18px 14px 34px; font-size:13.5px; line-height:1.7; color:#744210; margin-bottom:20px; }
+        .xm-center { text-align:center; }
+
+        /* Thanh trạng thái khi đang làm */
+        .xm-bar { position:sticky; top:0; z-index:30; display:flex; align-items:center; gap:14px; flex-wrap:wrap; background:var(--card-color); border-radius:16px; box-shadow:var(--neu-convex); padding:10px 16px; margin-bottom:16px; }
+        .xm-timer { font-size:22px; font-weight:900; font-variant-numeric:tabular-nums; color:var(--point-color); display:flex; align-items:center; gap:6px; }
+        .xm-timer.low { color:#e53e3e; }
+        .xm-bar .prog { font-size:13px; color:var(--sub-text); font-weight:700; }
+        .xm-bar .sp { flex:1; }
+        .xm-nav { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:16px; }
+        .xm-nav button { width:32px; height:30px; border:none; border-radius:8px; font-size:12px; font-weight:800; cursor:pointer; background:var(--bg-color); color:var(--sub-text); font-family:inherit; }
+        .xm-nav button.done { background:var(--point-light); color:var(--point-color); }
+        .xm-nav button.ok { background:#e4f8ec; color:#158240; }
+        .xm-nav button.bad { background:#fde8e8; color:#c53030; }
+        .xm-timeup { background:#fff5f5; border:2px solid #feb2b2; color:#c53030; border-radius:16px; padding:16px; text-align:center; margin-bottom:16px; font-weight:700; }
+        .xm-timeup .xm-btn { margin-top:10px; }
+
+        /* Audio */
+        .xm-audio { display:flex; align-items:center; gap:12px; background:var(--point-light); border-radius:14px; padding:12px 16px; margin-bottom:16px; flex-wrap:wrap; }
+        .xm-audio .track { flex:1; min-width:120px; height:8px; border-radius:99px; background:#dcd8ff; overflow:hidden; }
+        .xm-audio .track i { display:block; height:100%; width:0; background:var(--point-color); }
+        .xm-audio .t { font-size:12px; font-weight:800; color:var(--point-color); font-variant-numeric:tabular-nums; }
+        .xm-audio .note { width:100%; font-size:12px; color:var(--sub-text); }
+
+        /* Đề */
+        .xm-sec { margin-bottom:26px; }
+        .xm-sec-title { font-size:18px; font-weight:900; color:var(--point-color); border-bottom:2px solid var(--point-light); padding-bottom:6px; margin-bottom:12px; }
+        .xm-sec-title small { font-size:12px; color:var(--sub-text); font-weight:700; margin-left:8px; }
+        .xm-group { margin-bottom:18px; }
+        .xm-instr { font-weight:800; font-size:14px; color:var(--text-color); margin-bottom:8px; line-height:1.5; }
+        .xm-example { border:1px dashed #cbd5e0; border-radius:12px; padding:10px 14px; font-size:13.5px; margin-bottom:10px; background:#fafbfd; }
+        .xm-example::before { content:'〈보기〉'; font-weight:800; color:var(--sub-text); font-size:12px; display:block; margin-bottom:4px; }
+        .xm-root .ex-row { display:flex; gap:24px; flex-wrap:wrap; }
+        .xm-root .ex-opts { display:flex; gap:16px; flex-wrap:wrap; margin-top:4px; color:var(--sub-text); }
+        .xm-root .ex-opts .ok { color:var(--point-color); font-weight:800; }
+        .xm-root .ex-passage { background:var(--bg-color); border-radius:12px; padding:12px 16px; line-height:1.9; font-size:15px; margin-bottom:10px; }
+        .xm-root .ex-letter .sign { text-align:right; margin-top:4px; }
+        .xm-root .ex-table { border-collapse:collapse; margin:0 auto 10px; min-width:260px; font-size:14px; }
+        .xm-root .ex-table caption { font-weight:900; padding:6px; }
+        .xm-root .ex-table td { border:1px solid #cbd5e0; padding:6px 14px; }
+        .xm-root .ex-table td.foot { text-align:center; font-size:13px; color:var(--sub-text); }
+        .xm-q { background:var(--card-color); border:1px solid #edf2f7; border-radius:16px; padding:14px 16px; margin-bottom:10px; scroll-margin-top:90px; }
+        .xm-q-head { display:flex; gap:8px; font-size:15px; line-height:1.6; margin-bottom:8px; }
+        .xm-q-head .n { font-weight:900; color:var(--point-color); flex:0 0 auto; }
+        .xm-q-head .pts { margin-left:auto; flex:0 0 auto; font-size:11px; color:var(--sub-text); font-weight:700; }
+        .xm-opts { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+        .xm-opt { text-align:left; border:2px solid #edf2f7; background:#fff; border-radius:12px; padding:10px 12px; font-size:15px; cursor:pointer; font-family:inherit; color:var(--text-color); display:flex; gap:8px; align-items:flex-start; }
+        .xm-opt .c { font-weight:900; color:var(--sub-text); }
+        .xm-opt:hover:not(:disabled) { border-color:#c3bbff; }
+        .xm-opt.sel { border-color:var(--point-color); background:var(--point-light); }
+        .xm-opt.sel .c { color:var(--point-color); }
+        .xm-opt:disabled { cursor:default; }
+        .xm-opt.key { border-color:#38a169; background:#e4f8ec; }
+        .xm-opt.wrong { border-color:#e53e3e; background:#fde8e8; }
+        .xm-blank { display:flex; align-items:center; gap:10px; margin-top:8px; }
+        .xm-blank label { font-weight:900; color:var(--point-color); font-size:17px; }
+        .xm-blank input, .xm-essay textarea { flex:1; width:100%; border:2px solid #e2e8f0; border-radius:12px; padding:10px 12px; font-size:15px; font-family:inherit; outline:none; background:#fff; }
+        .xm-blank input:focus, .xm-essay textarea:focus { border-color:var(--point-color); }
+        .xm-essay textarea { min-height:170px; resize:vertical; line-height:1.7; }
+        .xm-count { font-size:12px; color:var(--sub-text); text-align:right; margin-top:4px; }
+        .xm-count.warn { color:#c05621; font-weight:700; }
+        .xm-locked input:disabled, .xm-locked textarea:disabled { background:#f7fafc; color:#4a5568; }
+
+        /* Kết quả */
+        .xm-score { display:flex; gap:20px; align-items:center; flex-wrap:wrap; margin:18px 0; }
+        .xm-score .big { font-size:58px; font-weight:900; color:var(--point-color); line-height:1; }
+        .xm-score .big small { font-size:20px; color:var(--sub-text); }
+        .xm-parts { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; flex:1; min-width:260px; }
+        .xm-part { background:var(--bg-color); border-radius:14px; padding:12px; text-align:center; }
+        .xm-part .v { font-size:20px; font-weight:900; color:var(--text-color); }
+        .xm-part .l { font-size:12px; color:var(--sub-text); font-weight:700; }
+        .xm-comment { background:#f0fff4; border:1px solid #9ae6b4; color:#22543d; border-radius:14px; padding:14px 16px; line-height:1.7; white-space:pre-wrap; margin-bottom:16px; }
+        .xm-wnote { margin-top:6px; font-size:13px; color:#22543d; background:#f0fff4; border-radius:10px; padding:6px 10px; }
+        .xm-wscore { font-weight:900; color:var(--point-color); font-size:13px; margin-left:auto; }
+        .xm-hist { font-size:13px; color:var(--sub-text); margin-top:16px; }
+        .xm-hist li { margin-left:18px; }
+        .xm-wait { text-align:center; padding:40px 20px; }
+        .xm-wait .ic { font-size:48px; }
+        .xm-wait h3 { font-size:20px; margin:8px 0; }
+        .xm-wait p { color:var(--sub-text); line-height:1.7; }
+        @media (max-width:768px){
+            .xm-panel { padding:16px 12px; }
+            .xm-facts { grid-template-columns:repeat(2,1fr); }
+            .xm-opts { grid-template-columns:1fr; }
+            .xm-parts { grid-template-columns:repeat(3,1fr); }
+            .xm-score .big { font-size:46px; }
+            .xm-timer { font-size:19px; }
+        }
     </style>
 </head>
 <body>
@@ -1308,6 +1431,9 @@
                 </li>
                 <li class="menu-item" id="menu-review" onclick="showAppMode('review')"><a href="#">
                     <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm0 16H5V8h14v11z"/></svg>Ôn lại từ vựng</a>
+                </li>
+                <li class="menu-item" id="menu-exercise" onclick="showAppMode('exercise')"><a href="#">
+                    <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>Bài tập</a>
                 </li>
             </ul>
         </div>
@@ -1814,6 +1940,18 @@
             </div>
         </div>
 
+        <!-- 📝 BÀI TẬP + KIỂM TRA GIỮA KỲ / CUỐI KỲ -->
+        <div id="mode-exercise-section" style="display: none;">
+            <div class="work-workspace-container" style="justify-content: flex-start;">
+                <div class="workspace-header">
+                    <h1>Bài tập &amp; Kiểm tra 📝</h1>
+                    <p>Bài tập theo từng Unit và bài kiểm tra Giữa kỳ / Cuối kỳ. Bài nào có 🔒 là giáo viên chưa mở.</p>
+                </div>
+                <div class="xm-tabs" id="xm-tabs"></div>
+                <div class="xm-panel" id="xm-panel"></div>
+            </div>
+        </div>
+
     </main>
 
 <!-- CỘT 3: WIDGET PHẢI - DASHBOARD THỐNG KÊ TOÀN DIỆN -->
@@ -2106,6 +2244,7 @@
     </div>
 </div>
 
+<script src="assets/exam/exam-data.js"></script>
 <script>
     // ============================================================================
     // 🔒 CÔ LẬP localStorage THEO TỪNG WEB (THTH1 vs THTH2)
@@ -2607,10 +2746,12 @@
         document.getElementById('mode-vocab-section').style.display = (modeName === 'vocab') ? 'flex' : 'none';
         document.getElementById('mode-grammar-section').style.display = (modeName === 'grammar') ? 'block' : 'none';
         document.getElementById('mode-review-section').style.display = (modeName === 'review') ? 'block' : 'none';
+        document.getElementById('mode-exercise-section').style.display = (modeName === 'exercise') ? 'block' : 'none';
 
-        // "Nhắc lại từ vựng" không cần thanh chọn Unit
+        // "Nhắc lại từ vựng" và "Bài tập" không cần thanh chọn Unit
         const unitPanel = document.querySelector('.unit-panel-box');
-        if (unitPanel) unitPanel.style.display = (modeName === 'review') ? 'none' : 'block';
+        if (unitPanel) unitPanel.style.display = (modeName === 'review' || modeName === 'exercise') ? 'none' : 'block';
+        if (modeName === 'exercise') enterExerciseMode();
 
         if (modeName === 'grammar') renderGrammarMode();
         if (modeName === 'review') renderReviewTable();
@@ -2880,6 +3021,7 @@
                 applyServerProgress(user, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
                 setLessonUnits(data.unlockLesson, user); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
                 setTeacherRole(data.isTeacher, user);     // 👩‍🏫 bật nút tải đề nếu là tài khoản giáo viên
+                setTestUnlock(data.unlockTest == null ? '' : data.unlockTest, user); // 📝 mở Bài tập / Giữa kỳ / Cuối kỳ
                 startStatusWatch(user, pass); // 🔒 theo dõi nếu tài khoản bị vô hiệu hoá từ xa
                 await parseAndInitApp(data.allowedUnits);
             } else if (data.disabled) {
@@ -5240,6 +5382,7 @@
                     applyServerProgress(savedUser, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
                     setLessonUnits(data.unlockLesson, savedUser); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
                     setTeacherRole(data.isTeacher, savedUser);   // 👩‍🏫 quyền tải đề
+                    setTestUnlock(data.unlockTest == null ? '' : data.unlockTest, savedUser); // 📝 mở Bài tập / Giữa kỳ / Cuối kỳ
                     startStatusWatch(savedUser, savedPass); // 🔒 theo dõi vô hiệu hoá từ xa
                     await parseAndInitApp(data.allowedUnits);
                 } else if (data.disabled) {
@@ -5251,6 +5394,7 @@
                 // Mất mạng: dùng lại danh sách unit đã lưu của chính tài khoản này (khoá riêng), có fallback khoá chung cũ.
                 loadLessonUnits(sessionUser); // 📘 khôi phục danh sách mở bài giảng đã lưu (offline)
                 loadTeacherRole(sessionUser); // 👩‍🏫 khôi phục quyền tải đề đã lưu (offline)
+                setTestUnlock(null, sessionUser); // 📝 khôi phục danh sách mở bài tập đã lưu (offline)
                 let oldHistory = localStorage.getItem('historyUnits_' + String(sessionUser).toLowerCase())
                               || localStorage.getItem('historyUnits_QuyenClass');
                 if(oldHistory) {
@@ -6430,6 +6574,7 @@
         document.getElementById('mode-vocab-section').style.display = 'none';
         document.getElementById('mode-grammar-section').style.display = 'none';
         document.getElementById('mode-review-section').style.display = 'none';
+        document.getElementById('mode-exercise-section').style.display = 'none';
         document.getElementById('mode-summary-section').style.display = 'none';
         const g = document.getElementById('mode-grammar-summary-section');
         if (g) g.style.display = 'none';
@@ -7718,6 +7863,478 @@
         window.addEventListener('focus', function () { check(); });
         window.addEventListener('online', function () { check(); });
     })();
+
+    /* ============================================================
+       📝 MENU "BÀI TẬP": 15 tab Unit + Giữa kỳ + Cuối kỳ
+       - Mở bằng cột "UnlockTest" trong sheet Students: số unit + "Mid" / "Final".
+       - Đề nằm ở assets/exam/exam-data.js (KHÔNG có đáp án).
+       - Đáp án + chấm trắc nghiệm ở backend; phần Viết giáo viên chấm ở teacher-exam.html.
+       ============================================================ */
+    const XM_UNITS = 15;
+    let xmUnlock = { units: {}, mid: false, final: false };
+    let xmCurrentTab = null;          // '1'..'15' | 'mid' | 'final'
+    let xmState = null;               // trạng thái bài thi đang mở (xem xmLoadExam)
+    let xmTimerId = null;
+    let xmClockSkew = 0;              // serverNow - Date.now()
+    let xmAudioEl = null;
+    let xmAwayStart = 0;
+
+    function xmUnlockKey(user) { return 'unlockTest_' + String(user || '').toLowerCase(); }
+    function xmParseUnlock(raw) {
+        const u = { units: {}, mid: false, final: false };
+        String(raw || '').split(/[,;]+/).forEach(t => {
+            const k = t.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9]/g, '');
+            if (!k) return;
+            if (/^\d+$/.test(k)) u.units[parseInt(k, 10)] = true;
+            else if (['mid', 'midterm', 'giuaky', 'gk'].includes(k)) u.mid = true;
+            else if (['final', 'cuoiky', 'ck'].includes(k)) u.final = true;
+        });
+        return u;
+    }
+    function setTestUnlock(raw, user) {
+        try {
+            if (raw == null) raw = localStorage.getItem(xmUnlockKey(user)) || '';
+            else localStorage.setItem(xmUnlockKey(user), String(raw));
+        } catch (e) {}
+        xmUnlock = xmParseUnlock(raw);
+    }
+    function xmIsUnlocked(tab) {
+        if (isTeacherAccount) return true;             // 👩‍🏫 tài khoản GV xem trước mọi bài
+        if (tab === 'mid') return xmUnlock.mid;
+        if (tab === 'final') return xmUnlock.final;
+        return !!xmUnlock.units[parseInt(tab, 10)];
+    }
+    function xmUser() { return __authUser || localStorage.getItem('studentSession_QuyenClass') || ''; }
+    function xmPass() { return __authPass || localStorage.getItem('saved_pass_QuyenClass') || ''; }
+    function xmEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+    const XM_CIRCLE = ['①', '②', '③', '④'];
+
+    function enterExerciseMode() {
+        renderXmTabs();
+        if (!xmCurrentTab) {
+            // Mặc định mở tab Giữa kỳ nếu đã mở, không thì Unit 1
+            xmCurrentTab = xmIsUnlocked('mid') ? 'mid' : '1';
+        }
+        xmOpenTab(xmCurrentTab);
+    }
+
+    function renderXmTabs() {
+        const box = document.getElementById('xm-tabs');
+        if (!box) return;
+        let h = '';
+        for (let u = 1; u <= XM_UNITS; u++) {
+            const lk = !xmIsUnlocked(String(u));
+            h += `<button class="xm-tab ${lk ? 'locked' : ''} ${xmCurrentTab === String(u) ? 'active' : ''}" onclick="xmOpenTab('${u}')">${lk ? '🔒 ' : ''}Unit ${u}</button>`;
+        }
+        h += '<span class="xm-tab-sep"></span>';
+        [['mid', 'Giữa kỳ'], ['final', 'Cuối kỳ']].forEach(([k, l]) => {
+            const lk = !xmIsUnlocked(k);
+            h += `<button class="xm-tab exam ${lk ? 'locked' : ''} ${xmCurrentTab === k ? 'active' : ''}" onclick="xmOpenTab('${k}')">${lk ? '🔒' : '📝'} ${l}</button>`;
+        });
+        box.innerHTML = h;
+    }
+
+    function xmPanel(html) { document.getElementById('xm-panel').innerHTML = html; }
+
+    function xmOpenTab(tab) {
+        // Đang làm bài thi -> không cho chuyển tab khác (tránh mất tập trung / nhầm)
+        if (xmState && xmState.phase === 'doing' && tab !== xmCurrentTab) {
+            if (!confirm('Bạn đang làm bài kiểm tra. Đồng hồ vẫn tiếp tục chạy khi bạn rời đi. Vẫn chuyển tab?')) return;
+        }
+        xmStopTimer();
+        xmStopAudio();
+        xmState = null;
+        xmCurrentTab = tab;
+        renderXmTabs();
+        const lockedMsg = (name) => `<div class="xm-empty"><div class="ic">🔒</div><h3>${name} chưa được mở</h3><p>Giáo viên sẽ mở bài khi đến thời điểm phù hợp.<br>Nếu bạn nghĩ đây là nhầm lẫn, hãy liên hệ giáo viên nhé.</p></div>`;
+        if (tab === 'mid' || tab === 'final') {
+            const name = tab === 'mid' ? 'Bài kiểm tra Giữa kỳ' : 'Bài kiểm tra Cuối kỳ';
+            if (!xmIsUnlocked(tab)) return xmPanel(lockedMsg(name));
+            const exam = (window.EXAMS || {})[tab];
+            if (!exam) return xmPanel(`<div class="xm-empty"><div class="ic">🗂️</div><h3>${name}</h3><p>Đề đang được chuẩn bị. Hãy quay lại sau nhé!</p></div>`);
+            return xmLoadExam(tab);
+        }
+        if (!xmIsUnlocked(tab)) return xmPanel(lockedMsg('Bài tập Unit ' + tab));
+        xmPanel(`<div class="xm-empty"><div class="ic">📚</div><h3>Bài tập Unit ${tab}</h3><p>Bài tập của Unit này đang được cập nhật. Hãy quay lại sau nhé!</p></div>`);
+    }
+
+    /* ---------- Lưu tạm bài làm trên máy ---------- */
+    function xmLocalKey(examId) { return 'exam_' + String(xmUser()).toLowerCase() + '_' + examId; }
+    function xmLoadLocal(examId) { try { return JSON.parse(localStorage.getItem(xmLocalKey(examId)) || 'null'); } catch (e) { return null; } }
+    function xmSaveLocal() {
+        if (!xmState || !xmState.attempt) return;
+        const s = xmState;
+        try {
+            localStorage.setItem(xmLocalKey(s.examId), JSON.stringify({
+                id: s.attempt.id, answers: s.answers, audio: s.audio, tabSwitches: s.tabSwitches, awayMs: s.awayMs
+            }));
+        } catch (e) {}
+    }
+    function xmClearLocal(examId) { try { localStorage.removeItem(xmLocalKey(examId)); } catch (e) {} }
+
+    async function xmGet(params) {
+        const q = Object.keys(params).map(k => k + '=' + encodeURIComponent(params[k])).join('&');
+        const res = await fetch(`${SCRIPT_URL}?${q}`);
+        return res.json();
+    }
+    async function xmPost(body) {
+        const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) });
+        return res.json();
+    }
+
+    async function xmLoadExam(examId) {
+        xmPanel('<div class="xm-empty"><div class="ic">⏳</div><p>Đang tải thông tin bài kiểm tra…</p></div>');
+        let d;
+        try {
+            d = await xmGet({ action: 'examStatus', user: xmUser(), pass: xmPass(), exam: examId });
+        } catch (e) {
+            return xmPanel(`<div class="xm-empty"><div class="ic">📡</div><h3>Không kết nối được máy chủ</h3><p>Kiểm tra mạng rồi thử lại.</p><br><button class="xm-btn sm" onclick="xmOpenTab('${examId}')">Thử lại</button></div>`);
+        }
+        if (xmCurrentTab !== examId) return;
+        if (!d || !d.success) return xmPanel(`<div class="xm-empty"><div class="ic">⚠️</div><h3>Không tải được bài</h3><p>${xmEsc((d && d.message) || 'Máy chủ chưa hỗ trợ bài kiểm tra (cần cập nhật backend).')}</p></div>`);
+        if (d.serverNow) xmClockSkew = d.serverNow - Date.now();
+        const atts = d.attempts || [];
+        const last = atts[atts.length - 1];
+        xmState = { examId, exam: window.EXAMS[examId], attempts: atts, phase: 'intro' };
+        if (!last) return xmRenderIntro();
+        if (last.status === 'STARTED') return xmBeginDoing(last);
+        if (last.status === 'RETURNED') return xmRenderResult(last);
+        return xmRenderWaiting(last);
+    }
+
+    /* ---------- 1. Màn hình giới thiệu ---------- */
+    function xmRenderIntro(isRetake) {
+        const ex = xmState.exam;
+        const nQ = ex.sections.reduce((a, s) => a + s.groups.reduce((b, g) => b + g.questions.length, 0), 0);
+        const rows = ex.info.map(i => `<tr><td><b>${i.skill}</b></td><td>${i.questions}</td><td><b>${i.points}</b> điểm</td><td>${i.note}</td></tr>`).join('');
+        xmPanel(`<div class="xm-intro">
+            <h2>📝 ${ex.title}</h2><div class="sub">${ex.subtitle}</div>
+            <div class="xm-facts">
+              <div class="xm-fact"><div class="v">${ex.durationMin}'</div><div class="l">Thời gian làm bài</div></div>
+              <div class="xm-fact"><div class="v">3</div><div class="l">Kỹ năng: Nghe · Đọc · Viết</div></div>
+              <div class="xm-fact"><div class="v">${nQ}</div><div class="l">Số câu hỏi</div></div>
+              <div class="xm-fact"><div class="v">${ex.totalPoints}</div><div class="l">Tổng điểm</div></div>
+            </div>
+            <table class="xm-skill-table"><thead><tr><th>Kỹ năng</th><th>Số câu</th><th>Điểm</th><th>Ghi chú</th></tr></thead><tbody>${rows}</tbody></table>
+            <ul class="xm-rules">${ex.rules.map(r => `<li>${r}</li>`).join('')}</ul>
+            <div class="xm-center"><button class="xm-btn" id="xm-start-btn" onclick="xmStart()">▶ ${isRetake ? 'Bắt đầu làm lại' : 'Bắt đầu'}</button></div>
+        </div>`);
+    }
+
+    async function xmStart() {
+        if (!confirm(`Bắt đầu làm bài? Đồng hồ ${xmState.exam.durationMin} phút sẽ chạy ngay và không dừng lại được.`)) return;
+        const btn = document.getElementById('xm-start-btn');
+        if (btn) { btn.disabled = true; btn.textContent = 'Đang chuẩn bị…'; }
+        try {
+            const d = await xmPost({ action: 'startExam', user: xmUser(), pass: xmPass(), exam: xmState.examId });
+            if (!d.success) { alert(d.message || 'Không bắt đầu được.'); if (btn) { btn.disabled = false; btn.textContent = '▶ Bắt đầu'; } return; }
+            if (d.serverNow) xmClockSkew = d.serverNow - Date.now();
+            xmClearLocal(xmState.examId);
+            xmBeginDoing(d.attempt);
+        } catch (e) {
+            alert('Lỗi kết nối máy chủ. Vui lòng thử lại.');
+            if (btn) { btn.disabled = false; btn.textContent = '▶ Bắt đầu'; }
+        }
+    }
+
+    /* ---------- 2. Đang làm bài ---------- */
+    function xmBeginDoing(att) {
+        const local = xmLoadLocal(xmState.examId);
+        const same = local && local.id === att.id;
+        Object.assign(xmState, {
+            phase: 'doing', attempt: att,
+            durationMs: (att.durationMin || xmState.exam.durationMin) * 60000,
+            answers: Object.assign({}, att.answers || {}, same ? local.answers : {}),
+            audio: same && local.audio ? local.audio : { plays: 0, pos: 0, ended: false },
+            tabSwitches: same ? (local.tabSwitches || 0) : 0,
+            awayMs: same ? (local.awayMs || 0) : 0,
+            timeUp: false
+        });
+        xmSaveLocal();
+        xmRenderPaper();
+        xmTick();
+        xmTimerId = setInterval(xmTick, 1000);
+    }
+
+    function xmRemainingMs() {
+        const s = xmState;
+        return s.attempt.startedAt + s.durationMs - (Date.now() + xmClockSkew);
+    }
+    function xmFmt(ms) {
+        ms = Math.max(0, ms); const t = Math.ceil(ms / 1000);
+        const m = Math.floor(t / 60), s = t % 60;
+        return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }
+    function xmStopTimer() { if (xmTimerId) { clearInterval(xmTimerId); xmTimerId = null; } }
+
+    function xmTick() {
+        if (!xmState || xmState.phase !== 'doing') return xmStopTimer();
+        const rem = xmRemainingMs();
+        const el = document.getElementById('xm-timer');
+        if (el) { el.querySelector('span').textContent = xmFmt(rem); el.classList.toggle('low', rem < 5 * 60000); }
+        if (rem <= 0 && !xmState.timeUp) xmTimeUp();
+    }
+
+    function xmTimeUp() {
+        xmState.timeUp = true;
+        xmStopTimer();
+        xmStopAudio();
+        xmSaveLocal();
+        const root = document.getElementById('xm-paper');
+        if (root) {
+            root.classList.add('xm-locked');
+            root.querySelectorAll('button.xm-opt, input, textarea').forEach(e => e.disabled = true);
+        }
+        const tu = document.getElementById('xm-timeup');
+        if (tu) tu.style.display = 'block';
+        const el = document.getElementById('xm-timer');
+        if (el) el.querySelector('span').textContent = 'Hết giờ';
+        const ab = document.getElementById('xm-audio-btn');
+        if (ab) { ab.disabled = true; ab.textContent = '⏹ Đã dừng (hết giờ)'; }
+        if (tu) tu.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function xmAllQuestions() {
+        const out = [];
+        xmState.exam.sections.forEach(s => s.groups.forEach(g => g.questions.forEach(q => out.push(q))));
+        return out;
+    }
+    function xmAnswered(q) {
+        const a = xmState.answers;
+        if (q.type === 'blanks') return q.blanks.every(b => String(a[b.id] || '').trim());
+        if (q.type === 'essay') return String(a[q.id] || '').trim().length > 0;
+        return !!a[q.n];
+    }
+
+    function xmQuestionHtml(q, mode, att) {
+        // mode: 'doing' | 'review'
+        const a = mode === 'review' ? (att.answers || {}) : xmState.answers;
+        const dis = (mode === 'review' || xmState.timeUp) ? 'disabled' : '';
+        let body = '';
+        if (q.type === 'blanks') {
+            body = q.blanks.map(b => {
+                let extra = '';
+                if (mode === 'review') {
+                    const w = (att.writing || {})[b.id] || {};
+                    extra = `<span class="xm-wscore">${w.score != null ? w.score : '–'}/${b.pts}đ</span>`;
+                    if (w.note) extra += `</div><div class="xm-wnote">💬 ${xmEsc(w.note)}`;
+                }
+                return `<div class="xm-blank"><label>${b.label}</label><input type="text" data-k="${b.id}" value="${xmEsc(a[b.id] || '')}" ${dis} placeholder="Viết 1 câu…" autocomplete="off">${extra}</div>`;
+            }).join('');
+        } else if (q.type === 'essay') {
+            const v = a[q.id] || '';
+            let extra = '';
+            if (mode === 'review') {
+                const w = (att.writing || {})[q.id] || {};
+                extra = `<div class="xm-blank"><span class="xm-wscore">${w.score != null ? w.score : '–'}/${q.pts}đ</span></div>` + (w.note ? `<div class="xm-wnote">💬 ${xmEsc(w.note)}</div>` : '');
+            }
+            body = `<div class="xm-essay"><textarea data-k="${q.id}" ${dis} placeholder="Viết đoạn văn của bạn ở đây…">${xmEsc(v)}</textarea><div class="xm-count" id="xm-count-${q.id}">${xmCountText(v, q)}</div></div>${extra}`;
+        } else {
+            const pick = Number(a[q.n]) || 0;
+            const key = mode === 'review' ? Number((att.key || {})[q.n]) || 0 : 0;
+            body = '<div class="xm-opts">' + q.options.map((o, i) => {
+                const v = i + 1;
+                let cls = pick === v ? 'sel' : '';
+                if (mode === 'review') { cls = v === key ? 'key' : (pick === v ? 'wrong' : ''); }
+                return `<button class="xm-opt ${cls}" data-q="${q.n}" data-v="${v}" ${dis}><span class="c">${XM_CIRCLE[i]}</span><span>${o}</span></button>`;
+            }).join('') + '</div>';
+        }
+        const ptsTxt = q.type ? '' : `<span class="pts">${String(q.pts).replace('.', ',')} điểm</span>`;
+        return `<div class="xm-q" id="xm-q-${q.n}">${q.context || ''}<div class="xm-q-head"><span class="n">${q.n}.</span><span>${q.prompt || ''}</span>${ptsTxt}</div>${body}</div>`;
+    }
+    function xmCountText(v, q) {
+        const all = [...String(v)].length, ns = [...String(v).replace(/\s/g, '')].length;
+        return `${all} ký tự (không tính dấu cách: ${ns}) · yêu cầu ${q.minChars}–${q.maxChars} ký tự`;
+    }
+
+    function xmPaperHtml(mode, att) {
+        return xmState.exam.sections.map(s => `<div class="xm-sec"><div class="xm-sec-title">${s.title}<small>${s.meta}</small></div>` +
+            s.groups.map(g => `<div class="xm-group"><div class="xm-instr">${g.instr}</div>${g.example ? `<div class="xm-example">${g.example}</div>` : ''}${g.context || ''}` +
+                g.questions.map(q => xmQuestionHtml(q, mode, att)).join('') + '</div>').join('') + '</div>').join('');
+    }
+
+    function xmNavHtml(mode, att) {
+        return xmAllQuestions().map(q => {
+            let cls = '';
+            if (mode === 'review') {
+                if (!q.type) cls = ((att.mcqDetail || {})[q.n] || {}).ok ? 'ok' : 'bad';
+            } else if (xmAnswered(q)) cls = 'done';
+            return `<button class="${cls}" onclick="document.getElementById('xm-q-${q.n}').scrollIntoView({behavior:'smooth',block:'start'})">${q.n}</button>`;
+        }).join('');
+    }
+    function xmRefreshNav() {
+        const nav = document.getElementById('xm-nav'); if (nav) nav.innerHTML = xmNavHtml('doing');
+        const all = xmAllQuestions(); const done = all.filter(xmAnswered).length;
+        const p = document.getElementById('xm-prog'); if (p) p.textContent = `Đã làm ${done}/${all.length} câu`;
+    }
+
+    function xmRenderPaper() {
+        const ex = xmState.exam;
+        const au = xmState.audio;
+        const audioDone = au.ended && au.plays >= ex.audioMaxPlays;
+        const audioHtml = ex.audio ? `<div class="xm-audio">
+                <button class="xm-btn sm" id="xm-audio-btn" onclick="xmPlayAudio()" ${audioDone ? 'disabled' : ''}>${audioDone ? '✔ Đã nghe xong' : (au.pos > 0 ? '▶ Nghe tiếp' : '▶ Phát file nghe')}</button>
+                <div class="track"><i id="xm-audio-bar" style="width:${audioDone ? 100 : 0}%"></i></div>
+                <span class="t" id="xm-audio-t">${audioDone ? 'Xong' : '--:--'}</span>
+                <div class="note">🎧 Phần Nghe (câu 1–10): file chỉ được phát ${ex.audioMaxPlays} lần, không tua được. Mỗi câu đã được đọc 2 lần.</div>
+            </div>` : '';
+        xmPanel(`<div class="xm-root">
+            <div class="xm-bar">
+                <div class="xm-timer" id="xm-timer">⏱ <span>--:--</span></div>
+                <div class="prog" id="xm-prog"></div>
+                <div class="sp"></div>
+                <button class="xm-btn sm" onclick="xmSubmit(false)">📤 Nộp bài</button>
+            </div>
+            <div class="xm-timeup" id="xm-timeup" style="display:none;">⏰ Đã hết giờ làm bài! Khu vực làm bài đã bị khoá.<br>Hãy bấm “Nộp bài” để gửi bài cho giáo viên.<br><button class="xm-btn warn" onclick="xmSubmit(true)">📤 Nộp bài ngay</button></div>
+            <div class="xm-nav" id="xm-nav"></div>
+            ${audioHtml}
+            <div id="xm-paper">${xmPaperHtml('doing')}</div>
+            <div class="xm-center" style="margin-top:20px;"><button class="xm-btn" onclick="xmSubmit(false)">📤 Nộp bài</button></div>
+        </div>`);
+        xmRefreshNav();
+        const paper = document.getElementById('xm-paper');
+        paper.addEventListener('click', e => {
+            const b = e.target.closest('button.xm-opt');
+            if (!b || b.disabled || xmState.timeUp) return;
+            const qn = b.dataset.q;
+            xmState.answers[qn] = Number(b.dataset.v);
+            paper.querySelectorAll(`button.xm-opt[data-q="${qn}"]`).forEach(x => x.classList.toggle('sel', x === b));
+            xmSaveLocal(); xmRefreshNav();
+        });
+        paper.addEventListener('input', e => {
+            const t = e.target; if (!t.dataset || !t.dataset.k || xmState.timeUp) return;
+            xmState.answers[t.dataset.k] = t.value;
+            const q = xmAllQuestions().find(x => x.id === t.dataset.k);
+            if (q) { const c = document.getElementById('xm-count-' + q.id); if (c) { c.textContent = xmCountText(t.value, q); const n = [...t.value].length; c.classList.toggle('warn', n > 0 && (n < q.minChars || n > q.maxChars)); } }
+            xmSaveLocal(); xmRefreshNav();
+        });
+        if (xmRemainingMs() <= 0) xmTimeUp();
+    }
+
+    /* ---------- Audio: phát 1 lần, không tua, nhớ vị trí nếu tải lại trang ---------- */
+    function xmPlayAudio() {
+        const ex = xmState.exam, au = xmState.audio;
+        if (xmState.timeUp) return;
+        if (au.ended && au.plays >= ex.audioMaxPlays) return;
+        const btn = document.getElementById('xm-audio-btn');
+        if (!xmAudioEl) {
+            xmAudioEl = new Audio(ex.audio);
+            xmAudioEl.preload = 'auto';
+            xmAudioEl.addEventListener('timeupdate', () => {
+                if (!xmState || !xmState.audio) return;
+                const d = xmAudioEl.duration || 0, c = xmAudioEl.currentTime || 0;
+                xmState.audio.pos = c;
+                const bar = document.getElementById('xm-audio-bar'); if (bar && d) bar.style.width = (c / d * 100) + '%';
+                const t = document.getElementById('xm-audio-t'); if (t && d) t.textContent = xmFmt(c * 1000) + ' / ' + xmFmt(d * 1000);
+                if (Math.floor(c) % 3 === 0) xmSaveLocal();
+            });
+            xmAudioEl.addEventListener('ended', () => {
+                if (!xmState || !xmState.audio) return;
+                xmState.audio.ended = true; xmState.audio.pos = 0; xmSaveLocal();
+                const b = document.getElementById('xm-audio-btn');
+                if (b) { const done = xmState.audio.plays >= ex.audioMaxPlays; b.disabled = done; b.textContent = done ? '✔ Đã nghe xong' : '▶ Phát lại'; }
+            });
+        }
+        if (au.pos > 0 && !au.ended) {
+            // Tiếp tục sau khi tải lại trang (không tính thêm lượt)
+            const seek = () => { try { xmAudioEl.currentTime = au.pos; } catch (e) {} };
+            if (xmAudioEl.readyState >= 1) seek(); else xmAudioEl.addEventListener('loadedmetadata', seek, { once: true });
+        } else {
+            au.plays += 1; au.ended = false; au.pos = 0;
+        }
+        xmSaveLocal();
+        xmAudioEl.play().then(() => {
+            if (btn) { btn.disabled = true; btn.textContent = '🔊 Đang phát…'; }
+        }).catch(() => {
+            alert('Không phát được file nghe. Hãy kiểm tra loa/tai nghe và bấm lại.');
+            if (au.pos === 0) au.plays = Math.max(0, au.plays - 1);
+            xmSaveLocal();
+        });
+    }
+    function xmStopAudio() { if (xmAudioEl) { try { xmAudioEl.pause(); } catch (e) {} xmAudioEl = null; } }
+
+    // Ghi nhận rời trang khi đang làm bài
+    document.addEventListener('visibilitychange', () => {
+        if (!xmState || xmState.phase !== 'doing' || xmState.timeUp) return;
+        if (document.hidden) { xmAwayStart = Date.now(); xmState.tabSwitches = (xmState.tabSwitches || 0) + 1; }
+        else if (xmAwayStart) { xmState.awayMs = (xmState.awayMs || 0) + (Date.now() - xmAwayStart); xmAwayStart = 0; }
+        xmSaveLocal();
+    });
+    window.addEventListener('beforeunload', e => {
+        if (xmState && xmState.phase === 'doing') { xmSaveLocal(); e.preventDefault(); e.returnValue = ''; }
+    });
+
+    async function xmSubmit(fromTimeUp) {
+        if (!xmState || xmState.phase !== 'doing') return;
+        if (!xmState.timeUp) {
+            const all = xmAllQuestions(), left = all.filter(q => !xmAnswered(q)).length;
+            const msg = left ? `Bạn còn ${left} câu chưa làm. Vẫn nộp bài?` : 'Nộp bài ngay? Sau khi nộp bạn không sửa được nữa.';
+            if (!confirm(msg)) return;
+        }
+        document.querySelectorAll('.xm-root .xm-btn').forEach(b => b.disabled = true);
+        try {
+            const d = await xmPost({
+                action: 'submitExam', user: xmUser(), pass: xmPass(), id: xmState.attempt.id, answers: xmState.answers,
+                meta: { tabSwitches: xmState.tabSwitches || 0, awayMs: xmState.awayMs || 0, autoSubmit: !!fromTimeUp, audioPlays: (xmState.audio || {}).plays || 0 }
+            });
+            if (!d.success) throw new Error(d.message || 'Nộp không thành công');
+            xmStopTimer(); xmStopAudio();
+            xmClearLocal(xmState.examId);
+            xmState.phase = 'waiting';
+            xmRenderWaiting(d.attempt, true);
+        } catch (e) {
+            alert('Chưa nộp được bài: ' + (e.message || 'lỗi mạng') + '\nBài làm vẫn được lưu trên máy. Hãy kiểm tra mạng và bấm "Nộp bài" lại.');
+            document.querySelectorAll('.xm-root .xm-btn').forEach(b => b.disabled = false);
+            const ab = document.getElementById('xm-audio-btn'); if (ab && (xmState.timeUp || (xmState.audio.ended && xmState.audio.plays >= xmState.exam.audioMaxPlays))) ab.disabled = true;
+        }
+    }
+
+    /* ---------- 3. Đã nộp, chờ chấm ---------- */
+    function xmFmtDate(ms) {
+        if (!ms) return '—';
+        const d = new Date(ms), p = n => (n < 10 ? '0' : '') + n;
+        return `${p(d.getHours())}:${p(d.getMinutes())} ${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()}`;
+    }
+    function xmRenderWaiting(att, justNow) {
+        xmState.phase = 'waiting';
+        xmPanel(`<div class="xm-wait"><div class="ic">${justNow ? '🎉' : '📨'}</div>
+            <h3>${justNow ? 'Nộp bài thành công!' : 'Bạn đã nộp bài'}</h3>
+            <p>Lần làm thứ ${att.attempt} · nộp lúc ${xmFmtDate(att.submittedAt)}.<br>Giáo viên đang chấm phần Viết. Khi có kết quả, điểm và bài chữa sẽ hiện ngay tại tab <b>Giữa kỳ</b> này.</p>
+            <br><button class="xm-btn ghost sm" onclick="xmOpenTab('${xmState.examId}')">🔄 Kiểm tra kết quả</button></div>`);
+    }
+
+    /* ---------- 4. Kết quả đã chấm + Làm lại ---------- */
+    function xmRenderResult(att) {
+        xmState.phase = 'result';
+        const ex = xmState.exam;
+        const det = att.mcqDetail || {};
+        let lis = 0, rea = 0, wri = 0;
+        Object.keys(det).forEach(n => { if (Number(n) <= 10) lis += det[n].pts || 0; else rea += det[n].pts || 0; });
+        Object.keys(att.writing || {}).forEach(k => { wri += Number(att.writing[k].score) || 0; });
+        const f = v => String(Math.round(v * 10) / 10).replace('.', ',');
+        const hist = xmState.attempts.length > 1 ? `<div class="xm-hist"><b>Các lần làm:</b><ul>${xmState.attempts.map(a => `<li>Lần ${a.attempt}: ${a.status === 'RETURNED' ? `<b>${f(a.totalScore)}</b>/100 điểm` : 'chưa có điểm'} · ${xmFmtDate(a.submittedAt || a.startedAt)}</li>`).join('')}</ul></div>` : '';
+        xmPanel(`<div class="xm-root">
+            <h2 style="font-size:22px;">📊 Kết quả ${ex.title.toLowerCase()}</h2>
+            <div class="sub" style="color:var(--sub-text);font-size:13px;margin-top:4px;">Lần làm thứ ${att.attempt} · nộp ${xmFmtDate(att.submittedAt)} · chấm ${xmFmtDate(att.gradedAt)}</div>
+            <div class="xm-score"><div class="big">${f(att.totalScore || 0)}<small>/100</small></div>
+              <div class="xm-parts">
+                <div class="xm-part"><div class="v">${f(lis)}/30</div><div class="l">Nghe</div></div>
+                <div class="xm-part"><div class="v">${f(rea)}/40</div><div class="l">Đọc</div></div>
+                <div class="xm-part"><div class="v">${f(wri)}/30</div><div class="l">Viết</div></div>
+              </div></div>
+            ${att.comment ? `<div class="xm-comment"><b>💬 Nhận xét của giáo viên:</b>\n${xmEsc(att.comment)}</div>` : ''}
+            <div class="xm-center" style="margin-bottom:18px;"><button class="xm-btn" onclick="xmRetake()">🔁 Làm lại bài</button></div>
+            <p style="font-size:13px;color:var(--sub-text);margin-bottom:8px;">Ô xanh = đáp án đúng · Ô đỏ = bạn chọn sai.</p>
+            <div class="xm-nav">${xmNavHtml('review', att)}</div>
+            <div>${xmPaperHtml('review', att)}</div>
+            ${hist}
+        </div>`);
+    }
+    function xmRetake() {
+        if (!confirm('Làm lại bài kiểm tra từ đầu? Kết quả lần này vẫn được lưu lại.')) return;
+        xmState.phase = 'intro';
+        xmRenderIntro(true);
+    }
 </script>
 </body>
 </html>
